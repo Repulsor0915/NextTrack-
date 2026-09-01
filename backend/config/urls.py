@@ -21,6 +21,7 @@ from django.urls import include, path
 urlpatterns = [
     path("admin/", admin.site.urls),
     path(
-        "api/", include("backend.recommendations.api.urls", namespace="recommendations")
+        "api/v1/",
+        include("recommendations.api.urls", namespace="recommendations"),
     ),
 ]
