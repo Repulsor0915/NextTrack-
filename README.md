@@ -1,8 +1,8 @@
 # NextTrack
 
 Stateless Django REST Framework API for session-informed music recommendation.
-The client supplies track history and optional mood/context in every request; the
-server does not require a user account or store a listening session.
+The client supplies optional track history, mood, and filters in every request;
+the server does not require a user account or store a listening session.
 
 ## Local development
 
@@ -21,22 +21,67 @@ The recommendation endpoint is:
 POST /api/v1/recommendations/
 ```
 
-Example Random baseline request:
+## Default Auto mode
+
+`algorithm` is optional and defaults to `auto`. Auto chooses a relevance model
+from the signals supplied in the current stateless request:
+
+| Request signals | Resolved method |
+|---|---|
+| No history and no mood | Random |
+| History only | History-based CBF |
+| Mood only | Mood-based CBF |
+| History and mood | History-and-mood contextual CBF |
+
+BPM does not select an algorithm. It is an optional inclusive hard filter that
+is applied to the candidate pool before ranking. A BPM-only request therefore
+filters the catalogue and then resolves to Random.
+
+Example mood-only Auto request:
 
 ```json
 {
-  "history": ["mbid-001"],
-  "algorithm": "random",
-  "limit": 2,
-  "candidate_ids": ["mbid-001", "mbid-002", "mbid-003"]
+  "limit": 5,
+  "context": {
+    "mood": "happy",
+    "bpm": {"min": 60, "max": 140},
+    "diversity_strength": 0.2
+  }
 }
 ```
 
-Random selection excludes history, honours `candidate_ids`, `limit`, and the BPM
-hard filter, but deliberately does not use mood or audio similarity for ranking.
-Its `score` is therefore `null`, and its explanation identifies it as a baseline.
+When Auto resolves to a content-based method, MMR reranking is enabled by
+default with `diversity_strength = 0.2`. This is equivalent to standard MMR
+`lambda = 0.8`: 80% relevance weight and 20% diversity-gain weight. Set
+`diversity_strength` to `0` to preserve the base relevance order.
 
-Example Basic CBF request:
+The response records both the requested and resolved methods:
+
+```json
+{
+  "algorithm": "auto",
+  "meta": {
+    "requested_algorithm": "auto",
+    "resolved_algorithm": "context_mmr",
+    "relevance_model": "mood_cbf",
+    "reranker": "mmr",
+    "diversity_strength": 0.2,
+    "mmr_lambda": 0.8
+  }
+}
+```
+
+## Explicit experiment modes
+
+Explicit modes remain available for controlled comparisons:
+
+- `random` forces the unscored Random baseline, even if history or mood is
+  present.
+- `cbf` requires history and runs the pure Basic CBF baseline without MMR.
+- `context_mmr` requires history or mood and runs the contextual CBF scorer
+  followed by MMR.
+
+Example Basic CBF baseline request:
 
 ```json
 {
@@ -53,12 +98,7 @@ Example Basic CBF request:
 }
 ```
 
-Basic CBF normalizes eight audio features, averages at most the five most recent
-history entries into a session profile, and ranks candidates using weighted cosine
-similarity. It excludes history and honours the same candidate and BPM constraints
-as Random, but deliberately leaves mood and exploration to Context+MMR.
-
-Example Context+MMR request:
+Example explicit Context+MMR request:
 
 ```json
 {
@@ -68,20 +108,57 @@ Example Context+MMR request:
   "context": {
     "mood": "happy",
     "bpm": {"min": 60, "max": 140},
-    "exploration": 0.3
+    "diversity_strength": 0.3
   }
 }
 ```
 
-Context+MMR uses a linearly recency-weighted profile of at most five history
-entries. When both history and mood are supplied, contextual relevance is 65%
-history similarity and 35% heuristic mood fit. MMR then uses `exploration` to
-trade relevance against dissimilarity to tracks already selected for the Top-N
-list. A mood-only request is supported when history is empty. Mood targets are
-configurable project heuristics and require evaluation; they are not presented as
-psychologically validated boundaries.
+## Contract details
+
+- History is ordered from oldest to newest. Repeated IDs represent repeated
+  play events and are intentionally preserved.
+- History tracks are excluded from the returned candidates.
+- Duplicate `candidate_ids` do not produce duplicate recommendations.
+- Missing or `null` `candidate_ids` means the full catalogue; an empty list is
+  an empty candidate pool.
+- Basic CBF averages at most the five most recent history events. Contextual CBF
+  uses a linearly recency-weighted profile of the same maximum size.
+- When history and mood are both supplied to contextual CBF, the current
+  provisional relevance formula is 65% history similarity and 35% mood fit.
+- The public recommendation `score` is always relevance: `null` for Random,
+  history similarity for history CBF, mood fit for mood-only CBF, and contextual
+  relevance for combined history and mood. MMR utility remains in
+  `components.mmr_score`; `rank` is the final reranked order.
+- `bpm_constraint_satisfied` is a boolean eligibility fact, not a scoring
+  component. The separate track `tempo` feature may still contribute to CBF.
+- Explanations are deterministic and evidence-based; they do not use an AI
+  agent or LLM.
+
+## Error responses
+
+Parser, serializer, and recommendation-service errors use one envelope while
+retaining actionable details:
+
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Request validation failed. See details for specific fields.",
+    "details": {
+      "limit": ["Ensure this value is less than or equal to 10."]
+    }
+  }
+}
+```
+
+Invalid input and unknown IDs return HTTP 400. A valid request with no eligible
+candidates returns HTTP 422. Internal stack traces, database paths, and server
+configuration are not exposed.
+
+## Data status
 
 The current 25-track catalogue is provisional prototype data for development and
 parity testing. It must not be presented as the final research dataset or as
-verified Spotify data. A documented research dataset will replace it before the
-final evaluation.
+verified Spotify data. Mood targets, feature weights, normalization ranges,
+history window, context ratio, diversity strength, and explanation thresholds
+remain provisional until final-dataset inspection and offline evaluation.

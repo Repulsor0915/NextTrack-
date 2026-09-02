@@ -41,7 +41,7 @@ class ContextRanking:
     relevance: float
     history_similarity: float | None
     mood_fit: float | None
-    tempo_fit: float | None
+    bpm_constraint_satisfied: bool | None
     feature_closeness: dict
 
 
@@ -65,7 +65,7 @@ def score_context_candidates(
     *,
     session_profile=None,
     mood=None,
-    tempo_constrained=False,
+    bpm_constraint_applied=False,
 ):
     """Score candidates using available session and explicit mood evidence."""
 
@@ -98,7 +98,7 @@ def score_context_candidates(
                 relevance=relevance,
                 history_similarity=history_similarity,
                 mood_fit=mood_fit,
-                tempo_fit=1.0 if tempo_constrained else None,
+                bpm_constraint_satisfied=True if bpm_constraint_applied else None,
                 feature_closeness=(
                     feature_closeness(vector, session_profile)
                     if session_profile is not None

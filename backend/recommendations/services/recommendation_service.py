@@ -53,39 +53,57 @@ class MissingTrackFeaturesError(RecommendationServiceError):
 
 
 class RecommendationService:
+    SUPPORTED_ALGORITHMS = {"auto", "random", "cbf", "context_mmr"}
+    DEFAULT_DIVERSITY_STRENGTH = 0.2
+
     def __init__(self, *, random_source=None):
         self.random_source = random_source
 
     def recommend(self, request_data):
         started_at = perf_counter()
-        algorithm = request_data["algorithm"]
+        requested_algorithm = request_data["algorithm"]
 
-        if algorithm not in {"random", "cbf", "context_mmr"}:
+        if requested_algorithm not in self.SUPPORTED_ALGORITHMS:
             raise UnsupportedAlgorithmError(
-                f'Algorithm "{algorithm}" has not been implemented yet.',
-                details={"algorithm": algorithm},
+                f'Algorithm "{requested_algorithm}" has not been implemented yet.',
+                details={"algorithm": requested_algorithm},
             )
 
         history = request_data["history"]
+        context = request_data.get("context", {})
+        mood = context.get("mood")
+        resolved_algorithm = self._resolve_algorithm(
+            requested_algorithm,
+            history=history,
+            mood=mood,
+        )
         candidate_ids = request_data.get("candidate_ids")
         self._validate_track_ids(history, candidate_ids)
 
         candidates = self._get_candidates(
             history=history,
             candidate_ids=candidate_ids,
-            context=request_data.get("context", {}),
+            context=context,
         )
         if not candidates:
             raise NoCandidatesError(
-                "No unplayed tracks satisfy the requested candidate constraints."
+                "No unplayed tracks satisfy the requested candidate constraints.",
+                details={
+                    "candidate_ids_supplied": candidate_ids is not None,
+                    "bpm_filter": context.get("bpm"),
+                    "history_count": len(history),
+                },
             )
 
         meta = {
             "catalogue_version": self._catalogue_version(candidates),
             "candidate_count": len(candidates),
+            "requested_algorithm": requested_algorithm,
+            "resolved_algorithm": resolved_algorithm,
+            "bpm_filter": context.get("bpm"),
         }
 
-        if algorithm == "random":
+        if resolved_algorithm == "random":
             selected_tracks = rank_random(
                 candidates,
                 request_data["limit"],
@@ -95,7 +113,8 @@ class RecommendationService:
                 self._build_random_result(track, rank)
                 for rank, track in enumerate(selected_tracks, start=1)
             ]
-        elif algorithm == "cbf":
+            meta.update({"relevance_model": "random", "reranker": None})
+        elif resolved_algorithm == "cbf" and requested_algorithm == "cbf":
             history_tracks = self._get_history_tracks(history)
             history_vectors = [
                 build_feature_vector(track.features) for track in history_tracks
@@ -117,17 +136,22 @@ class RecommendationService:
                 len(history_tracks), HISTORY_WINDOW_SIZE
             )
             meta["history_window_size"] = HISTORY_WINDOW_SIZE
+            meta.update({"relevance_model": "history_cbf", "reranker": None})
         else:
-            context = request_data.get("context", {})
-            mood = context.get("mood")
-            exploration = context.get("exploration", 0.2)
+            diversity_strength = context.get(
+                "diversity_strength",
+                self.DEFAULT_DIVERSITY_STRENGTH,
+            )
             history_tracks = self._get_history_tracks(history) if history else []
             session_profile = None
             if history_tracks:
                 history_vectors = [
                     build_feature_vector(track.features) for track in history_tracks
                 ]
-                session_profile = build_recency_weighted_profile(history_vectors)
+                if resolved_algorithm == "cbf":
+                    session_profile = build_session_profile(history_vectors)
+                else:
+                    session_profile = build_recency_weighted_profile(history_vectors)
 
             candidate_vectors = [
                 (track, build_feature_vector(track.features)) for track in candidates
@@ -136,19 +160,19 @@ class RecommendationService:
                 candidate_vectors,
                 session_profile=session_profile,
                 mood=mood,
-                tempo_constrained=bool(context.get("bpm")),
+                bpm_constraint_applied=bool(context.get("bpm")),
             )
             reranked_candidates = rerank_mmr(
                 context_rankings,
                 request_data["limit"],
-                exploration=exploration,
+                diversity_strength=diversity_strength,
             )
             recommendations = [
                 self._build_context_result(
                     result,
                     rank,
                     mood=mood,
-                    exploration=exploration,
+                    diversity_strength=diversity_strength,
                 )
                 for rank, result in enumerate(reranked_candidates, start=1)
             ]
@@ -159,7 +183,13 @@ class RecommendationService:
                     ),
                     "history_window_size": HISTORY_WINDOW_SIZE,
                     "mood": mood,
-                    "exploration": exploration,
+                    "relevance_model": self._relevance_model(
+                        history=history,
+                        mood=mood,
+                    ),
+                    "reranker": "mmr",
+                    "diversity_strength": diversity_strength,
+                    "mmr_lambda": round(1.0 - diversity_strength, 4),
                 }
             )
 
@@ -168,10 +198,28 @@ class RecommendationService:
         meta["processing_ms"] = elapsed_ms
 
         return {
-            "algorithm": algorithm,
+            "algorithm": requested_algorithm,
             "recommendations": recommendations,
             "meta": meta,
         }
+
+    @staticmethod
+    def _resolve_algorithm(requested_algorithm, *, history, mood):
+        if requested_algorithm != "auto":
+            return requested_algorithm
+        if mood:
+            return "context_mmr"
+        if history:
+            return "cbf"
+        return "random"
+
+    @staticmethod
+    def _relevance_model(*, history, mood):
+        if history and mood:
+            return "history_mood_cbf"
+        if mood:
+            return "mood_cbf"
+        return "history_cbf"
 
     @staticmethod
     def _validate_track_ids(history, candidate_ids):
@@ -273,7 +321,7 @@ class RecommendationService:
         }
 
     @staticmethod
-    def _build_context_result(result, rank, *, mood, exploration):
+    def _build_context_result(result, rank, *, mood, diversity_strength):
         context = result.context
 
         def rounded(value):
@@ -286,11 +334,11 @@ class RecommendationService:
                 "title": context.candidate.title,
                 "artist": context.candidate.artist,
             },
-            "score": rounded(result.mmr_score),
+            "score": rounded(context.relevance),
             "components": {
                 "history_similarity": rounded(context.history_similarity),
                 "mood_fit": rounded(context.mood_fit),
-                "tempo_fit": rounded(context.tempo_fit),
+                "bpm_constraint_satisfied": context.bpm_constraint_satisfied,
                 "context_relevance": rounded(context.relevance),
                 "diversity_penalty": rounded(result.diversity_penalty),
                 "diversity_gain": rounded(result.diversity_gain),
@@ -304,9 +352,9 @@ class RecommendationService:
                 history_similarity=context.history_similarity,
                 mood=mood,
                 mood_fit=context.mood_fit,
-                tempo_fit=context.tempo_fit,
+                bpm_constraint_satisfied=context.bpm_constraint_satisfied,
                 diversity_penalty=result.diversity_penalty,
-                exploration=exploration,
+                diversity_strength=diversity_strength,
                 rank=rank,
             ),
         }

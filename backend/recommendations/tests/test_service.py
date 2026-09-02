@@ -89,6 +89,31 @@ class RecommendationServiceTests(TestCase):
         }
         self.assertEqual(result_ids, {"track-a", "track-c"})
 
+    def test_duplicate_candidate_ids_do_not_duplicate_results(self):
+        result = self.service.recommend(
+            self._request(
+                candidate_ids=["track-a", "track-a", "track-c"],
+                limit=5,
+            )
+        )
+
+        result_ids = [
+            recommendation["track"]["id"]
+            for recommendation in result["recommendations"]
+        ]
+        self.assertCountEqual(result_ids, ["track-a", "track-c"])
+        self.assertEqual(len(result_ids), len(set(result_ids)))
+
+    def test_history_order_and_repeated_play_events_are_preserved(self):
+        tracks = self.service._get_history_tracks(
+            ["track-a", "track-b", "track-a"]
+        )
+
+        self.assertEqual(
+            [track.id for track in tracks],
+            ["track-a", "track-b", "track-a"],
+        )
+
     def test_bpm_range_is_applied_as_a_hard_candidate_filter(self):
         result = self.service.recommend(
             self._request(context={"bpm": {"min": 100, "max": 140}}, limit=5)
@@ -145,6 +170,8 @@ class RecommendationServiceTests(TestCase):
         self.assertIn("summary", recommendation["explanation"])
         self.assertEqual(result["meta"]["catalogue_version"], "test-catalogue-v1")
         self.assertIsInstance(result["meta"]["processing_ms"], float)
+        self.assertEqual(result["meta"]["requested_algorithm"], "random")
+        self.assertEqual(result["meta"]["resolved_algorithm"], "random")
 
     def test_cbf_ranks_the_closest_history_match_first(self):
         result = self.service.recommend(
@@ -218,6 +245,7 @@ class RecommendationServiceTests(TestCase):
             8,
         )
         self.assertTrue(recommendation["explanation"]["evidence"])
+        self.assertIsNone(result["meta"]["reranker"])
 
     def test_cbf_rejects_history_track_without_features(self):
         Track.objects.create(
@@ -256,7 +284,7 @@ class RecommendationServiceTests(TestCase):
                 algorithm="context_mmr",
                 history=[],
                 candidate_ids=["happy-track", "low-mood-track"],
-                context={"mood": "happy", "exploration": 0},
+                context={"mood": "happy", "diversity_strength": 0},
             )
         )
 
@@ -277,7 +305,7 @@ class RecommendationServiceTests(TestCase):
                 context={
                     "mood": "happy",
                     "bpm": {"min": 100, "max": 140},
-                    "exploration": 0.4,
+                    "diversity_strength": 0.4,
                 },
                 limit=2,
             )
@@ -287,16 +315,39 @@ class RecommendationServiceTests(TestCase):
 
         self.assertEqual(result["algorithm"], "context_mmr")
         self.assertEqual(result["meta"]["mood"], "happy")
-        self.assertEqual(result["meta"]["exploration"], 0.4)
+        self.assertEqual(result["meta"]["diversity_strength"], 0.4)
+        self.assertEqual(result["meta"]["mmr_lambda"], 0.6)
         self.assertIsNotNone(components["history_similarity"])
         self.assertIsNotNone(components["mood_fit"])
-        self.assertEqual(components["tempo_fit"], 1.0)
+        self.assertIs(components["bpm_constraint_satisfied"], True)
         self.assertIn("context_relevance", components)
         self.assertIn("diversity_penalty", components)
         self.assertIn("mmr_score", components)
+        self.assertEqual(recommendation["score"], components["context_relevance"])
         self.assertTrue(recommendation["explanation"]["evidence"])
 
-    def test_high_exploration_promotes_diversity_after_first_result(self):
+    def test_auto_history_uses_cbf_relevance_with_default_mmr(self):
+        result = self.service.recommend(
+            self._request(
+                algorithm="auto",
+                history=["track-b"],
+                limit=2,
+            )
+        )
+
+        self.assertEqual(result["algorithm"], "auto")
+        self.assertEqual(result["meta"]["resolved_algorithm"], "cbf")
+        self.assertEqual(result["meta"]["relevance_model"], "history_cbf")
+        self.assertEqual(result["meta"]["reranker"], "mmr")
+        self.assertEqual(result["meta"]["diversity_strength"], 0.2)
+        self.assertEqual(result["meta"]["mmr_lambda"], 0.8)
+        for recommendation in result["recommendations"]:
+            self.assertEqual(
+                recommendation["score"],
+                recommendation["components"]["context_relevance"],
+            )
+
+    def test_high_diversity_strength_promotes_diversity_after_first_result(self):
         feature_values = {
             "tempo": 220,
             "energy": 1.0,
@@ -339,10 +390,10 @@ class RecommendationServiceTests(TestCase):
         )
 
         relevance_result = self.service.recommend(
-            {**base_request, "context": {"exploration": 0}}
+            {**base_request, "context": {"diversity_strength": 0}}
         )
-        exploration_result = self.service.recommend(
-            {**base_request, "context": {"exploration": 0.9}}
+        diversity_result = self.service.recommend(
+            {**base_request, "context": {"diversity_strength": 0.9}}
         )
 
         self.assertEqual(
@@ -350,7 +401,7 @@ class RecommendationServiceTests(TestCase):
             ["ctx-a", "ctx-b"],
         )
         self.assertEqual(
-            [item["track"]["id"] for item in exploration_result["recommendations"]],
+            [item["track"]["id"] for item in diversity_result["recommendations"]],
             ["ctx-a", "ctx-c"],
         )
 
@@ -360,7 +411,7 @@ class RecommendationServiceTests(TestCase):
                 algorithm="context_mmr",
                 history=["track-a", "track-b", "track-c"],
                 candidate_ids=["track-d"],
-                context={"exploration": 0.2},
+                context={"diversity_strength": 0.2},
             )
         )
 

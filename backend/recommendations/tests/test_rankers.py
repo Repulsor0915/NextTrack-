@@ -276,10 +276,10 @@ class ContextRankerTests(SimpleTestCase):
         result = score_context_candidates(
             [("track-a", self._vector())],
             mood="calm",
-            tempo_constrained=True,
+            bpm_constraint_applied=True,
         )[0]
 
-        self.assertEqual(result.tempo_fit, 1.0)
+        self.assertIs(result.bpm_constraint_satisfied, True)
 
     def test_rejects_request_without_history_profile_or_mood(self):
         with self.assertRaises(ValueError):
@@ -307,7 +307,7 @@ class MmrTests(SimpleTestCase):
             relevance=relevance,
             history_similarity=relevance,
             mood_fit=None,
-            tempo_fit=None,
+            bpm_constraint_satisfied=None,
             feature_closeness={},
         )
 
@@ -329,16 +329,16 @@ class MmrTests(SimpleTestCase):
         )
         self.rankings = [self.relevant, self.similar, self.diverse]
 
-    def test_zero_exploration_preserves_relevance_order(self):
-        results = rerank_mmr(self.rankings, 2, exploration=0)
+    def test_zero_diversity_strength_preserves_relevance_order(self):
+        results = rerank_mmr(self.rankings, 2, diversity_strength=0)
 
         self.assertEqual(
             [result.context.candidate for result in results],
             ["track-a", "track-b"],
         )
 
-    def test_high_exploration_promotes_a_different_second_track(self):
-        results = rerank_mmr(self.rankings, 2, exploration=0.9)
+    def test_high_diversity_strength_promotes_a_different_second_track(self):
+        results = rerank_mmr(self.rankings, 2, diversity_strength=0.9)
 
         self.assertEqual(
             [result.context.candidate for result in results],
@@ -346,8 +346,8 @@ class MmrTests(SimpleTestCase):
         )
         self.assertGreater(results[1].diversity_gain, 0.9)
 
-    def test_first_selection_is_most_relevant_at_any_exploration(self):
-        results = rerank_mmr(self.rankings, 1, exploration=1)
+    def test_first_selection_is_most_relevant_at_any_diversity_strength(self):
+        results = rerank_mmr(self.rankings, 1, diversity_strength=1)
 
         self.assertEqual(results[0].context.candidate, "track-a")
         self.assertEqual(results[0].diversity_penalty, 0)
@@ -355,10 +355,10 @@ class MmrTests(SimpleTestCase):
     def test_does_not_modify_input_rankings(self):
         original = self.rankings.copy()
 
-        rerank_mmr(self.rankings, 2, exploration=0.5)
+        rerank_mmr(self.rankings, 2, diversity_strength=0.5)
 
         self.assertEqual(self.rankings, original)
 
-    def test_rejects_exploration_outside_zero_to_one(self):
+    def test_rejects_diversity_strength_outside_zero_to_one(self):
         with self.assertRaises(ValueError):
-            rerank_mmr(self.rankings, 2, exploration=1.1)
+            rerank_mmr(self.rankings, 2, diversity_strength=1.1)

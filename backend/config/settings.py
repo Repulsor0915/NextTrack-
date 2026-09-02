@@ -42,6 +42,10 @@ INSTALLED_APPS = [
     "recommendations.apps.RecommendationsConfig",
 ]
 
+REST_FRAMEWORK = {
+    "EXCEPTION_HANDLER": "recommendations.api.exceptions.api_exception_handler",
+}
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",

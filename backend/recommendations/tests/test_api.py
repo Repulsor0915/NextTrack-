@@ -73,7 +73,7 @@ class RecommendationApiTests(APITestCase):
                 "context": {
                     "mood": "happy",
                     "bpm": {"min": 50, "max": 140},
-                    "exploration": 0.25,
+                    "diversity_strength": 0.25,
                 },
             },
             format="json",
@@ -89,7 +89,7 @@ class RecommendationApiTests(APITestCase):
         self.assertIsInstance(response.data["recommendations"][0]["score"], float)
         self.assertEqual(response.data["meta"]["history_count_used"], 1)
 
-    def test_algorithm_defaults_to_cbf(self):
+    def test_algorithm_defaults_to_auto_and_resolves_history_to_cbf(self):
         self._create_track("track-history", tempo=100)
         self._create_track("track-candidate", tempo=105)
 
@@ -100,8 +100,107 @@ class RecommendationApiTests(APITestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["algorithm"], "cbf")
+        self.assertEqual(response.data["algorithm"], "auto")
+        self.assertEqual(response.data["meta"]["resolved_algorithm"], "cbf")
+        self.assertEqual(response.data["meta"]["reranker"], "mmr")
+        self.assertEqual(response.data["meta"]["diversity_strength"], 0.2)
         self.assertEqual(len(response.data["recommendations"]), 1)
+
+    def test_auto_without_history_or_mood_resolves_to_random(self):
+        self._create_track("track-a")
+        self._create_track("track-b")
+
+        response = self.client.post(self.url, {}, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["algorithm"], "auto")
+        self.assertEqual(response.data["meta"]["resolved_algorithm"], "random")
+        self.assertEqual(response.data["meta"]["relevance_model"], "random")
+        self.assertIsNone(response.data["meta"]["reranker"])
+        self.assertIsNone(response.data["recommendations"][0]["score"])
+
+    def test_auto_with_mood_resolves_to_mood_cbf_and_default_mmr(self):
+        self._create_track(
+            "happy-track",
+            energy=0.70,
+            valence=0.85,
+            danceability=0.65,
+        )
+        self._create_track("other-track", energy=0.1, valence=0.1)
+
+        response = self.client.post(
+            self.url,
+            {"context": {"mood": "happy"}},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["algorithm"], "auto")
+        self.assertEqual(
+            response.data["meta"]["resolved_algorithm"],
+            "context_mmr",
+        )
+        self.assertEqual(response.data["meta"]["relevance_model"], "mood_cbf")
+        self.assertEqual(response.data["meta"]["reranker"], "mmr")
+        self.assertEqual(response.data["meta"]["diversity_strength"], 0.2)
+        self.assertEqual(response.data["meta"]["mmr_lambda"], 0.8)
+
+    def test_auto_with_history_and_mood_uses_combined_context_model(self):
+        self._create_track("track-history", energy=0.7, valence=0.7)
+        self._create_track("track-candidate", energy=0.8, valence=0.8)
+
+        response = self.client.post(
+            self.url,
+            {
+                "history": ["track-history"],
+                "context": {"mood": "happy"},
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            response.data["meta"]["resolved_algorithm"],
+            "context_mmr",
+        )
+        self.assertEqual(
+            response.data["meta"]["relevance_model"],
+            "history_mood_cbf",
+        )
+        components = response.data["recommendations"][0]["components"]
+        self.assertIsNotNone(components["history_similarity"])
+        self.assertIsNotNone(components["mood_fit"])
+
+    def test_auto_with_only_bpm_filters_then_resolves_to_random(self):
+        self._create_track("inside-range", tempo=120)
+        self._create_track("outside-range", tempo=160)
+
+        response = self.client.post(
+            self.url,
+            {"context": {"bpm": {"min": 100, "max": 140}}},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["meta"]["resolved_algorithm"], "random")
+        self.assertEqual(
+            response.data["recommendations"][0]["track"]["id"],
+            "inside-range",
+        )
+
+    def test_renamed_exploration_field_returns_specific_error(self):
+        response = self.client.post(
+            self.url,
+            {"context": {"mood": "happy", "exploration": 0.2}},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data["error"]["code"], "VALIDATION_ERROR")
+        self.assertIn(
+            "diversity_strength",
+            str(response.data["error"]["details"]["context"]["exploration"]),
+        )
 
     def test_invalid_algorithm_returns_400(self):
         response = self.client.post(
@@ -111,7 +210,8 @@ class RecommendationApiTests(APITestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("algorithm", response.data)
+        self.assertEqual(response.data["error"]["code"], "VALIDATION_ERROR")
+        self.assertIn("algorithm", response.data["error"]["details"])
 
     def test_limit_above_maximum_returns_400(self):
         response = self.client.post(
@@ -121,7 +221,8 @@ class RecommendationApiTests(APITestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("limit", response.data)
+        self.assertEqual(response.data["error"]["code"], "VALIDATION_ERROR")
+        self.assertIn("limit", response.data["error"]["details"])
 
     def test_cbf_requires_non_empty_history(self):
         response = self.client.post(
@@ -131,7 +232,7 @@ class RecommendationApiTests(APITestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("history", response.data)
+        self.assertIn("history", response.data["error"]["details"])
 
     def test_random_allows_empty_history(self):
         self._create_track("track-a")
@@ -212,6 +313,10 @@ class RecommendationApiTests(APITestCase):
 
         self.assertEqual(response.status_code, 422)
         self.assertEqual(response.data["error"]["code"], "NO_CANDIDATES")
+        self.assertTrue(
+            response.data["error"]["details"]["candidate_ids_supplied"]
+        )
+        self.assertEqual(response.data["error"]["details"]["history_count"], 1)
 
     def test_context_mmr_returns_ranked_component_scores(self):
         self._create_track("track-history", energy=0.8, valence=0.7)
@@ -226,7 +331,7 @@ class RecommendationApiTests(APITestCase):
                 "limit": 2,
                 "context": {
                     "mood": "happy",
-                    "exploration": 0.3,
+                    "diversity_strength": 0.3,
                 },
             },
             format="json",
@@ -240,6 +345,10 @@ class RecommendationApiTests(APITestCase):
         self.assertIn("mood_fit", components)
         self.assertIn("diversity_penalty", components)
         self.assertIn("mmr_score", components)
+        self.assertEqual(
+            response.data["recommendations"][0]["score"],
+            components["context_relevance"],
+        )
 
     def test_context_mmr_allows_mood_without_history(self):
         self._create_track(
@@ -261,7 +370,7 @@ class RecommendationApiTests(APITestCase):
                 "history": [],
                 "algorithm": "context_mmr",
                 "limit": 1,
-                "context": {"mood": "happy", "exploration": 0},
+                "context": {"mood": "happy", "diversity_strength": 0},
             },
             format="json",
         )
@@ -279,13 +388,13 @@ class RecommendationApiTests(APITestCase):
             {
                 "history": [],
                 "algorithm": "context_mmr",
-                "context": {"exploration": 0.5},
+                "context": {"diversity_strength": 0.5},
             },
             format="json",
         )
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("history", response.data)
+        self.assertIn("history", response.data["error"]["details"])
 
     def test_invalid_bpm_range_returns_400(self):
         response = self.client.post(
@@ -298,7 +407,7 @@ class RecommendationApiTests(APITestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("context", response.data)
+        self.assertIn("context", response.data["error"]["details"])
 
     def test_malformed_json_returns_400(self):
         response = self.client.generic(
@@ -309,4 +418,5 @@ class RecommendationApiTests(APITestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("detail", response.data)
+        self.assertEqual(response.data["error"]["code"], "MALFORMED_JSON")
+        self.assertIn("parse_error", response.data["error"]["details"])

@@ -17,12 +17,23 @@ class ContextSerializer(serializers.Serializer):
         required=False,
     )
     bpm = BpmRangeSerializer(required=False)
-    exploration = serializers.FloatField(
+    diversity_strength = serializers.FloatField(
         min_value=0,
         max_value=1,
         required=False,
         default=0.2,
     )
+
+    def to_internal_value(self, data):
+        if isinstance(data, dict) and "exploration" in data:
+            raise serializers.ValidationError(
+                {
+                    "exploration": (
+                        "This field was renamed to diversity_strength."
+                    )
+                }
+            )
+        return super().to_internal_value(data)
 
 
 class RecommendationRequestSerializer(serializers.Serializer):
@@ -30,10 +41,12 @@ class RecommendationRequestSerializer(serializers.Serializer):
         child=serializers.CharField(),
         allow_empty=True,
         max_length=50,
+        required=False,
+        default=list,
     )
     algorithm = serializers.ChoiceField(
-        choices=["random", "cbf", "context_mmr"],
-        default="cbf",
+        choices=["auto", "random", "cbf", "context_mmr"],
+        default="auto",
     )
     limit = serializers.IntegerField(
         min_value=1,

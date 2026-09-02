@@ -11,18 +11,20 @@ class MmrRanking:
     diversity_gain: float
 
 
-def rerank_mmr(context_rankings, limit, *, exploration):
+def rerank_mmr(context_rankings, limit, *, diversity_strength):
     """Greedily balance contextual relevance and intra-list diversity.
 
     For selections after rank one, the normalized utility is equivalent to the
     standard MMR objective up to an additive constant:
-    ``(1-e) * relevance + e * (1-max_similarity)``.
+    ``(1-d) * relevance + d * (1-max_similarity)``. The public
+    ``diversity_strength`` value ``d`` corresponds to standard MMR
+    ``lambda = 1-d``.
     """
 
     if limit < 1:
         raise ValueError("limit must be at least 1")
-    if not 0 <= exploration <= 1:
-        raise ValueError("exploration must be between 0 and 1")
+    if not 0 <= diversity_strength <= 1:
+        raise ValueError("diversity_strength must be between 0 and 1")
 
     remaining = list(context_rankings)
     selected = []
@@ -45,8 +47,8 @@ def rerank_mmr(context_rankings, limit, *, exploration):
                 )
                 diversity_gain = 1.0 - diversity_penalty
                 mmr_score = (
-                    (1.0 - exploration) * context.relevance
-                    + exploration * diversity_gain
+                    (1.0 - diversity_strength) * context.relevance
+                    + diversity_strength * diversity_gain
                 )
 
             scored_options.append(

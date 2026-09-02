@@ -45,9 +45,9 @@ def build_context_explanation(
     history_similarity,
     mood,
     mood_fit,
-    tempo_fit,
+    bpm_constraint_satisfied,
     diversity_penalty,
-    exploration,
+    diversity_strength,
     rank,
 ):
     """Explain only the components that actually affected eligibility/ranking."""
@@ -55,7 +55,7 @@ def build_context_explanation(
     if history_similarity is not None and mood_fit is not None:
         summary = "Balances recent-listening similarity with the requested mood."
     elif mood_fit is not None:
-        summary = "Selected for alignment with the requested mood."
+        summary = "Selected using the requested mood profile."
     else:
         summary = "Selected for similarity to the recent listening history."
 
@@ -64,9 +64,9 @@ def build_context_explanation(
         evidence.append(f"history similarity {history_similarity:.2f}")
     if mood_fit is not None:
         evidence.append(f'{mood} mood fit {mood_fit:.2f}')
-    if tempo_fit is not None:
+    if bpm_constraint_satisfied is not None:
         evidence.append("within the requested BPM range")
-    if rank > 1 and exploration > 0:
+    if rank > 1 and diversity_strength > 0:
         evidence.append(
             f"maximum similarity to earlier recommendations {diversity_penalty:.2f}"
         )
