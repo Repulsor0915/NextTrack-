@@ -1,0 +1,65 @@
+{
+  "catalogue_version": "spotify-tracks-kaggle-v1-500",
+  "licence_note": "The Kaggle metadata declares the database licence; track and artist names remain content attributed to their original authors. Preserve attribution and review ODbL share-alike obligations before public redistribution of an adapted database.",
+  "outputs": {
+    "catalogue.json": {
+      "bytes": 198920,
+      "sha256": "389536c0d80e5ae79a6469ea20bf549b73fc627bd386f160694152f92705dc1f"
+    },
+    "dataset-summary.json": {
+      "bytes": 3448,
+      "sha256": "7bc0425627cc2ba0d650a877192f7cac02387b9651fa55d45acea2f659c8de6e"
+    },
+    "excluded-rows-summary.json": {
+      "bytes": 14682,
+      "sha256": "284a0b6276c8b5e92d1e9bc4240236418f29b2fe6dcf9ccb5b9c080bcc856203"
+    },
+    "excluded-rows.json": {
+      "bytes": 4437188,
+      "sha256": "aea24566edf54eac4886f1478ef893c74ea8ef76ba68b8a8340725b2b32fef6f"
+    },
+    "smoke-test-result.json": {
+      "bytes": 623,
+      "sha256": "eed13ab5839dd755b66028a595b3fff595494af24bbca8e2417908d6faed7713"
+    }
+  },
+  "retrieved_date": "2026-09-04",
+  "schema_version": 1,
+  "source": {
+    "canonical_url": "https://www.kaggle.com/datasets/maharshipandya/-spotify-tracks-dataset",
+    "declared_database_license": "Open Database License; contents remain © original authors",
+    "feature_origin": "Collected using the Spotify Web API",
+    "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "metadata_api_url": "https://www.kaggle.com/api/v1/datasets/view/maharshipandya/-spotify-tracks-dataset",
+    "name": "Spotify Tracks Dataset",
+    "publisher": "MaharshiPandya",
+    "raw_bytes": 20118244,
+    "raw_file": "dataset.csv",
+    "raw_sha256": "b202fa49909b2d5cef71a04b1d21243cfeb36414535f2ca9272aa646721177bd",
+    "retrieval_revision": "c4609440b24ac4075899f6e60b33775acbe00827",
+    "retrieval_url": "https://huggingface.co/datasets/maharshipandya/spotify-tracks-dataset/resolve/c4609440b24ac4075899f6e60b33775acbe00827/dataset.csv",
+    "source_last_updated": "2022-10-22T14:40:15.3Z",
+    "version": 1
+  },
+  "transform": {
+    "deduplication_key": "track_id",
+    "duplicate_policy": "keep first valid source row",
+    "explicit_content_policy": "exclude source rows marked explicit",
+    "genre_policy": "exclude comedy and sleep as non-song categories",
+    "invalid_row_policy": "exclude and report reasons",
+    "required_audio_features": [
+      "tempo",
+      "energy",
+      "valence",
+      "danceability",
+      "acousticness",
+      "instrumentalness",
+      "loudness",
+      "speechiness"
+    ],
+    "selection_limit": 500,
+    "selection_seed": 20260904,
+    "spoken_word_policy": "exclude speechiness greater than 0.66",
+    "year_policy": "null because the source does not provide release year"
+  }
+}

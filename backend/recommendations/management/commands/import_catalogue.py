@@ -5,19 +5,8 @@ from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
+from recommendations.catalogue_schema import FEATURE_FIELDS
 from recommendations.models import Track, TrackFeatures
-
-
-FEATURE_FIELDS = (
-    "tempo",
-    "energy",
-    "valence",
-    "danceability",
-    "acousticness",
-    "instrumentalness",
-    "loudness",
-    "speechiness",
-)
 
 
 class Command(BaseCommand):

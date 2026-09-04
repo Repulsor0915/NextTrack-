@@ -1,0 +1,27 @@
+{
+  "track_count": 500,
+  "track_features_count": 500,
+  "history_id": "00a5Fzao5KLmrJ68NJUYGF",
+  "request": {
+    "history": [
+      "00a5Fzao5KLmrJ68NJUYGF"
+    ],
+    "limit": 5,
+    "context": {
+      "mood": "happy",
+      "diversity_strength": 0.2
+    }
+  },
+  "http_status": 200,
+  "returned_count": 5,
+  "resolved_algorithm": "context_mmr",
+  "relevance_model": "history_mood_cbf",
+  "mood_model": "va-informed-8-feature-heuristic-v1",
+  "recommended_ids": [
+    "29Kc7RQUikxuxjkRYa39Ih",
+    "4ELGoHY7cG7GDRSW28lymj",
+    "2OFd67AsbCWEqnqFy9h9Hp",
+    "07YdlRy1GxHXYYPdy6FMfW",
+    "0SXsYrW0AreJdlamLMwJCs"
+  ]
+}
