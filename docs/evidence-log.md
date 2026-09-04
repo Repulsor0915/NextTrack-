@@ -225,6 +225,77 @@ Git whitespace-error check: passed
 - Chapter 5: software-correctness evidence only; quality evaluation still waits
   for the final dataset.
 
-**Next action:** Perform the final-dataset 20-track ingestion spike, verify the
-DEAM licence and schema, inspect missing values, and decide whether migration
-`0002` is required.
+**Next action (superseded on 2026-09-04):** The data spike remains next, but DEAM
+is now a theory/benchmark source rather than the assumed catalogue. See the next
+entry for the revised eight-feature dataset criteria.
+
+## 2026-09-04 - Mood theory and implementation boundary
+
+**Feature or milestone:** Archived the DEAM/VA and PAD/VAD design decision, then
+separated mood scoring from context orchestration without adding emotion fields
+to the database.
+
+**Code commit:** `7d358c7` (`feat: isolate VA-informed mood scoring`)
+
+**Approved boundary:**
+
+- History CBF and mood CBF continue to use the same normalized eight-feature
+  track representation.
+- DEAM and valence/arousal research support the literature and design rationale;
+  DEAM is not assumed to be the final runtime catalogue.
+- The implementation does not calculate standalone arousal, does not equate
+  energy with ground-truth arousal, and does not add a dominance value.
+- PAD/VAD is Future Work only. It would require suitable dominance-labelled
+  data, new mood requirements, and separate validation.
+- The four project-defined targets remain provisional and are explicitly
+  versioned as `va-informed-8-feature-heuristic-v1`.
+
+**Files or modules:**
+
+- `backend/recommendations/domain/mood_model.py`
+- `backend/recommendations/domain/context_ranker.py`
+- `backend/recommendations/domain/explanations.py`
+- `backend/recommendations/services/recommendation_service.py`
+- `backend/recommendations/tests/test_rankers.py`
+- `backend/recommendations/tests/test_service.py`
+- `backend/recommendations/tests/test_api.py`
+- `README.md`
+- sibling planning record: `../Codex/08_情绪模型与数据方向决策.md`
+
+**Observable API additions:**
+
+- Mood-based responses identify `meta.mood_model`.
+- Context result components expose `mood_feature_closeness` for only the
+  features that actually participate in the selected mood profile.
+- Deterministic explanations cite the closest mood-profile cues rather than
+  implying a hidden AI or validated arousal prediction.
+
+**Verification commands:**
+
+```powershell
+.\.venv\Scripts\python.exe backend\manage.py test recommendations --verbosity 1
+.\.venv\Scripts\python.exe backend\manage.py check
+.\.venv\Scripts\python.exe backend\manage.py makemigrations --check --dry-run
+git diff --check
+```
+
+**Observed verification result:**
+
+```text
+74 tests found
+74 tests passed
+Django system check: no issues
+Model migration drift: none
+Git whitespace-error check: passed
+```
+
+**Database impact:** None. `TrackFeatures` still contains exactly the existing
+eight audio-feature fields; no `0002` migration was generated.
+
+**Known limitations:** Mood targets and equal-within-profile mood-fit aggregation
+are engineering defaults. They require distribution inspection, sensitivity
+analysis, ablation, and offline evaluation on the selected final dataset.
+
+**Next action:** Run an eight-feature final-dataset 20-track spike. Verify exact
+source, licence, version, field definitions, units, missingness, duplicates, and
+outliers before selecting a dataset or changing the schema.
