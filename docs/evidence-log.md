@@ -299,3 +299,134 @@ analysis, ablation, and offline evaluation on the selected final dataset.
 **Next action:** Run an eight-feature final-dataset 20-track spike. Verify exact
 source, licence, version, field definitions, units, missingness, duplicates, and
 outliers before selecting a dataset or changing the schema.
+
+## 2026-09-04 - Final-dataset spike and 500-track catalogue
+
+**Feature or milestone:** Completed the provenance-aware eight-feature
+20-track ingestion spike and expanded the verified pipeline to the formal
+500-track FYP catalogue baseline.
+
+**Code commit:** `73e051f` (`feat: build provenance-aware 500-track catalogue`)
+
+**Selected source:** MaharshiPandya, *Spotify Tracks Dataset*, version 1. The
+Kaggle metadata declares an Open Database Licence for the database and reserves
+contents to their original authors. A pinned Hugging Face retrieval revision is
+used to make the exact CSV repeatable.
+
+```text
+Source rows: 114,000
+Raw bytes: 20,118,244
+Raw SHA-256: b202fa49909b2d5cef71a04b1d21243cfeb36414535f2ca9272aa646721177bd
+Pinned revision: c4609440b24ac4075899f6e60b33775acbe00827
+Valid unique tracks: 80,598
+Excluded source rows: 33,402
+Required audio-feature missing values: 0
+```
+
+**Quality/exclusion evidence:**
+
+```text
+duplicate_track_id: 22,207
+explicit_content: 9,747
+non_song_genre (comedy/sleep): 2,000
+likely_spoken_word: 91
+out_of_range_tempo: 19
+missing_artists: 1
+missing_track_name: 1
+```
+
+A source row may have more than one reason. The 500-track version retains the
+complete 33,402-row exclusion report as well as a compact summary.
+
+**Schema decision:** All eight required fields map directly to the existing
+`TrackFeatures` model. The source has no release-year field, and the existing
+nullable `Track.year` stores `null`. No `arousal` or `dominance` is derived and
+no `0002` migration is required.
+
+**Normalisation evidence:** Current robust ranges cover 99.976% of valid tempo
+values, 99.454% of valid loudness values, and 100% of the other six fields. The
+existing normaliser clamps the small number of more extreme tempo/loudness
+values; this is retained as an explicit limitation.
+
+**20-track spike result:**
+
+```text
+Tracks imported: 20
+TrackFeatures imported: 20
+Artists: 20
+Genres: 19
+Recommendation HTTP status: 200
+Returned recommendations: 5
+Resolved algorithm: context_mmr
+Mood model: va-informed-8-feature-heuristic-v1
+```
+
+**500-track expansion result:**
+
+```text
+Tracks imported: 500
+TrackFeatures imported: 500
+Artists: 477
+Genres: 107
+History ID: 00a5Fzao5KLmrJ68NJUYGF
+Recommendation HTTP status: 200
+Returned recommendations: 5
+Relevance model: history_mood_cbf
+Resolved algorithm: context_mmr
+Mood model: va-informed-8-feature-heuristic-v1
+```
+
+**Verification commands:**
+
+```powershell
+.\.venv\Scripts\python.exe backend\manage.py prepare_catalogue `
+  data\raw\spotify-tracks-kaggle-v1\dataset.csv `
+  data\processed\spotify-tracks-kaggle-v1-500 `
+  --limit 500 --seed 20260904 `
+  --catalogue-version spotify-tracks-kaggle-v1-500 `
+  --retrieved-date 2026-09-04 --write-full-exclusions
+
+.\.venv\Scripts\python.exe backend\manage.py test recommendations --verbosity 1
+.\.venv\Scripts\python.exe backend\manage.py check
+.\.venv\Scripts\python.exe backend\manage.py makemigrations --check --dry-run
+git diff --check
+```
+
+**Observed verification result:**
+
+```text
+77 tests found
+77 tests passed
+Django system check: no issues
+Model migration drift: none
+Git whitespace-error check: passed
+```
+
+**Generated artefacts:**
+
+- `data/SOURCES.md`
+- `data/processed/spotify-tracks-kaggle-v1-spike-20/`
+- `data/processed/spotify-tracks-kaggle-v1-500/catalogue.json`
+- `data/processed/spotify-tracks-kaggle-v1-500/dataset-summary.json`
+- `data/processed/spotify-tracks-kaggle-v1-500/excluded-rows-summary.json`
+- `data/processed/spotify-tracks-kaggle-v1-500/excluded-rows.json`
+- `data/processed/spotify-tracks-kaggle-v1-500/manifest.json`
+- `data/processed/spotify-tracks-kaggle-v1-500/smoke-test-result.json`
+
+The manifest records the raw checksum and the SHA-256/byte size of each JSON
+output. Raw CSV downloads and verification SQLite files remain Git-ignored.
+
+**Known limitations:** Source-provided explicit and genre labels may be
+imperfect. The deterministic hash sample is reproducible and broad but is not
+popularity-balanced. The source says features were collected via Spotify Web
+API, so this project must not claim that NextTrack calculated them or that the
+dataset is a first-party Spotify release. Dataset readiness does not establish
+recommendation quality.
+
+**Report mapping:** Chapter 3 can now state the actual field mapping, quality
+rules, fixed catalogue version, and schema decision. Chapter 4 can document the
+pipeline and isolated import. Chapter 5 can use the manifest and distribution
+summary as data evidence, but quality claims must wait for offline evaluation.
+
+**Next action:** Freeze `spotify-tracks-kaggle-v1-500` and build the repeatable
+offline evaluation for Random, Basic CBF, and Context+MMR.
