@@ -5,7 +5,6 @@ from django.test import SimpleTestCase
 from recommendations.domain.cbf_ranker import rank_cbf
 from recommendations.domain.context_ranker import (
     ContextRanking,
-    calculate_mood_fit,
     score_context_candidates,
 )
 from recommendations.domain.feature_vectors import (
@@ -18,6 +17,12 @@ from recommendations.domain.feature_vectors import (
     weighted_cosine_similarity,
 )
 from recommendations.domain.mmr import rerank_mmr
+from recommendations.domain.mood_model import (
+    MOOD_MODEL_VERSION,
+    MOOD_PROFILES,
+    calculate_mood_fit,
+    score_mood,
+)
 from recommendations.domain.random_ranker import rank_random
 
 
@@ -241,6 +246,28 @@ class ContextRankerTests(SimpleTestCase):
             calculate_mood_fit(low_mood_vector, "happy"),
         )
 
+    def test_mood_model_is_explicitly_versioned_and_uses_audio_features_only(self):
+        self.assertEqual(
+            MOOD_MODEL_VERSION,
+            "va-informed-8-feature-heuristic-v1",
+        )
+        for profile in MOOD_PROFILES.values():
+            self.assertTrue(set(profile).issubset(FEATURE_NAMES))
+            self.assertNotIn("arousal", profile)
+            self.assertNotIn("dominance", profile)
+
+    def test_mood_score_returns_feature_level_evidence(self):
+        score = score_mood(
+            self._vector(valence=0.85, energy=0.70, danceability=0.65),
+            "happy",
+        )
+
+        self.assertAlmostEqual(score.fit, 1.0)
+        self.assertEqual(
+            set(score.feature_closeness),
+            {"valence", "energy", "danceability"},
+        )
+
     def test_mood_only_context_can_rank_without_history(self):
         candidates = [
             (
@@ -258,6 +285,10 @@ class ContextRankerTests(SimpleTestCase):
         self.assertEqual(results[0].candidate, "happy-track")
         self.assertIsNone(results[0].history_similarity)
         self.assertIsNotNone(results[0].mood_fit)
+        self.assertEqual(
+            set(results[0].mood_feature_closeness),
+            {"valence", "energy", "danceability"},
+        )
 
     def test_history_and_mood_are_combined_into_context_relevance(self):
         profile = self._vector(energy=0.8, valence=0.8)

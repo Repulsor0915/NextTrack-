@@ -103,6 +103,7 @@ class RecommendationApiTests(APITestCase):
         self.assertEqual(response.data["algorithm"], "auto")
         self.assertEqual(response.data["meta"]["resolved_algorithm"], "cbf")
         self.assertEqual(response.data["meta"]["reranker"], "mmr")
+        self.assertIsNone(response.data["meta"]["mood_model"])
         self.assertEqual(response.data["meta"]["diversity_strength"], 0.2)
         self.assertEqual(len(response.data["recommendations"]), 1)
 
@@ -142,6 +143,10 @@ class RecommendationApiTests(APITestCase):
         )
         self.assertEqual(response.data["meta"]["relevance_model"], "mood_cbf")
         self.assertEqual(response.data["meta"]["reranker"], "mmr")
+        self.assertEqual(
+            response.data["meta"]["mood_model"],
+            "va-informed-8-feature-heuristic-v1",
+        )
         self.assertEqual(response.data["meta"]["diversity_strength"], 0.2)
         self.assertEqual(response.data["meta"]["mmr_lambda"], 0.8)
 
@@ -343,6 +348,7 @@ class RecommendationApiTests(APITestCase):
         components = response.data["recommendations"][0]["components"]
         self.assertIn("history_similarity", components)
         self.assertIn("mood_fit", components)
+        self.assertIn("mood_feature_closeness", components)
         self.assertIn("diversity_penalty", components)
         self.assertIn("mmr_score", components)
         self.assertEqual(

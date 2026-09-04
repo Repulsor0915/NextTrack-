@@ -45,6 +45,7 @@ def build_context_explanation(
     history_similarity,
     mood,
     mood_fit,
+    mood_feature_closeness,
     bpm_constraint_satisfied,
     diversity_penalty,
     diversity_strength,
@@ -64,6 +65,18 @@ def build_context_explanation(
         evidence.append(f"history similarity {history_similarity:.2f}")
     if mood_fit is not None:
         evidence.append(f'{mood} mood fit {mood_fit:.2f}')
+        closest_mood_features = sorted(
+            mood_feature_closeness.items(),
+            key=lambda item: (-item[1], item[0]),
+        )[:2]
+        if closest_mood_features:
+            evidence.append(
+                "closest mood-profile cues: "
+                + ", ".join(
+                    f"{FEATURE_LABELS[feature_name]} {closeness:.2f}"
+                    for feature_name, closeness in closest_mood_features
+                )
+            )
     if bpm_constraint_satisfied is not None:
         evidence.append("within the requested BPM range")
     if rank > 1 and diversity_strength > 0:

@@ -134,6 +134,19 @@ Example explicit Context+MMR request:
 - Explanations are deterministic and evidence-based; they do not use an AI
   agent or LLM.
 
+## Mood model boundary
+
+Mood recommendation remains content-based and uses the same normalized eight
+audio features as history CBF. The current project-defined profiles are
+versioned as `va-informed-8-feature-heuristic-v1`. Valence/arousal research,
+including DEAM, informs the design rationale, but the API does not calculate or
+store a standalone arousal value and does not treat `energy` as ground-truth
+arousal. PAD/VAD dominance is not part of the implemented model.
+
+For mood requests, `meta.mood_model` identifies the profile version and each
+result exposes `components.mood_feature_closeness`. These values let the
+deterministic explanation cite the actual feature cues used in `mood_fit`.
+
 ## Error responses
 
 Parser, serializer, and recommendation-service errors use one envelope while
@@ -162,3 +175,10 @@ parity testing. It must not be presented as the final research dataset or as
 verified Spotify data. Mood targets, feature weights, normalization ranges,
 history window, context ratio, diversity strength, and explanation thresholds
 remain provisional until final-dataset inspection and offline evaluation.
+
+The next data task is a 20-track spike using a static downloadable dataset that
+contains the eight required features and has traceable licence, provenance,
+version, field definitions, and missing-value handling. DEAM is retained as a
+VA/Music Emotion Recognition literature and benchmark source, not assumed to be
+the runtime catalogue. No `arousal` or `dominance` database migration should be
+added without new data and evaluation evidence.

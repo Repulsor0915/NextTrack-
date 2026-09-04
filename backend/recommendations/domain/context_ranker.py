@@ -1,34 +1,7 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from .feature_vectors import feature_closeness, weighted_cosine_similarity
-
-
-# Heuristic targets in normalized feature space. They are configurable project
-# parameters, not claims of clinically or psychologically validated boundaries.
-MOOD_TARGETS = {
-    "happy": {
-        "valence": 0.85,
-        "energy": 0.70,
-        "danceability": 0.65,
-    },
-    "energetic": {
-        "energy": 0.90,
-        "tempo": 0.75,
-        "danceability": 0.75,
-    },
-    "calm": {
-        "energy": 0.20,
-        "tempo": 0.25,
-        "acousticness": 0.70,
-        "speechiness": 0.10,
-    },
-    "sad": {
-        "valence": 0.15,
-        "energy": 0.25,
-        "tempo": 0.30,
-        "acousticness": 0.60,
-    },
-}
+from .mood_model import score_mood
 
 HISTORY_RELEVANCE_WEIGHT = 0.65
 MOOD_RELEVANCE_WEIGHT = 0.35
@@ -43,21 +16,7 @@ class ContextRanking:
     mood_fit: float | None
     bpm_constraint_satisfied: bool | None
     feature_closeness: dict
-
-
-def calculate_mood_fit(vector, mood):
-    """Return mean proximity to a mood's heuristic normalized targets."""
-
-    if mood is None:
-        return None
-    if mood not in MOOD_TARGETS:
-        raise ValueError(f'Unsupported mood "{mood}"')
-
-    targets = MOOD_TARGETS[mood]
-    return sum(
-        1.0 - abs(vector[feature_name] - target)
-        for feature_name, target in targets.items()
-    ) / len(targets)
+    mood_feature_closeness: dict = field(default_factory=dict)
 
 
 def score_context_candidates(
@@ -79,7 +38,8 @@ def score_context_candidates(
             if session_profile is not None
             else None
         )
-        mood_fit = calculate_mood_fit(vector, mood)
+        mood_score = score_mood(vector, mood) if mood is not None else None
+        mood_fit = mood_score.fit if mood_score is not None else None
 
         if history_similarity is not None and mood_fit is not None:
             relevance = (
@@ -102,6 +62,11 @@ def score_context_candidates(
                 feature_closeness=(
                     feature_closeness(vector, session_profile)
                     if session_profile is not None
+                    else {}
+                ),
+                mood_feature_closeness=(
+                    mood_score.feature_closeness
+                    if mood_score is not None
                     else {}
                 ),
             )

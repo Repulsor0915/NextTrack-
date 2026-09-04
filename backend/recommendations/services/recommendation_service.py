@@ -13,6 +13,7 @@ from recommendations.domain.feature_vectors import (
     build_session_profile,
 )
 from recommendations.domain.mmr import rerank_mmr
+from recommendations.domain.mood_model import MOOD_MODEL_VERSION
 from recommendations.domain.random_ranker import rank_random
 from recommendations.models import Track
 
@@ -183,6 +184,7 @@ class RecommendationService:
                     ),
                     "history_window_size": HISTORY_WINDOW_SIZE,
                     "mood": mood,
+                    "mood_model": MOOD_MODEL_VERSION if mood else None,
                     "relevance_model": self._relevance_model(
                         history=history,
                         mood=mood,
@@ -338,6 +340,10 @@ class RecommendationService:
             "components": {
                 "history_similarity": rounded(context.history_similarity),
                 "mood_fit": rounded(context.mood_fit),
+                "mood_feature_closeness": {
+                    feature_name: round(value, 4)
+                    for feature_name, value in context.mood_feature_closeness.items()
+                },
                 "bpm_constraint_satisfied": context.bpm_constraint_satisfied,
                 "context_relevance": rounded(context.relevance),
                 "diversity_penalty": rounded(result.diversity_penalty),
@@ -352,6 +358,7 @@ class RecommendationService:
                 history_similarity=context.history_similarity,
                 mood=mood,
                 mood_fit=context.mood_fit,
+                mood_feature_closeness=context.mood_feature_closeness,
                 bpm_constraint_satisfied=context.bpm_constraint_satisfied,
                 diversity_penalty=result.diversity_penalty,
                 diversity_strength=diversity_strength,

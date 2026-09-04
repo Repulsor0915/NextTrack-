@@ -315,16 +315,27 @@ class RecommendationServiceTests(TestCase):
 
         self.assertEqual(result["algorithm"], "context_mmr")
         self.assertEqual(result["meta"]["mood"], "happy")
+        self.assertEqual(
+            result["meta"]["mood_model"],
+            "va-informed-8-feature-heuristic-v1",
+        )
         self.assertEqual(result["meta"]["diversity_strength"], 0.4)
         self.assertEqual(result["meta"]["mmr_lambda"], 0.6)
         self.assertIsNotNone(components["history_similarity"])
         self.assertIsNotNone(components["mood_fit"])
+        self.assertTrue(components["mood_feature_closeness"])
         self.assertIs(components["bpm_constraint_satisfied"], True)
         self.assertIn("context_relevance", components)
         self.assertIn("diversity_penalty", components)
         self.assertIn("mmr_score", components)
         self.assertEqual(recommendation["score"], components["context_relevance"])
         self.assertTrue(recommendation["explanation"]["evidence"])
+        self.assertTrue(
+            any(
+                item.startswith("closest mood-profile cues:")
+                for item in recommendation["explanation"]["evidence"]
+            )
+        )
 
     def test_auto_history_uses_cbf_relevance_with_default_mmr(self):
         result = self.service.recommend(
