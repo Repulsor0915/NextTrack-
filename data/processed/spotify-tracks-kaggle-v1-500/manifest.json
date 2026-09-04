@@ -7,16 +7,16 @@
       "sha256": "389536c0d80e5ae79a6469ea20bf549b73fc627bd386f160694152f92705dc1f"
     },
     "dataset-summary.json": {
-      "bytes": 3448,
-      "sha256": "7bc0425627cc2ba0d650a877192f7cac02387b9651fa55d45acea2f659c8de6e"
+      "bytes": 3497,
+      "sha256": "e9d9d5cc496095707b22dfe336aa068df17dd29f380aae0acc7fa546fa06ca27"
     },
     "excluded-rows-summary.json": {
-      "bytes": 14682,
-      "sha256": "284a0b6276c8b5e92d1e9bc4240236418f29b2fe6dcf9ccb5b9c080bcc856203"
+      "bytes": 14740,
+      "sha256": "e050687b4333d33030570a424b4b2c6522010c480bdca603cd108e4ac950534f"
     },
     "excluded-rows.json": {
-      "bytes": 4437188,
-      "sha256": "aea24566edf54eac4886f1478ef893c74ea8ef76ba68b8a8340725b2b32fef6f"
+      "bytes": 4439044,
+      "sha256": "e04c3dc1f12f82ae7b407f61b201f63d8866e58fa9bf9f5971cc624b28e5a6fd"
     },
     "smoke-test-result.json": {
       "bytes": 623,
@@ -47,6 +47,48 @@
     "explicit_content_policy": "exclude source rows marked explicit",
     "genre_policy": "exclude comedy and sleep as non-song categories",
     "invalid_row_policy": "exclude and report reasons",
+    "normalization": {
+      "feature_ranges": {
+        "acousticness": {
+          "maximum": 1.0,
+          "minimum": 0.0
+        },
+        "danceability": {
+          "maximum": 1.0,
+          "minimum": 0.0
+        },
+        "energy": {
+          "maximum": 1.0,
+          "minimum": 0.0
+        },
+        "instrumentalness": {
+          "maximum": 1.0,
+          "minimum": 0.0
+        },
+        "loudness": {
+          "maximum": 0.0,
+          "minimum": -30.0
+        },
+        "speechiness": {
+          "maximum": 1.0,
+          "minimum": 0.0
+        },
+        "tempo": {
+          "maximum": 220.0,
+          "minimum": 40.0
+        },
+        "valence": {
+          "maximum": 1.0,
+          "minimum": 0.0
+        }
+      },
+      "method": "min-max scaling followed by clamping",
+      "output_range": [
+        0.0,
+        1.0
+      ],
+      "stored_values": "raw source feature values"
+    },
     "required_audio_features": [
       "tempo",
       "energy",
@@ -57,8 +99,16 @@
       "loudness",
       "speechiness"
     ],
+    "selected_track_count": 500,
     "selection_limit": 500,
+    "selection_mode": "deterministic_hash_sample",
     "selection_seed": 20260904,
+    "source_text_max_lengths": {
+      "artists": 255,
+      "track_genre": 100,
+      "track_id": 100,
+      "track_name": 255
+    },
     "spoken_word_policy": "exclude speechiness greater than 0.66",
     "year_policy": "null because the source does not provide release year"
   }

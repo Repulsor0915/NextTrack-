@@ -171,10 +171,12 @@ configuration are not exposed.
 ## Data status
 
 The original 25-track catalogue remains provisional prototype data for parity
-testing. The formal FYP baseline is now
-`data/processed/spotify-tracks-kaggle-v1-500/catalogue.json`: 500 tracks selected
-reproducibly from 80,598 valid unique candidates after inspecting all 114,000
-source rows. The processed directory includes a manifest with source/output
+testing. The formal FYP catalogue is now
+`data/processed/spotify-tracks-kaggle-v1-full/catalogue.json`: all 80,584
+schema-compatible valid unique tracks retained after inspecting all 114,000
+source rows. The 20-track spike remains as a small ingestion/API sample and the
+500-track version remains as an intermediate milestone. The full processed
+directory includes a manifest with source/output
 SHA-256 checksums, distribution and missing-value statistics, complete excluded
 rows, and an observed API smoke-test result.
 
@@ -185,22 +187,31 @@ Git-ignored. The Django schema still uses exactly the existing eight features;
 no `arousal`, `dominance`, or `0002` migration was needed. DEAM remains a
 VA/Music Emotion Recognition literature and benchmark source, not runtime data.
 
-Prepare and import the 500-track version from a verified raw CSV:
+Prepare and import the full version from a verified raw CSV:
 
 ```powershell
 .\.venv\Scripts\python.exe backend\manage.py prepare_catalogue `
   data\raw\spotify-tracks-kaggle-v1\dataset.csv `
-  data\processed\spotify-tracks-kaggle-v1-500 `
-  --limit 500 --seed 20260904 `
-  --catalogue-version spotify-tracks-kaggle-v1-500 `
-  --retrieved-date 2026-09-04 --write-full-exclusions
+  data\processed\spotify-tracks-kaggle-v1-full `
+  --all-valid `
+  --catalogue-version spotify-tracks-kaggle-v1-full `
+  --retrieved-date 2026-09-05 --write-full-exclusions
 
 .\.venv\Scripts\python.exe backend\manage.py import_catalogue `
-  data\processed\spotify-tracks-kaggle-v1-500\catalogue.json `
-  --data-source spotify-tracks-kaggle-v1-500
+  data\processed\spotify-tracks-kaggle-v1-full\catalogue.json `
+  --data-source spotify-tracks-kaggle-v1-full
 ```
 
-This catalogue is sufficient for the planned baseline evaluation, but it does
-not by itself prove recommendation quality. Mood targets, feature weights,
-history window, context ratio, diversity strength, and explanation thresholds
-remain provisional until offline evaluation and sensitivity checks.
+The validated raw values remain in JSON/SQLite while min-max scaling and
+clamping are centralized in `recommendations/preprocessing/normalization.py`.
+See `recommendations/preprocessing/README.md` for the preprocessing boundary.
+
+This catalogue does not by itself prove recommendation quality. Mood targets,
+feature weights, history window, context ratio, diversity strength, and
+explanation thresholds remain provisional until offline evaluation and
+sensitivity checks.
+
+The full import is functional but currently takes about 160 seconds, and a
+local full-catalogue Context+MMR smoke request took about 7.5 seconds. These are
+known performance baselines to address before production deployment and large
+offline experiment runs.

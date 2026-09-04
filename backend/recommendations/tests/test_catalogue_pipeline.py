@@ -5,11 +5,11 @@ from tempfile import TemporaryDirectory
 
 from django.test import SimpleTestCase
 
-from recommendations.catalogue_pipeline import (
+from recommendations.preprocessing.catalogue import (
     CataloguePreparationError,
     prepare_catalogue,
 )
-from recommendations.catalogue_schema import FEATURE_FIELDS
+from recommendations.preprocessing.schema import FEATURE_FIELDS
 
 
 class CataloguePipelineTests(SimpleTestCase):
@@ -92,6 +92,7 @@ class CataloguePipelineTests(SimpleTestCase):
                 self._row("track-spoken", speechiness="0.9"),
                 self._row("track-explicit", explicit="True"),
                 self._row("track-non-song", track_genre="sleep"),
+                self._row("track-long-artist", artists="A" * 256),
             ]
         )
 
@@ -109,13 +110,44 @@ class CataloguePipelineTests(SimpleTestCase):
         ) as report_file:
             report = json.load(report_file)
 
-        self.assertEqual(report["excluded_source_row_count"], 6)
+        self.assertEqual(report["excluded_source_row_count"], 7)
         self.assertEqual(report["reason_counts"]["duplicate_track_id"], 1)
         self.assertEqual(report["reason_counts"]["missing_energy"], 1)
         self.assertEqual(report["reason_counts"]["out_of_range_valence"], 1)
         self.assertEqual(report["reason_counts"]["likely_spoken_word"], 1)
         self.assertEqual(report["reason_counts"]["explicit_content"], 1)
         self.assertEqual(report["reason_counts"]["non_song_genre"], 1)
+        self.assertEqual(report["reason_counts"]["too_long_artists"], 1)
+
+    def test_all_valid_mode_keeps_every_valid_unique_track(self):
+        self._write_rows(
+            [
+                self._row("track-c"),
+                self._row("track-a"),
+                self._row("track-b"),
+            ]
+        )
+
+        result = prepare_catalogue(
+            self.source_path,
+            self.output_directory,
+            limit=None,
+            seed=42,
+            catalogue_version="test-full-v1",
+            retrieved_date="2026-09-05",
+        )
+
+        with result["catalogue_path"].open(encoding="utf-8") as catalogue_file:
+            catalogue = json.load(catalogue_file)
+        with result["summary_path"].open(encoding="utf-8") as summary_file:
+            summary = json.load(summary_file)
+
+        self.assertEqual(
+            [track["id"] for track in catalogue],
+            ["track-a", "track-b", "track-c"],
+        )
+        self.assertEqual(summary["selection_mode"], "all_valid_unique")
+        self.assertIsNone(summary["selection_seed"])
 
     def test_rejects_missing_required_source_column(self):
         with self.source_path.open("w", encoding="utf-8", newline="") as source:

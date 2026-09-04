@@ -8,7 +8,6 @@ from recommendations.domain.explanations import (
 )
 from recommendations.domain.feature_vectors import (
     HISTORY_WINDOW_SIZE,
-    build_feature_vector,
     build_recency_weighted_profile,
     build_session_profile,
 )
@@ -16,6 +15,7 @@ from recommendations.domain.mmr import rerank_mmr
 from recommendations.domain.mood_model import MOOD_MODEL_VERSION
 from recommendations.domain.random_ranker import rank_random
 from recommendations.models import Track
+from recommendations.preprocessing.normalization import build_feature_vector
 
 
 class RecommendationServiceError(Exception):

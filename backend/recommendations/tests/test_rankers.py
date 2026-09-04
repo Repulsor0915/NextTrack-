@@ -8,12 +8,9 @@ from recommendations.domain.context_ranker import (
     score_context_candidates,
 )
 from recommendations.domain.feature_vectors import (
-    FEATURE_NAMES,
     FEATURE_WEIGHTS,
-    build_feature_vector,
     build_recency_weighted_profile,
     build_session_profile,
-    normalize_feature,
     weighted_cosine_similarity,
 )
 from recommendations.domain.mmr import rerank_mmr
@@ -24,6 +21,11 @@ from recommendations.domain.mood_model import (
     score_mood,
 )
 from recommendations.domain.random_ranker import rank_random
+from recommendations.preprocessing.normalization import (
+    FEATURE_NAMES,
+    build_feature_vector,
+    normalize_feature,
+)
 
 
 class RandomRankerTests(SimpleTestCase):

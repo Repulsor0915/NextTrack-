@@ -51,10 +51,10 @@ One source row is transformed into the existing Django schema as follows:
 
 | NextTrack field | Source column | Rule |
 |---|---|---|
-| `id` | `track_id` | Required; deduplication key |
-| `title` | `track_name` | Required |
-| `artist` | `artists` | Required; source text retained |
-| `genre` | `track_genre` | Required; source label retained |
+| `id` | `track_id` | Required; deduplication key; maximum 100 characters |
+| `title` | `track_name` | Required; maximum 255 characters |
+| `artist` | `artists` | Required; source text retained; maximum 255 characters |
+| `genre` | `track_genre` | Required; source label retained; maximum 100 characters |
 | `year` | — | Stored as `null`; source has no release-year column |
 | `tempo` | `tempo` | Required finite number, `(0, 300]` BPM |
 | `energy` | `energy` | Required finite number in `[0, 1]` |
@@ -69,19 +69,26 @@ The unnamed CSV index column and unused fields are ignored. The source supplies
 all eight features already used by `TrackFeatures`, so no `0002` migration is
 needed. No `arousal` or `dominance` column is derived.
 
+Processed JSON and SQLite retain these validated raw values. Min-max scaling and
+clamping are performed by `recommendations/preprocessing/normalization.py` when
+the recommender builds its eight-dimensional vectors; the normalization ranges
+are recorded in the generated manifest.
+
 ## Quality rules and observed results
 
 The pipeline reads all 114,000 rows before selecting a catalogue. It retains
-80,598 valid unique tracks and excludes 33,402 source rows. A row may have more
+80,584 schema-compatible valid unique tracks and excludes 33,416 source rows. A row may have more
 than one reason, so reason counts need not sum exactly to excluded rows.
 
 | Exclusion reason | Count | Rule |
 |---|---:|---|
-| Duplicate `track_id` | 22,207 | Keep the first valid occurrence |
+| Duplicate `track_id` | 22,206 | Keep the first valid occurrence |
 | Source `explicit=true` | 9,747 | Exclude from this project catalogue |
 | `comedy` or `sleep` genre | 2,000 | Exclude obvious non-song categories |
-| `speechiness > 0.66` | 91 | Exclude likely spoken-word recordings |
+| `speechiness > 0.66` | 88 | Exclude likely spoken-word recordings |
 | Tempo outside `(0, 300]` | 19 | Exclude invalid range |
+| Artist longer than 255 characters | 18 | Must fit the Django field |
+| Title longer than 255 characters | 1 | Must fit the Django field |
 | Missing artist | 1 | Required field |
 | Missing title | 1 | Required field |
 
@@ -98,8 +105,8 @@ Known limitations:
   guarantee.
 - Keeping the first valid duplicate is deterministic but may discard a later
   genre assignment for the same track.
-- The 500-track catalogue is a deterministic random-like sample for this FYP,
-  not a popularity-balanced or user-personalised corpus.
+- The full catalogue contains every schema-compatible valid unique track; it is
+  not popularity-balanced or user-personalised.
 - DEAM informs the valence/arousal literature and mood rationale only; no DEAM
   audio or annotations are merged into this catalogue.
 
@@ -108,18 +115,20 @@ Known limitations:
 | Version | Tracks | Artists | Genres | Purpose |
 |---|---:|---:|---:|---|
 | `spotify-tracks-kaggle-v1-spike-20` | 20 | 20 | 19 | Schema/import/API spike |
-| `spotify-tracks-kaggle-v1-500` | 500 | 477 | 107 | Formal FYP catalogue baseline |
+| `spotify-tracks-kaggle-v1-500` | 500 | 477 | 107 | Retained intermediate milestone |
+| `spotify-tracks-kaggle-v1-full` | 80,584 | 28,153 | 111 | Formal full catalogue |
 
-Selection is reproducible: candidates are ordered by the SHA-256 value of
-`20260904:<track_id>` and the lowest priorities are selected. Output order is
-then sorted by track ID. Each version contains:
+Sample selection is reproducible: candidates are ordered by the SHA-256 value
+of `20260904:<track_id>` and the lowest priorities are selected. The full
+version does not sample: it retains every valid unique candidate. All output is
+sorted by track ID. Each version contains:
 
 - `catalogue.json`: importable processed data;
 - `dataset-summary.json`: source shape, missing values, feature distributions,
   and selection coverage;
 - `excluded-rows-summary.json`: reason totals and the first 100 examples;
-- `excluded-rows.json` in the 500-track version: all excluded source rows and
-  their reasons;
+- `excluded-rows.json` in the 500-track and full versions: all excluded source
+  rows and their reasons;
 - `manifest.json`: source identity, raw checksum, transform policy, and SHA-256
   checksum for every generated JSON artefact;
 - `smoke-test-result.json`: observed import/API result.
@@ -134,22 +143,28 @@ Get-FileHash -Algorithm SHA256 data\raw\spotify-tracks-kaggle-v1\dataset.csv
 
 .\.venv\Scripts\python.exe backend\manage.py prepare_catalogue `
   data\raw\spotify-tracks-kaggle-v1\dataset.csv `
-  data\processed\spotify-tracks-kaggle-v1-500 `
-  --limit 500 `
-  --seed 20260904 `
-  --catalogue-version spotify-tracks-kaggle-v1-500 `
-  --retrieved-date 2026-09-04 `
+  data\processed\spotify-tracks-kaggle-v1-full `
+  --all-valid `
+  --catalogue-version spotify-tracks-kaggle-v1-full `
+  --retrieved-date 2026-09-05 `
   --write-full-exclusions
 
-$env:NEXTTRACK_DB_PATH = "data\processed\spotify-tracks-kaggle-v1-500\verification.sqlite3"
+$env:NEXTTRACK_DB_PATH = "data\processed\spotify-tracks-kaggle-v1-full\verification.sqlite3"
 .\.venv\Scripts\python.exe backend\manage.py migrate --noinput
 .\.venv\Scripts\python.exe backend\manage.py import_catalogue `
-  data\processed\spotify-tracks-kaggle-v1-500\catalogue.json `
-  --data-source spotify-tracks-kaggle-v1-500
+  data\processed\spotify-tracks-kaggle-v1-full\catalogue.json `
+  --data-source spotify-tracks-kaggle-v1-full
 ```
 
 `NEXTTRACK_DB_PATH` keeps verification separate from the developer database.
 Generated SQLite files are ignored and are not research artefacts.
+
+The verified full import created 80,584 Track and 80,584 TrackFeatures rows.
+The current row-by-row importer took approximately 160 seconds, and one
+full-catalogue history + mood + MMR request took approximately 7.5 seconds in
+the local development environment. These are functionality checks, not final
+performance benchmarks; import batching and candidate-search optimisation
+remain production/performance work.
 
 ## Candidate not selected
 

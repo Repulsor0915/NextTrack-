@@ -702,14 +702,16 @@
     }
   ],
   "examples_are_truncated": true,
-  "excluded_source_row_count": 33402,
+  "excluded_source_row_count": 33416,
   "reason_counts": {
-    "duplicate_track_id": 22207,
+    "duplicate_track_id": 22206,
     "explicit_content": 9747,
-    "likely_spoken_word": 91,
+    "likely_spoken_word": 88,
     "missing_artists": 1,
     "missing_track_name": 1,
     "non_song_genre": 2000,
-    "out_of_range_tempo": 19
+    "out_of_range_tempo": 19,
+    "too_long_artists": 18,
+    "too_long_track_name": 1
   }
 }

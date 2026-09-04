@@ -1,11 +1,11 @@
 {
-  "excluded_source_row_count": 33402,
+  "excluded_source_row_count": 33416,
   "feature_statistics_for_valid_unique_tracks": {
     "acousticness": {
       "above_current_normalization_maximum": 0,
       "below_current_normalization_minimum": 0,
       "maximum": 0.996,
-      "mean": 0.331835,
+      "mean": 0.331808,
       "median": 0.194,
       "minimum": 0.0,
       "p01": 7e-06,
@@ -15,7 +15,7 @@
       "above_current_normalization_maximum": 0,
       "below_current_normalization_minimum": 0,
       "maximum": 0.985,
-      "mean": 0.560561,
+      "mean": 0.560575,
       "median": 0.573,
       "minimum": 0.0513,
       "p01": 0.143,
@@ -25,7 +25,7 @@
       "above_current_normalization_maximum": 0,
       "below_current_normalization_minimum": 0,
       "maximum": 1.0,
-      "mean": 0.630074,
+      "mean": 0.630092,
       "median": 0.672,
       "minimum": 2e-05,
       "p01": 0.0336,
@@ -35,7 +35,7 @@
       "above_current_normalization_maximum": 0,
       "below_current_normalization_minimum": 0,
       "maximum": 0.999,
-      "mean": 0.178716,
+      "mean": 0.178728,
       "median": 8.1e-05,
       "minimum": 0.0,
       "p01": 0.0,
@@ -45,17 +45,17 @@
       "above_current_normalization_maximum": 54,
       "below_current_normalization_minimum": 386,
       "maximum": 4.532,
-      "mean": -8.462951,
+      "mean": -8.462653,
       "median": -7.25,
       "minimum": -43.957,
-      "p01": -27.0646,
+      "p01": -27.0674,
       "p99": -1.678
     },
     "speechiness": {
       "above_current_normalization_maximum": 0,
       "below_current_normalization_minimum": 0,
       "maximum": 0.66,
-      "mean": 0.072753,
+      "mean": 0.072751,
       "median": 0.0467,
       "minimum": 0.0221,
       "p01": 0.0256,
@@ -65,17 +65,17 @@
       "above_current_normalization_maximum": 8,
       "below_current_normalization_minimum": 11,
       "maximum": 243.372,
-      "mean": 122.664849,
-      "median": 122.701,
+      "mean": 122.664924,
+      "median": 122.702,
       "minimum": 30.322,
-      "p01": 66.95594,
-      "p99": 193.67612
+      "p01": 66.95566,
+      "p99": 193.67668
     },
     "valence": {
       "above_current_normalization_maximum": 0,
       "below_current_normalization_minimum": 0,
       "maximum": 0.995,
-      "mean": 0.474902,
+      "mean": 0.474912,
       "median": 0.462,
       "minimum": 0.0,
       "p01": 0.0362,
@@ -116,6 +116,7 @@
   "selected_genre_count": 107,
   "selected_track_count": 500,
   "selection_method": "lowest SHA-256 priorities of seed:track_id over valid unique tracks",
+  "selection_mode": "deterministic_hash_sample",
   "selection_seed": 20260904,
   "source_column_count": 21,
   "source_columns": [
@@ -142,6 +143,6 @@
     "track_genre"
   ],
   "source_row_count": 114000,
-  "unselected_valid_track_count": 80098,
-  "valid_unique_track_count": 80598
+  "unselected_valid_track_count": 80084,
+  "valid_unique_track_count": 80584
 }

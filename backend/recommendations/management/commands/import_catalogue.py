@@ -5,8 +5,8 @@ from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
-from recommendations.catalogue_schema import FEATURE_FIELDS
 from recommendations.models import Track, TrackFeatures
+from recommendations.preprocessing.schema import FEATURE_FIELDS
 
 
 class Command(BaseCommand):

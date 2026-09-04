@@ -1,32 +1,29 @@
 {
-  "catalogue_version": "spotify-tracks-kaggle-v1-spike-20",
-  "database": {
-    "feature_count": 20,
-    "isolated_sqlite_not_committed": true,
-    "track_count": 20
-  },
+  "track_count": 20,
+  "track_features_count": 20,
+  "history_id": "0YCPCY9WhQFMFtoSpj6dhL",
   "request": {
-    "context": {
-      "diversity_strength": 0.2,
-      "mood": "happy"
-    },
     "history": [
-      "2nqhQaJH4zJ6F2X2wBQ1IT"
+      "0YCPCY9WhQFMFtoSpj6dhL"
     ],
-    "limit": 5
+    "limit": 5,
+    "context": {
+      "mood": "happy",
+      "diversity_strength": 0.2
+    }
   },
-  "response_observation": {
-    "http_status": 200,
-    "mood_model": "va-informed-8-feature-heuristic-v1",
-    "recommended_ids": [
-      "19LGby5jLYCgto7lrWraWS",
-      "0vsRt9W2VisbZW6mqqjbp8",
-      "4cugerDcXpyGDu5RfES1Ag",
-      "1tdk9AdzpYRihGtZyvEbeQ",
-      "74PHS8w06Hu5pwa7rB2mF9"
-    ],
-    "resolved_algorithm": "context_mmr",
-    "returned_count": 5
-  },
-  "verified_date": "2026-09-04"
+  "http_status": 200,
+  "returned_count": 5,
+  "resolved_algorithm": "context_mmr",
+  "relevance_model": "history_mood_cbf",
+  "mood_model": "va-informed-8-feature-heuristic-v1",
+  "service_processing_ms": 4.272,
+  "client_wall_ms": 50.626,
+  "recommended_ids": [
+    "4cugerDcXpyGDu5RfES1Ag",
+    "0vsRt9W2VisbZW6mqqjbp8",
+    "2iPZtPwZbHvmIeIStJfsmr",
+    "7gpGDGRcUtAmZhFdZm7NJt",
+    "1xDmRbSnfZMcj6KM8HBYiN"
+  ]
 }

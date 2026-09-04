@@ -2,7 +2,7 @@ from pathlib import Path
 
 from django.core.management.base import BaseCommand, CommandError
 
-from recommendations.catalogue_pipeline import (
+from recommendations.preprocessing.catalogue import (
     CataloguePreparationError,
     prepare_catalogue,
 )
@@ -14,7 +14,13 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument("source_csv", type=Path)
         parser.add_argument("output_directory", type=Path)
-        parser.add_argument("--limit", type=int, default=20)
+        selection_group = parser.add_mutually_exclusive_group()
+        selection_group.add_argument("--limit", type=int, default=20)
+        selection_group.add_argument(
+            "--all-valid",
+            action="store_true",
+            help="Include every valid unique track instead of taking a sample.",
+        )
         parser.add_argument("--seed", type=int, default=20260904)
         parser.add_argument(
             "--catalogue-version",
@@ -28,7 +34,7 @@ class Command(BaseCommand):
             result = prepare_catalogue(
                 options["source_csv"],
                 options["output_directory"],
-                limit=options["limit"],
+                limit=None if options["all_valid"] else options["limit"],
                 seed=options["seed"],
                 catalogue_version=options["catalogue_version"],
                 retrieved_date=options["retrieved_date"],
