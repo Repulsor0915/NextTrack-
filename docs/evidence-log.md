@@ -308,6 +308,9 @@ outliers before selecting a dataset or changing the schema.
 
 **Code commit:** `73e051f` (`feat: build provenance-aware 500-track catalogue`)
 
+**Checksum portability commit:** `0a6063e` fixes processed JSON to LF across
+Git checkouts so the recorded SHA-256 values remain stable on Windows.
+
 **Selected source:** MaharshiPandya, *Spotify Tracks Dataset*, version 1. The
 Kaggle metadata declares an Open Database Licence for the database and reserves
 contents to their original authors. A pinned Hugging Face retrieval revision is
