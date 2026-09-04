@@ -302,6 +302,10 @@ outliers before selecting a dataset or changing the schema.
 
 ## 2026-09-04 - Final-dataset spike and 500-track catalogue
 
+**Status:** Superseded on 2026-09-05 by the full-catalogue entry below. A full
+import exposed source text longer than the Django schema limits, so eligibility
+was tightened and the valid count changed from 80,598 to 80,584.
+
 **Feature or milestone:** Completed the provenance-aware eight-feature
 20-track ingestion spike and expanded the verified pipeline to the formal
 500-track FYP catalogue baseline.
@@ -433,3 +437,128 @@ summary as data evidence, but quality claims must wait for offline evaluation.
 
 **Next action:** Freeze `spotify-tracks-kaggle-v1-500` and build the repeatable
 offline evaluation for Random, Basic CBF, and Context+MMR.
+
+## 2026-09-05 - All-valid final catalogue and preprocessing package
+
+**Feature or milestone:** Retained the 20-track spike and promoted every
+schema-compatible valid unique track to the formal final catalogue. Moved raw
+catalogue processing and min-max normalisation into a dedicated preprocessing
+package.
+
+**Code commit:** `aff5f1d` (`feat: promote all valid tracks to final catalogue`)
+
+**Final data hierarchy:**
+
+```text
+Raw source rows: 114,000
+Retained 20-track spike: 20
+Formal full catalogue: 80,584
+Unselected valid tracks in full mode: 0
+Distinct artists: 28,153
+Distinct genres: 111
+Excluded source rows: 33,416
+```
+
+The existing 500-track deterministic sample remains as an intermediate
+milestone, but it is no longer the final catalogue.
+
+**Final exclusion evidence:**
+
+```text
+duplicate_track_id: 22,206
+explicit_content: 9,747
+non_song_genre: 2,000
+likely_spoken_word: 88
+out_of_range_tempo: 19
+too_long_artists: 18
+too_long_track_name: 1
+missing_artists: 1
+missing_track_name: 1
+```
+
+One row can have multiple reasons. Text-length validation was added after the
+first full import correctly failed on a 316-character artist value that could
+not fit `Track.artist(max_length=255)`. The failed transaction rolled back, the
+preprocessor was corrected, and the final import was rerun from zero.
+
+**Preprocessing modules:**
+
+- `backend/recommendations/preprocessing/schema.py`
+- `backend/recommendations/preprocessing/catalogue.py`
+- `backend/recommendations/preprocessing/normalization.py`
+- `backend/recommendations/preprocessing/README.md`
+
+Processed JSON and SQLite preserve the validated raw values. The normalization
+module converts them into the recommender's `[0, 1]` vector space using min-max
+scaling followed by clamping. Each full manifest records the exact bounds. No
+normalized duplicate columns, `arousal`, `dominance`, or `0002` migration were
+added.
+
+**Full preparation command:**
+
+```powershell
+.\.venv\Scripts\python.exe backend\manage.py prepare_catalogue `
+  data\raw\spotify-tracks-kaggle-v1\dataset.csv `
+  data\processed\spotify-tracks-kaggle-v1-full `
+  --all-valid `
+  --catalogue-version spotify-tracks-kaggle-v1-full `
+  --retrieved-date 2026-09-05 `
+  --write-full-exclusions
+```
+
+**Observed full import/API result:**
+
+```text
+Track rows: 80,584
+TrackFeatures rows: 80,584
+Import result: successful
+Import time: 160.366 seconds
+Recommendation HTTP status: 200
+Returned recommendations: 5
+Relevance model: history_mood_cbf
+Resolved algorithm: context_mmr
+Mood model: va-informed-8-feature-heuristic-v1
+Service processing time: 7,490.469 ms
+Client wall time: 7,635.128 ms
+```
+
+**Retained 20-track sample re-verification:**
+
+```text
+Track rows: 20
+TrackFeatures rows: 20
+Recommendation HTTP status: 200
+Returned recommendations: 5
+Resolved algorithm: context_mmr
+Service processing time: 4.272 ms
+```
+
+**Verification:**
+
+```text
+78 tests found
+78 tests passed
+Django system check: no issues
+Model migration drift: none
+All manifest output checksums: matched
+All smoke-test history/recommendation IDs: present in their catalogue
+```
+
+**Generated full artefacts:**
+
+- `data/processed/spotify-tracks-kaggle-v1-full/catalogue.json`
+- `data/processed/spotify-tracks-kaggle-v1-full/dataset-summary.json`
+- `data/processed/spotify-tracks-kaggle-v1-full/excluded-rows-summary.json`
+- `data/processed/spotify-tracks-kaggle-v1-full/excluded-rows.json`
+- `data/processed/spotify-tracks-kaggle-v1-full/manifest.json`
+- `data/processed/spotify-tracks-kaggle-v1-full/smoke-test-result.json`
+
+**Known limitation:** The full catalogue is functionally usable but the current
+row-by-row importer and exhaustive candidate scoring are slow at this size.
+These measurements are smoke baselines rather than a controlled performance
+experiment. Bulk import and candidate/vector retrieval optimisation should be
+completed before large offline experiment runs or production deployment.
+
+**Next action:** Prepare full-catalogue performance (bulk import and candidate
+vector retrieval/caching or fixed evaluation candidate pools), then run the
+repeatable Random vs Basic CBF vs Context+MMR offline evaluation.
