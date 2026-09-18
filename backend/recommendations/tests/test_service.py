@@ -343,7 +343,7 @@ class RecommendationServiceTests(TestCase):
         self.assertEqual(result["meta"]["mood"], "happy")
         self.assertEqual(
             result["meta"]["mood_model"],
-            "va-informed-8-feature-heuristic-v1",
+            "va-targets-panda-2021-relieff-weights-v2",
         )
         self.assertEqual(result["meta"]["diversity_strength"], 0.4)
         self.assertEqual(result["meta"]["mmr_lambda"], 0.6)

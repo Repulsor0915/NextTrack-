@@ -41,6 +41,32 @@ EQUAL_FEATURE_WEIGHTS = {
     for feature_name in FEATURE_NAMES
 }
 
+# ReliefF feature importance reported by Panda et al. (2021) for separating
+# 704 labelled songs across Russell's four arousal-valence quadrants. The
+# source study used 12 Spotify features; only the eight features available in
+# NextTrack are retained and normalised here. These weights are used solely by
+# the mood-fit calculation, not by the Basic CBF similarity baseline.
+# Source: https://renatopanda.github.io/assets/pdf/papers/
+# Panda%20et%20al.%20-%202021%20-%20How%20Does%20the%20Spotify%20API%20Compare%
+# 20to%20the%20Music%20Emotion%20Recognition%20State-of-the-Art.pdf
+_PANDA_2021_MER_RAW_FEATURE_WEIGHTS = {
+    "tempo": 0.00721,
+    "energy": 0.07299,
+    "valence": 0.06713,
+    "danceability": 0.00409,
+    "acousticness": 0.06394,
+    "instrumentalness": 0.02479,
+    "loudness": 0.01518,
+    "speechiness": 0.01583,
+}
+_panda_2021_mer_weight_total = sum(
+    _PANDA_2021_MER_RAW_FEATURE_WEIGHTS.values()
+)
+PANDA_2021_MER_MOOD_FEATURE_WEIGHTS = {
+    feature_name: weight / _panda_2021_mer_weight_total
+    for feature_name, weight in _PANDA_2021_MER_RAW_FEATURE_WEIGHTS.items()
+}
+
 # Literature-informed experimental preset retained for controlled comparison.
 # These are the eight NextTrack-overlapping values reported by a 2025 HDSR
 # genre-classification study; that study also used other features. The values
@@ -105,7 +131,7 @@ class AlgorithmConfig:
     over the features used by the requested mood.
     """
 
-    name: str = "baseline-current-v1"
+    name: str = "baseline-panda-mood-v1"
     feature_weights: Mapping[str, float] = field(
         default_factory=lambda: dict(CURRENT_FEATURE_WEIGHTS)
     )
@@ -115,7 +141,9 @@ class AlgorithmConfig:
     context_history_strategy: str = "linear_recency"
     history_relevance_weight: float = 0.65
     mood_relevance_weight: float = 0.35
-    mood_feature_weights: Mapping[str, float] | None = None
+    mood_feature_weights: Mapping[str, float] | None = field(
+        default_factory=lambda: dict(PANDA_2021_MER_MOOD_FEATURE_WEIGHTS)
+    )
     default_diversity_strength: float = 0.20
 
     def __post_init__(self) -> None:

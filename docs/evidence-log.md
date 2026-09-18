@@ -116,3 +116,23 @@ configuration object.
 - `makemigrations --check --dry-run` reported no model changes.
 - Formal offline evaluation has not started; passing regression tests is not
   reported as evidence that one algorithm has better recommendation quality.
+
+## 2026-09-19 — Panda-weighted mood baseline
+
+The formal default configuration is now `baseline-panda-mood-v1`. Mood target
+values remain project-defined, while feature closeness inside each mood profile
+uses the normalized NextTrack-overlapping ReliefF importance values reported by
+Panda et al. (2021). Basic CBF weights and similarity, the 65:35 history:mood
+context relevance ratio, and the 80:20 MMR relevance:diversity setting are
+unchanged.
+
+The Panda values affect only `mood_fit`. Equal mood-feature weighting remains
+available as an experimental comparison through `AlgorithmConfig`.
+
+Verification performed:
+
+- All 93 recommendation tests passed.
+- Django system checks passed and no migrations were generated.
+- A full-catalogue database smoke run used three history tracks, 100 fixed
+  candidates, happy mood, and diversity strength 0.20; Context+MMR returned all
+  requested ten recommendations with the new mood model version.

@@ -10,6 +10,7 @@ from recommendations.domain.algorithm_config import (
     DEFAULT_ALGORITHM_CONFIG,
     EQUAL_FEATURE_WEIGHTS,
     LITERATURE_INFORMED_FEATURE_WEIGHTS,
+    PANDA_2021_MER_MOOD_FEATURE_WEIGHTS,
     AlgorithmConfig,
 )
 
@@ -18,7 +19,7 @@ class AlgorithmConfigTests(SimpleTestCase):
     def test_default_config_preserves_the_current_baseline(self):
         config = DEFAULT_ALGORITHM_CONFIG
 
-        self.assertEqual(config.name, "baseline-current-v1")
+        self.assertEqual(config.name, "baseline-panda-mood-v1")
         self.assertEqual(dict(config.feature_weights), CURRENT_FEATURE_WEIGHTS)
         self.assertEqual(config.relevance_similarity_metric, "weighted_cosine")
         self.assertEqual(config.diversity_similarity_metric, "weighted_cosine")
@@ -26,7 +27,10 @@ class AlgorithmConfigTests(SimpleTestCase):
         self.assertEqual(config.context_history_strategy, "linear_recency")
         self.assertEqual(config.history_relevance_weight, 0.65)
         self.assertEqual(config.mood_relevance_weight, 0.35)
-        self.assertIsNone(config.mood_feature_weights)
+        self.assertEqual(
+            dict(config.mood_feature_weights),
+            PANDA_2021_MER_MOOD_FEATURE_WEIGHTS,
+        )
         self.assertEqual(config.default_diversity_strength, 0.2)
 
     def test_config_snapshot_is_json_serialisable(self):
@@ -36,7 +40,7 @@ class AlgorithmConfigTests(SimpleTestCase):
             snapshot["schema_version"],
             ALGORITHM_CONFIG_SCHEMA_VERSION,
         )
-        self.assertIn("baseline-current-v1", json.dumps(snapshot))
+        self.assertIn("baseline-panda-mood-v1", json.dumps(snapshot))
 
     def test_weight_mappings_are_immutable(self):
         with self.assertRaises(TypeError):
@@ -66,6 +70,7 @@ class AlgorithmConfigTests(SimpleTestCase):
             CURRENT_FEATURE_WEIGHTS,
             EQUAL_FEATURE_WEIGHTS,
             LITERATURE_INFORMED_FEATURE_WEIGHTS,
+            PANDA_2021_MER_MOOD_FEATURE_WEIGHTS,
         ):
             self.assertEqual(set(weights), set(FEATURE_NAMES))
             self.assertAlmostEqual(sum(weights.values()), 1.0)

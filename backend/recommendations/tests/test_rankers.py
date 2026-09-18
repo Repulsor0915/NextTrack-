@@ -6,6 +6,7 @@ from django.test import SimpleTestCase
 from recommendations.domain.cbf_ranker import rank_cbf
 from recommendations.domain.algorithm_config import (
     DEFAULT_ALGORITHM_CONFIG,
+    PANDA_2021_MER_MOOD_FEATURE_WEIGHTS,
     AlgorithmConfig,
 )
 from recommendations.domain.context_ranker import (
@@ -309,7 +310,7 @@ class ContextRankerTests(SimpleTestCase):
     def test_mood_model_is_explicitly_versioned_and_uses_audio_features_only(self):
         self.assertEqual(
             MOOD_MODEL_VERSION,
-            "va-informed-8-feature-heuristic-v1",
+            "va-targets-panda-2021-relieff-weights-v2",
         )
         for profile in MOOD_PROFILES.values():
             self.assertTrue(set(profile).issubset(FEATURE_NAMES))
@@ -339,7 +340,11 @@ class ContextRankerTests(SimpleTestCase):
         )
         vector = self._vector(valence=0.85, energy=0.0, danceability=0.65)
 
-        equal_score = score_mood(vector, "happy")
+        equal_score = score_mood(
+            vector,
+            "happy",
+            feature_weights=None,
+        )
         weighted_score = score_mood(
             vector,
             "happy",
@@ -349,6 +354,23 @@ class ContextRankerTests(SimpleTestCase):
         self.assertAlmostEqual(equal_score.fit, (1.0 + 0.3 + 1.0) / 3)
         self.assertAlmostEqual(weighted_score.fit, 0.88 / 0.95)
         self.assertGreater(weighted_score.fit, equal_score.fit)
+
+    def test_default_mood_weights_follow_panda_2021_relief_f_values(self):
+        vector = self._vector(valence=0.85, energy=0.0, danceability=0.65)
+
+        score = score_mood(vector, "happy")
+
+        active_features = ("valence", "energy", "danceability")
+        active_total = sum(
+            PANDA_2021_MER_MOOD_FEATURE_WEIGHTS[feature_name]
+            for feature_name in active_features
+        )
+        expected = (
+            PANDA_2021_MER_MOOD_FEATURE_WEIGHTS["valence"]
+            + 0.3 * PANDA_2021_MER_MOOD_FEATURE_WEIGHTS["energy"]
+            + PANDA_2021_MER_MOOD_FEATURE_WEIGHTS["danceability"]
+        ) / active_total
+        self.assertAlmostEqual(score.fit, expected)
 
     def test_mood_only_context_can_rank_without_history(self):
         candidates = [

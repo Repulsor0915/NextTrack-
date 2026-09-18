@@ -145,7 +145,7 @@ class RecommendationApiTests(APITestCase):
         self.assertEqual(response.data["meta"]["reranker"], "mmr")
         self.assertEqual(
             response.data["meta"]["mood_model"],
-            "va-informed-8-feature-heuristic-v1",
+            "va-targets-panda-2021-relieff-weights-v2",
         )
         self.assertEqual(response.data["meta"]["diversity_strength"], 0.2)
         self.assertEqual(response.data["meta"]["mmr_lambda"], 0.8)

@@ -23,8 +23,10 @@ When both history and mood exist, contextual relevance is:
 relevance = 0.65 * history_similarity + 0.35 * mood_fit
 ```
 
-The current mood model uses project-defined target profiles. Features listed
-in a profile contribute equally to `mood_fit` under the baseline configuration.
+The current mood model uses project-defined target profiles. Feature closeness
+within each profile is weighted using the eight NextTrack-overlapping ReliefF
+importance values reported by Panda et al. (2021), renormalized over the
+features used by the requested mood.
 
 MMR keeps the most relevant track first. From rank two onward:
 
@@ -56,18 +58,19 @@ It does not contain the catalogue, candidate pool, Top-N, test scenarios, or
 random seed. Those describe an experiment run and belong in
 `experiment-config.json`, not in the ranking formula.
 
-The default `baseline-current-v1` configuration preserves existing API
-behaviour. Experimental alternatives currently supported by the algorithm
-layer are:
+The default `baseline-panda-mood-v1` configuration preserves the Basic CBF,
+context-relevance, and MMR defaults, and formally uses the Panda-derived mood
+feature weights. Experimental alternatives currently supported by the
+algorithm layer are:
 
 - equal, current heuristic, or literature-informed eight-feature weights;
 - weighted cosine or normalized weighted Euclidean relevance similarity;
-- equal or explicitly weighted mood-profile features;
+- equal or Panda-derived mood-profile feature weights;
 - configurable history:mood ratio; and
 - configurable MMR relevance:diversity ratio.
 
-The literature-informed feature preset is only an experimental comparison. It
-is not asserted to be a universal or already validated optimum for NextTrack.
-Likewise, no unsupported full mood-weight preset is fabricated: the baseline
-remains equal weighting until a complete, defensible configuration is selected
-and evaluated.
+The general CBF literature-informed feature preset is only an experimental
+comparison. It is not asserted to be a universal or already validated optimum
+for NextTrack. The separate Panda-derived weights are used only inside
+`mood_fit`; they do not alter Basic CBF similarity, the 65:35 history:mood
+ratio, or the 80:20 MMR relevance:diversity setting.

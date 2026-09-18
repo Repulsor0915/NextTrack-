@@ -1,7 +1,9 @@
 from dataclasses import dataclass
 
+from .algorithm_config import PANDA_2021_MER_MOOD_FEATURE_WEIGHTS
 
-MOOD_MODEL_VERSION = "va-informed-8-feature-heuristic-v1"
+
+MOOD_MODEL_VERSION = "va-targets-panda-2021-relieff-weights-v2"
 
 # These profiles operate in the same normalized eight-feature space as the
 # recommender. Valence/arousal theory informs their interpretation, but the
@@ -39,7 +41,12 @@ class MoodScore:
     feature_closeness: dict
 
 
-def score_mood(vector, mood, *, feature_weights=None):
+def score_mood(
+    vector,
+    mood,
+    *,
+    feature_weights=PANDA_2021_MER_MOOD_FEATURE_WEIGHTS,
+):
     """Score proximity to a project-defined mood profile.
 
     No standalone arousal or dominance value is inferred. Activation-related
@@ -76,7 +83,12 @@ def score_mood(vector, mood, *, feature_weights=None):
     )
 
 
-def calculate_mood_fit(vector, mood, *, feature_weights=None):
+def calculate_mood_fit(
+    vector,
+    mood,
+    *,
+    feature_weights=PANDA_2021_MER_MOOD_FEATURE_WEIGHTS,
+):
     """Return the scalar fit for callers that do not need evidence details."""
 
     if mood is None:

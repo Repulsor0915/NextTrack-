@@ -138,10 +138,13 @@ Example explicit Context+MMR request:
 
 Mood recommendation remains content-based and uses the same normalized eight
 audio features as history CBF. The current project-defined profiles are
-versioned as `va-informed-8-feature-heuristic-v1`. Valence/arousal research,
-including DEAM, informs the design rationale, but the API does not calculate or
-store a standalone arousal value and does not treat `energy` as ground-truth
-arousal. PAD/VAD dominance is not part of the implemented model.
+versioned as `va-targets-panda-2021-relieff-weights-v2`. The target values remain
+project-defined; feature contributions within each mood use the normalized
+Panda et al. (2021) ReliefF importance values for the eight features available
+in NextTrack. Valence/arousal research, including DEAM, informs the design
+rationale, but the API does not calculate or store a standalone arousal value
+and does not treat `energy` as ground-truth arousal. PAD/VAD dominance is not
+part of the implemented model.
 
 For mood requests, `meta.mood_model` identifies the profile version and each
 result exposes `components.mood_feature_closeness`. These values let the
@@ -157,9 +160,10 @@ metrics, history:mood ratios, mood-feature weights, and MMR defaults without
 editing ranker source code. The public API does not accept this complete
 configuration object.
 
-The default configuration is named `baseline-current-v1` and preserves the
-behaviour documented above. The detailed algorithm boundary and configurable
-experiment choices are recorded in
+The default configuration is named `baseline-panda-mood-v1`. It preserves the
+existing Basic CBF, context-relevance, and MMR defaults while making the
+Panda-derived mood feature weights the formal mood calculation. The detailed
+algorithm boundary and configurable experiment choices are recorded in
 `backend/recommendations/domain/README.md`.
 
 ## Error responses
