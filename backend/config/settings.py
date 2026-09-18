@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "rest_framework",
+    "offline_evaluation.apps.OfflineEvaluationConfig",
     "recommendations.apps.RecommendationsConfig",
 ]
 

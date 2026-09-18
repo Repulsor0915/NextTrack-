@@ -166,6 +166,32 @@ Panda-derived mood feature weights the formal mood calculation. The detailed
 algorithm boundary and configurable experiment choices are recorded in
 `backend/recommendations/domain/README.md`.
 
+## Offline evaluation protocol draft
+
+Protocol steps 6-8 can be reproduced from the project root with:
+
+```powershell
+.\.venv\Scripts\python.exe backend\manage.py prepare_evaluation_protocol `
+  --protocol-date 2026-09-19 `
+  --seed 221611 `
+  --top-n 10 `
+  --random-repetitions 30 `
+  --expected-candidate-count 500 `
+  --coherent-genres pop rock hip-hop
+```
+
+Single-line version:
+
+```powershell
+.\.venv\Scripts\python.exe backend\manage.py prepare_evaluation_protocol --protocol-date 2026-09-19 --seed 221611 --top-n 10 --random-repetitions 30 --expected-candidate-count 500 --coherent-genres pop rock hip-hop
+```
+
+The command creates `evaluation/experiment-config.json`, the fixed
+`candidate-pool.json`, `scenarios.draft.json`, a human-readable
+`scenario-review.md`, and `protocol-manifest.json`. It refuses to overwrite
+these files unless `--force` is supplied. The draft must be reviewed and frozen
+as `scenarios.json` before an evaluation runner is implemented or executed.
+
 ## Error responses
 
 Parser, serializer, and recommendation-service errors use one envelope while

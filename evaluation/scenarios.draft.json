@@ -1,0 +1,2451 @@
+{
+  "category_counts": {
+    "coherent_multi_track_history": 9,
+    "mood_only": 4,
+    "single_track_history": 4,
+    "transition_conflicting_history": 4
+  },
+  "coherent_genres": [
+    "pop",
+    "rock",
+    "hip-hop"
+  ],
+  "generator_version": "deterministic-scenarios-v1",
+  "human_review_required": true,
+  "instructions": [
+    "Check track title, artist, genre and feature evidence for plausibility.",
+    "Reject accidental duplicates, unsuitable metadata or incoherent histories.",
+    "Do not rename to scenarios.json until the review is approved."
+  ],
+  "scenario_count": 21,
+  "scenarios": [
+    {
+      "applicable_algorithms": [
+        "random",
+        "cbf",
+        "context_mmr"
+      ],
+      "audit": {
+        "anchor_mood": "happy",
+        "selection_method": "highest happy mood fit outside the candidate pool, with globally distinct history artists"
+      },
+      "category": "single_track_history",
+      "description": "Single history track selected near the happy profile; no requested mood is supplied.",
+      "expected_candidate_count": 500,
+      "history_tracks": [
+        {
+          "artist": "The Po' Ramblin' Boys;Bronwyn Keith-Hynes;Jason Carter",
+          "genres": [
+            "bluegrass"
+          ],
+          "id": "1KcVZj7EtoOcf6mL3Rv94S",
+          "mood_fit": {
+            "calm": 0.687948,
+            "energetic": 0.802579,
+            "happy": 0.997437,
+            "sad": 0.595788
+          },
+          "normalized_features": {
+            "acousticness": 0.537,
+            "danceability": 0.669,
+            "energy": 0.704,
+            "instrumentalness": 0.165,
+            "loudness": 0.743967,
+            "speechiness": 0.03,
+            "tempo": 0.47215,
+            "valence": 0.85
+          },
+          "position": 1,
+          "raw_features": {
+            "acousticness": 0.537,
+            "danceability": 0.669,
+            "energy": 0.704,
+            "instrumentalness": 0.165,
+            "loudness": -7.681,
+            "speechiness": 0.03,
+            "tempo": 124.987,
+            "valence": 0.85
+          },
+          "role": "single_anchor",
+          "title": "East Bound and Down"
+        }
+      ],
+      "request_template": {
+        "context": {},
+        "history": [
+          "1KcVZj7EtoOcf6mL3Rv94S"
+        ],
+        "limit": 10
+      },
+      "scenario_id": "single_happy_anchor"
+    },
+    {
+      "applicable_algorithms": [
+        "random",
+        "cbf",
+        "context_mmr"
+      ],
+      "audit": {
+        "anchor_mood": "energetic",
+        "selection_method": "highest energetic mood fit outside the candidate pool, with globally distinct history artists"
+      },
+      "category": "single_track_history",
+      "description": "Single history track selected near the energetic profile; no requested mood is supplied.",
+      "expected_candidate_count": 500,
+      "history_tracks": [
+        {
+          "artist": "Level",
+          "genres": [
+            "metalcore"
+          ],
+          "id": "79r1StxsiqwbLLkTGK2OdG",
+          "mood_fit": {
+            "calm": 0.398961,
+            "energetic": 0.999276,
+            "happy": 0.714533,
+            "sad": 0.522472
+          },
+          "normalized_features": {
+            "acousticness": 0.141,
+            "danceability": 0.745,
+            "energy": 0.9,
+            "instrumentalness": 0.0,
+            "loudness": 0.828067,
+            "speechiness": 0.458,
+            "tempo": 0.755633,
+            "valence": 0.46
+          },
+          "position": 1,
+          "raw_features": {
+            "acousticness": 0.141,
+            "danceability": 0.745,
+            "energy": 0.9,
+            "instrumentalness": 0.0,
+            "loudness": -5.158,
+            "speechiness": 0.458,
+            "tempo": 176.014,
+            "valence": 0.46
+          },
+          "role": "single_anchor",
+          "title": "Turn Da Beat Up!"
+        }
+      ],
+      "request_template": {
+        "context": {},
+        "history": [
+          "79r1StxsiqwbLLkTGK2OdG"
+        ],
+        "limit": 10
+      },
+      "scenario_id": "single_energetic_anchor"
+    },
+    {
+      "applicable_algorithms": [
+        "random",
+        "cbf",
+        "context_mmr"
+      ],
+      "audit": {
+        "anchor_mood": "calm",
+        "selection_method": "highest calm mood fit outside the candidate pool, with globally distinct history artists"
+      },
+      "category": "single_track_history",
+      "description": "Single history track selected near the calm profile; no requested mood is supplied.",
+      "expected_candidate_count": 500,
+      "history_tracks": [
+        {
+          "artist": "George Jones",
+          "genres": [
+            "honky-tonk"
+          ],
+          "id": "2O3nenUcckL7ATMPQVvXVH",
+          "mood_fit": {
+            "calm": 0.99038,
+            "energetic": 0.349293,
+            "happy": 0.496321,
+            "sad": 0.902955
+          },
+          "normalized_features": {
+            "acousticness": 0.698,
+            "danceability": 0.604,
+            "energy": 0.205,
+            "instrumentalness": 0.0,
+            "loudness": 0.4633,
+            "speechiness": 0.0391,
+            "tempo": 0.261383,
+            "valence": 0.309
+          },
+          "position": 1,
+          "raw_features": {
+            "acousticness": 0.698,
+            "danceability": 0.604,
+            "energy": 0.205,
+            "instrumentalness": 0.0,
+            "loudness": -16.101,
+            "speechiness": 0.0391,
+            "tempo": 87.049,
+            "valence": 0.309
+          },
+          "role": "single_anchor",
+          "title": "Don't Leave Without Taking Your Silver"
+        }
+      ],
+      "request_template": {
+        "context": {},
+        "history": [
+          "2O3nenUcckL7ATMPQVvXVH"
+        ],
+        "limit": 10
+      },
+      "scenario_id": "single_calm_anchor"
+    },
+    {
+      "applicable_algorithms": [
+        "random",
+        "cbf",
+        "context_mmr"
+      ],
+      "audit": {
+        "anchor_mood": "sad",
+        "selection_method": "highest sad mood fit outside the candidate pool, with globally distinct history artists"
+      },
+      "category": "single_track_history",
+      "description": "Single history track selected near the sad profile; no requested mood is supplied.",
+      "expected_candidate_count": 500,
+      "history_tracks": [
+        {
+          "artist": "Gabriela Rocha",
+          "genres": [
+            "gospel"
+          ],
+          "id": "3UGAT6cXT3NI73seAE2BOF",
+          "mood_fit": {
+            "calm": 0.936415,
+            "energetic": 0.378447,
+            "happy": 0.443009,
+            "sad": 0.982511
+          },
+          "normalized_features": {
+            "acousticness": 0.609,
+            "danceability": 0.506,
+            "energy": 0.233,
+            "instrumentalness": 0.0,
+            "loudness": 0.717833,
+            "speechiness": 0.0338,
+            "tempo": 0.37435,
+            "valence": 0.17
+          },
+          "position": 1,
+          "raw_features": {
+            "acousticness": 0.609,
+            "danceability": 0.506,
+            "energy": 0.233,
+            "instrumentalness": 0.0,
+            "loudness": -8.465,
+            "speechiness": 0.0338,
+            "tempo": 107.383,
+            "valence": 0.17
+          },
+          "role": "single_anchor",
+          "title": "Conversa de Filho"
+        }
+      ],
+      "request_template": {
+        "context": {},
+        "history": [
+          "3UGAT6cXT3NI73seAE2BOF"
+        ],
+        "limit": 10
+      },
+      "scenario_id": "single_sad_anchor"
+    },
+    {
+      "applicable_algorithms": [
+        "random",
+        "cbf",
+        "context_mmr"
+      ],
+      "audit": {
+        "genre": "pop",
+        "history_length": 1,
+        "nested_history_family": "coherent_pop",
+        "selection_method": "closest distinct-artist tracks to the normalized pop centroid"
+      },
+      "category": "coherent_multi_track_history",
+      "description": "1-track coherent pop history with distinct artists and no requested mood.",
+      "expected_candidate_count": 500,
+      "history_tracks": [
+        {
+          "artist": "Shankar-Ehsaan-Loy;Shankar Mahadevan;Caralisa Monteiro;Shafqat Amanat Ali",
+          "genres": [
+            "pop",
+            "pop-film"
+          ],
+          "id": "4BTPzhEsyW3blWcxcuhLM0",
+          "mood_fit": {
+            "calm": 0.630096,
+            "energetic": 0.728108,
+            "happy": 0.808991,
+            "sad": 0.657313
+          },
+          "normalized_features": {
+            "acousticness": 0.295,
+            "danceability": 0.63,
+            "energy": 0.63,
+            "instrumentalness": 1.3e-05,
+            "loudness": 0.749167,
+            "speechiness": 0.0364,
+            "tempo": 0.372794,
+            "valence": 0.517
+          },
+          "position": 1,
+          "raw_features": {
+            "acousticness": 0.295,
+            "danceability": 0.63,
+            "energy": 0.63,
+            "instrumentalness": 1.26e-05,
+            "loudness": -7.525,
+            "speechiness": 0.0364,
+            "tempo": 107.103,
+            "valence": 0.517
+          },
+          "role": "coherent_history",
+          "title": "Mitwa"
+        }
+      ],
+      "request_template": {
+        "context": {},
+        "history": [
+          "4BTPzhEsyW3blWcxcuhLM0"
+        ],
+        "limit": 10
+      },
+      "scenario_id": "coherent_pop_h1"
+    },
+    {
+      "applicable_algorithms": [
+        "random",
+        "cbf",
+        "context_mmr"
+      ],
+      "audit": {
+        "genre": "pop",
+        "history_length": 3,
+        "nested_history_family": "coherent_pop",
+        "selection_method": "closest distinct-artist tracks to the normalized pop centroid"
+      },
+      "category": "coherent_multi_track_history",
+      "description": "3-track coherent pop history with distinct artists and no requested mood.",
+      "expected_candidate_count": 500,
+      "history_tracks": [
+        {
+          "artist": "Sanam",
+          "genres": [
+            "pop"
+          ],
+          "id": "1ccZZf0IQi5y0bHMl2aGDF",
+          "mood_fit": {
+            "calm": 0.674111,
+            "energetic": 0.742555,
+            "happy": 0.781922,
+            "sad": 0.714568
+          },
+          "normalized_features": {
+            "acousticness": 0.422,
+            "danceability": 0.636,
+            "energy": 0.647,
+            "instrumentalness": 0.0,
+            "loudness": 0.767667,
+            "speechiness": 0.0436,
+            "tempo": 0.366189,
+            "valence": 0.44
+          },
+          "position": 1,
+          "raw_features": {
+            "acousticness": 0.422,
+            "danceability": 0.636,
+            "energy": 0.647,
+            "instrumentalness": 0.0,
+            "loudness": -6.97,
+            "speechiness": 0.0436,
+            "tempo": 105.914,
+            "valence": 0.44
+          },
+          "role": "coherent_history",
+          "title": "Gulabi Aankhen"
+        },
+        {
+          "artist": "Sam C.S.;Anirudh Ravichander;Shakthisree Gopalan",
+          "genres": [
+            "pop"
+          ],
+          "id": "6EB454nVg2u6sbeCvWAPej",
+          "mood_fit": {
+            "calm": 0.655286,
+            "energetic": 0.738178,
+            "happy": 0.791365,
+            "sad": 0.686121
+          },
+          "normalized_features": {
+            "acousticness": 0.368,
+            "danceability": 0.692,
+            "energy": 0.624,
+            "instrumentalness": 0.0,
+            "loudness": 0.7836,
+            "speechiness": 0.0337,
+            "tempo": 0.516089,
+            "valence": 0.487
+          },
+          "position": 2,
+          "raw_features": {
+            "acousticness": 0.368,
+            "danceability": 0.692,
+            "energy": 0.624,
+            "instrumentalness": 0.0,
+            "loudness": -6.492,
+            "speechiness": 0.0337,
+            "tempo": 132.896,
+            "valence": 0.487
+          },
+          "role": "coherent_history",
+          "title": "Yaanji - From \"Vikram Vedha\""
+        },
+        {
+          "artist": "Shankar-Ehsaan-Loy;Shankar Mahadevan;Caralisa Monteiro;Shafqat Amanat Ali",
+          "genres": [
+            "pop",
+            "pop-film"
+          ],
+          "id": "4BTPzhEsyW3blWcxcuhLM0",
+          "mood_fit": {
+            "calm": 0.630096,
+            "energetic": 0.728108,
+            "happy": 0.808991,
+            "sad": 0.657313
+          },
+          "normalized_features": {
+            "acousticness": 0.295,
+            "danceability": 0.63,
+            "energy": 0.63,
+            "instrumentalness": 1.3e-05,
+            "loudness": 0.749167,
+            "speechiness": 0.0364,
+            "tempo": 0.372794,
+            "valence": 0.517
+          },
+          "position": 3,
+          "raw_features": {
+            "acousticness": 0.295,
+            "danceability": 0.63,
+            "energy": 0.63,
+            "instrumentalness": 1.26e-05,
+            "loudness": -7.525,
+            "speechiness": 0.0364,
+            "tempo": 107.103,
+            "valence": 0.517
+          },
+          "role": "coherent_history",
+          "title": "Mitwa"
+        }
+      ],
+      "request_template": {
+        "context": {},
+        "history": [
+          "1ccZZf0IQi5y0bHMl2aGDF",
+          "6EB454nVg2u6sbeCvWAPej",
+          "4BTPzhEsyW3blWcxcuhLM0"
+        ],
+        "limit": 10
+      },
+      "scenario_id": "coherent_pop_h3"
+    },
+    {
+      "applicable_algorithms": [
+        "random",
+        "cbf",
+        "context_mmr"
+      ],
+      "audit": {
+        "genre": "pop",
+        "history_length": 5,
+        "nested_history_family": "coherent_pop",
+        "selection_method": "closest distinct-artist tracks to the normalized pop centroid"
+      },
+      "category": "coherent_multi_track_history",
+      "description": "5-track coherent pop history with distinct artists and no requested mood.",
+      "expected_candidate_count": 500,
+      "history_tracks": [
+        {
+          "artist": "Yuvan Shankar Raja;Sid Sriram",
+          "genres": [
+            "k-pop",
+            "pop",
+            "pop-film"
+          ],
+          "id": "78tblPcz2otRZd1VOeU7zz",
+          "mood_fit": {
+            "calm": 0.604725,
+            "energetic": 0.787545,
+            "happy": 0.84035,
+            "sad": 0.633178
+          },
+          "normalized_features": {
+            "acousticness": 0.291,
+            "danceability": 0.72,
+            "energy": 0.692,
+            "instrumentalness": 0.0,
+            "loudness": 0.7882,
+            "speechiness": 0.0894,
+            "tempo": 0.38895,
+            "valence": 0.52
+          },
+          "position": 1,
+          "raw_features": {
+            "acousticness": 0.291,
+            "danceability": 0.72,
+            "energy": 0.692,
+            "instrumentalness": 0.0,
+            "loudness": -6.354,
+            "speechiness": 0.0894,
+            "tempo": 110.011,
+            "valence": 0.52
+          },
+          "role": "coherent_history",
+          "title": "Kanja Poovu Kannala (From \"Viruman\")"
+        },
+        {
+          "artist": "GAYLE",
+          "genres": [
+            "alternative",
+            "pop"
+          ],
+          "id": "4fouWK6XVHhzl78KzQ1UjL",
+          "mood_fit": {
+            "calm": 0.670323,
+            "energetic": 0.660375,
+            "happy": 0.715249,
+            "sad": 0.719216
+          },
+          "normalized_features": {
+            "acousticness": 0.299,
+            "danceability": 0.695,
+            "energy": 0.54,
+            "instrumentalness": 0.0,
+            "loudness": 0.810267,
+            "speechiness": 0.0493,
+            "tempo": 0.455178,
+            "valence": 0.415
+          },
+          "position": 2,
+          "raw_features": {
+            "acousticness": 0.299,
+            "danceability": 0.695,
+            "energy": 0.54,
+            "instrumentalness": 0.0,
+            "loudness": -5.692,
+            "speechiness": 0.0493,
+            "tempo": 121.932,
+            "valence": 0.415
+          },
+          "role": "coherent_history",
+          "title": "abcdefu"
+        },
+        {
+          "artist": "Sanam",
+          "genres": [
+            "pop"
+          ],
+          "id": "1ccZZf0IQi5y0bHMl2aGDF",
+          "mood_fit": {
+            "calm": 0.674111,
+            "energetic": 0.742555,
+            "happy": 0.781922,
+            "sad": 0.714568
+          },
+          "normalized_features": {
+            "acousticness": 0.422,
+            "danceability": 0.636,
+            "energy": 0.647,
+            "instrumentalness": 0.0,
+            "loudness": 0.767667,
+            "speechiness": 0.0436,
+            "tempo": 0.366189,
+            "valence": 0.44
+          },
+          "position": 3,
+          "raw_features": {
+            "acousticness": 0.422,
+            "danceability": 0.636,
+            "energy": 0.647,
+            "instrumentalness": 0.0,
+            "loudness": -6.97,
+            "speechiness": 0.0436,
+            "tempo": 105.914,
+            "valence": 0.44
+          },
+          "role": "coherent_history",
+          "title": "Gulabi Aankhen"
+        },
+        {
+          "artist": "Sam C.S.;Anirudh Ravichander;Shakthisree Gopalan",
+          "genres": [
+            "pop"
+          ],
+          "id": "6EB454nVg2u6sbeCvWAPej",
+          "mood_fit": {
+            "calm": 0.655286,
+            "energetic": 0.738178,
+            "happy": 0.791365,
+            "sad": 0.686121
+          },
+          "normalized_features": {
+            "acousticness": 0.368,
+            "danceability": 0.692,
+            "energy": 0.624,
+            "instrumentalness": 0.0,
+            "loudness": 0.7836,
+            "speechiness": 0.0337,
+            "tempo": 0.516089,
+            "valence": 0.487
+          },
+          "position": 4,
+          "raw_features": {
+            "acousticness": 0.368,
+            "danceability": 0.692,
+            "energy": 0.624,
+            "instrumentalness": 0.0,
+            "loudness": -6.492,
+            "speechiness": 0.0337,
+            "tempo": 132.896,
+            "valence": 0.487
+          },
+          "role": "coherent_history",
+          "title": "Yaanji - From \"Vikram Vedha\""
+        },
+        {
+          "artist": "Shankar-Ehsaan-Loy;Shankar Mahadevan;Caralisa Monteiro;Shafqat Amanat Ali",
+          "genres": [
+            "pop",
+            "pop-film"
+          ],
+          "id": "4BTPzhEsyW3blWcxcuhLM0",
+          "mood_fit": {
+            "calm": 0.630096,
+            "energetic": 0.728108,
+            "happy": 0.808991,
+            "sad": 0.657313
+          },
+          "normalized_features": {
+            "acousticness": 0.295,
+            "danceability": 0.63,
+            "energy": 0.63,
+            "instrumentalness": 1.3e-05,
+            "loudness": 0.749167,
+            "speechiness": 0.0364,
+            "tempo": 0.372794,
+            "valence": 0.517
+          },
+          "position": 5,
+          "raw_features": {
+            "acousticness": 0.295,
+            "danceability": 0.63,
+            "energy": 0.63,
+            "instrumentalness": 1.26e-05,
+            "loudness": -7.525,
+            "speechiness": 0.0364,
+            "tempo": 107.103,
+            "valence": 0.517
+          },
+          "role": "coherent_history",
+          "title": "Mitwa"
+        }
+      ],
+      "request_template": {
+        "context": {},
+        "history": [
+          "78tblPcz2otRZd1VOeU7zz",
+          "4fouWK6XVHhzl78KzQ1UjL",
+          "1ccZZf0IQi5y0bHMl2aGDF",
+          "6EB454nVg2u6sbeCvWAPej",
+          "4BTPzhEsyW3blWcxcuhLM0"
+        ],
+        "limit": 10
+      },
+      "scenario_id": "coherent_pop_h5"
+    },
+    {
+      "applicable_algorithms": [
+        "random",
+        "cbf",
+        "context_mmr"
+      ],
+      "audit": {
+        "genre": "rock",
+        "history_length": 1,
+        "nested_history_family": "coherent_rock",
+        "selection_method": "closest distinct-artist tracks to the normalized rock centroid"
+      },
+      "category": "coherent_multi_track_history",
+      "description": "1-track coherent rock history with distinct artists and no requested mood.",
+      "expected_candidate_count": 500,
+      "history_tracks": [
+        {
+          "artist": "Journey",
+          "genres": [
+            "hard-rock",
+            "rock"
+          ],
+          "id": "4bHsxqR3GMrXTxEPLuK5ue",
+          "mood_fit": {
+            "calm": 0.506154,
+            "energetic": 0.829564,
+            "happy": 0.815043,
+            "sad": 0.564427
+          },
+          "normalized_features": {
+            "acousticness": 0.127,
+            "danceability": 0.5,
+            "energy": 0.748,
+            "instrumentalness": 0.0,
+            "loudness": 0.6976,
+            "speechiness": 0.0363,
+            "tempo": 0.438067,
+            "valence": 0.514
+          },
+          "position": 1,
+          "raw_features": {
+            "acousticness": 0.127,
+            "danceability": 0.5,
+            "energy": 0.748,
+            "instrumentalness": 0.0,
+            "loudness": -9.072,
+            "speechiness": 0.0363,
+            "tempo": 118.852,
+            "valence": 0.514
+          },
+          "role": "coherent_history",
+          "title": "Don't Stop Believin'"
+        }
+      ],
+      "request_template": {
+        "context": {},
+        "history": [
+          "4bHsxqR3GMrXTxEPLuK5ue"
+        ],
+        "limit": 10
+      },
+      "scenario_id": "coherent_rock_h1"
+    },
+    {
+      "applicable_algorithms": [
+        "random",
+        "cbf",
+        "context_mmr"
+      ],
+      "audit": {
+        "genre": "rock",
+        "history_length": 3,
+        "nested_history_family": "coherent_rock",
+        "selection_method": "closest distinct-artist tracks to the normalized rock centroid"
+      },
+      "category": "coherent_multi_track_history",
+      "description": "3-track coherent rock history with distinct artists and no requested mood.",
+      "expected_candidate_count": 500,
+      "history_tracks": [
+        {
+          "artist": "Jaymes Young",
+          "genres": [
+            "rock"
+          ],
+          "id": "0OqlORbUnYtoz5TvyZuUrq",
+          "mood_fit": {
+            "calm": 0.549591,
+            "energetic": 0.774393,
+            "happy": 0.819555,
+            "sad": 0.603383
+          },
+          "normalized_features": {
+            "acousticness": 0.15,
+            "danceability": 0.671,
+            "energy": 0.673,
+            "instrumentalness": 5.2e-05,
+            "loudness": 0.768633,
+            "speechiness": 0.0444,
+            "tempo": 0.455333,
+            "valence": 0.493
+          },
+          "position": 1,
+          "raw_features": {
+            "acousticness": 0.15,
+            "danceability": 0.671,
+            "energy": 0.673,
+            "instrumentalness": 5.16e-05,
+            "loudness": -6.941,
+            "speechiness": 0.0444,
+            "tempo": 121.96,
+            "valence": 0.493
+          },
+          "role": "coherent_history",
+          "title": "Infinity"
+        },
+        {
+          "artist": "Rod Stewart",
+          "genres": [
+            "rock"
+          ],
+          "id": "2o9Q5VeH9Dw0IAps33XDBF",
+          "mood_fit": {
+            "calm": 0.555562,
+            "energetic": 0.858949,
+            "happy": 0.850111,
+            "sad": 0.570417
+          },
+          "normalized_features": {
+            "acousticness": 0.285,
+            "danceability": 0.537,
+            "energy": 0.77,
+            "instrumentalness": 0.00294,
+            "loudness": 0.768567,
+            "speechiness": 0.0443,
+            "tempo": 0.537889,
+            "valence": 0.611
+          },
+          "position": 2,
+          "raw_features": {
+            "acousticness": 0.285,
+            "danceability": 0.537,
+            "energy": 0.77,
+            "instrumentalness": 0.00294,
+            "loudness": -6.943,
+            "speechiness": 0.0443,
+            "tempo": 136.82,
+            "valence": 0.611
+          },
+          "role": "coherent_history",
+          "title": "Street Fighting Man"
+        },
+        {
+          "artist": "Journey",
+          "genres": [
+            "hard-rock",
+            "rock"
+          ],
+          "id": "4bHsxqR3GMrXTxEPLuK5ue",
+          "mood_fit": {
+            "calm": 0.506154,
+            "energetic": 0.829564,
+            "happy": 0.815043,
+            "sad": 0.564427
+          },
+          "normalized_features": {
+            "acousticness": 0.127,
+            "danceability": 0.5,
+            "energy": 0.748,
+            "instrumentalness": 0.0,
+            "loudness": 0.6976,
+            "speechiness": 0.0363,
+            "tempo": 0.438067,
+            "valence": 0.514
+          },
+          "position": 3,
+          "raw_features": {
+            "acousticness": 0.127,
+            "danceability": 0.5,
+            "energy": 0.748,
+            "instrumentalness": 0.0,
+            "loudness": -9.072,
+            "speechiness": 0.0363,
+            "tempo": 118.852,
+            "valence": 0.514
+          },
+          "role": "coherent_history",
+          "title": "Don't Stop Believin'"
+        }
+      ],
+      "request_template": {
+        "context": {},
+        "history": [
+          "0OqlORbUnYtoz5TvyZuUrq",
+          "2o9Q5VeH9Dw0IAps33XDBF",
+          "4bHsxqR3GMrXTxEPLuK5ue"
+        ],
+        "limit": 10
+      },
+      "scenario_id": "coherent_rock_h3"
+    },
+    {
+      "applicable_algorithms": [
+        "random",
+        "cbf",
+        "context_mmr"
+      ],
+      "audit": {
+        "genre": "rock",
+        "history_length": 5,
+        "nested_history_family": "coherent_rock",
+        "selection_method": "closest distinct-artist tracks to the normalized rock centroid"
+      },
+      "category": "coherent_multi_track_history",
+      "description": "5-track coherent rock history with distinct artists and no requested mood.",
+      "expected_candidate_count": 500,
+      "history_tracks": [
+        {
+          "artist": "Julieta Venegas",
+          "genres": [
+            "alt-rock",
+            "alternative",
+            "latin",
+            "rock"
+          ],
+          "id": "4fvKqLGqlsj7giLICaxTXl",
+          "mood_fit": {
+            "calm": 0.549225,
+            "energetic": 0.749621,
+            "happy": 0.861455,
+            "sad": 0.568919
+          },
+          "normalized_features": {
+            "acousticness": 0.124,
+            "danceability": 0.625,
+            "energy": 0.653,
+            "instrumentalness": 0.0,
+            "loudness": 0.8011,
+            "speechiness": 0.0257,
+            "tempo": 0.394289,
+            "valence": 0.605
+          },
+          "position": 1,
+          "raw_features": {
+            "acousticness": 0.124,
+            "danceability": 0.625,
+            "energy": 0.653,
+            "instrumentalness": 0.0,
+            "loudness": -5.967,
+            "speechiness": 0.0257,
+            "tempo": 110.972,
+            "valence": 0.605
+          },
+          "role": "coherent_history",
+          "title": "Limón y Sal"
+        },
+        {
+          "artist": "Phillip Phillips",
+          "genres": [
+            "folk",
+            "rock"
+          ],
+          "id": "2qHiyBpxyOXnRGG3t2iE96",
+          "mood_fit": {
+            "calm": 0.5557,
+            "energetic": 0.745329,
+            "happy": 0.807787,
+            "sad": 0.605946
+          },
+          "normalized_features": {
+            "acousticness": 0.129,
+            "danceability": 0.664,
+            "energy": 0.642,
+            "instrumentalness": 0.0,
+            "loudness": 0.8013,
+            "speechiness": 0.038,
+            "tempo": 0.433344,
+            "valence": 0.501
+          },
+          "position": 2,
+          "raw_features": {
+            "acousticness": 0.129,
+            "danceability": 0.664,
+            "energy": 0.642,
+            "instrumentalness": 0.0,
+            "loudness": -5.961,
+            "speechiness": 0.038,
+            "tempo": 118.002,
+            "valence": 0.501
+          },
+          "role": "coherent_history",
+          "title": "Gone, Gone, Gone"
+        },
+        {
+          "artist": "Jaymes Young",
+          "genres": [
+            "rock"
+          ],
+          "id": "0OqlORbUnYtoz5TvyZuUrq",
+          "mood_fit": {
+            "calm": 0.549591,
+            "energetic": 0.774393,
+            "happy": 0.819555,
+            "sad": 0.603383
+          },
+          "normalized_features": {
+            "acousticness": 0.15,
+            "danceability": 0.671,
+            "energy": 0.673,
+            "instrumentalness": 5.2e-05,
+            "loudness": 0.768633,
+            "speechiness": 0.0444,
+            "tempo": 0.455333,
+            "valence": 0.493
+          },
+          "position": 3,
+          "raw_features": {
+            "acousticness": 0.15,
+            "danceability": 0.671,
+            "energy": 0.673,
+            "instrumentalness": 5.16e-05,
+            "loudness": -6.941,
+            "speechiness": 0.0444,
+            "tempo": 121.96,
+            "valence": 0.493
+          },
+          "role": "coherent_history",
+          "title": "Infinity"
+        },
+        {
+          "artist": "Rod Stewart",
+          "genres": [
+            "rock"
+          ],
+          "id": "2o9Q5VeH9Dw0IAps33XDBF",
+          "mood_fit": {
+            "calm": 0.555562,
+            "energetic": 0.858949,
+            "happy": 0.850111,
+            "sad": 0.570417
+          },
+          "normalized_features": {
+            "acousticness": 0.285,
+            "danceability": 0.537,
+            "energy": 0.77,
+            "instrumentalness": 0.00294,
+            "loudness": 0.768567,
+            "speechiness": 0.0443,
+            "tempo": 0.537889,
+            "valence": 0.611
+          },
+          "position": 4,
+          "raw_features": {
+            "acousticness": 0.285,
+            "danceability": 0.537,
+            "energy": 0.77,
+            "instrumentalness": 0.00294,
+            "loudness": -6.943,
+            "speechiness": 0.0443,
+            "tempo": 136.82,
+            "valence": 0.611
+          },
+          "role": "coherent_history",
+          "title": "Street Fighting Man"
+        },
+        {
+          "artist": "Journey",
+          "genres": [
+            "hard-rock",
+            "rock"
+          ],
+          "id": "4bHsxqR3GMrXTxEPLuK5ue",
+          "mood_fit": {
+            "calm": 0.506154,
+            "energetic": 0.829564,
+            "happy": 0.815043,
+            "sad": 0.564427
+          },
+          "normalized_features": {
+            "acousticness": 0.127,
+            "danceability": 0.5,
+            "energy": 0.748,
+            "instrumentalness": 0.0,
+            "loudness": 0.6976,
+            "speechiness": 0.0363,
+            "tempo": 0.438067,
+            "valence": 0.514
+          },
+          "position": 5,
+          "raw_features": {
+            "acousticness": 0.127,
+            "danceability": 0.5,
+            "energy": 0.748,
+            "instrumentalness": 0.0,
+            "loudness": -9.072,
+            "speechiness": 0.0363,
+            "tempo": 118.852,
+            "valence": 0.514
+          },
+          "role": "coherent_history",
+          "title": "Don't Stop Believin'"
+        }
+      ],
+      "request_template": {
+        "context": {},
+        "history": [
+          "4fvKqLGqlsj7giLICaxTXl",
+          "2qHiyBpxyOXnRGG3t2iE96",
+          "0OqlORbUnYtoz5TvyZuUrq",
+          "2o9Q5VeH9Dw0IAps33XDBF",
+          "4bHsxqR3GMrXTxEPLuK5ue"
+        ],
+        "limit": 10
+      },
+      "scenario_id": "coherent_rock_h5"
+    },
+    {
+      "applicable_algorithms": [
+        "random",
+        "cbf",
+        "context_mmr"
+      ],
+      "audit": {
+        "genre": "hip-hop",
+        "history_length": 1,
+        "nested_history_family": "coherent_hip_hop",
+        "selection_method": "closest distinct-artist tracks to the normalized hip-hop centroid"
+      },
+      "category": "coherent_multi_track_history",
+      "description": "1-track coherent hip-hop history with distinct artists and no requested mood.",
+      "expected_candidate_count": 500,
+      "history_tracks": [
+        {
+          "artist": "MC SQUARE",
+          "genres": [
+            "hip-hop"
+          ],
+          "id": "49TNlAQZXmFBteKZBF9rj0",
+          "mood_fit": {
+            "calm": 0.581127,
+            "energetic": 0.750657,
+            "happy": 0.844489,
+            "sad": 0.600812
+          },
+          "normalized_features": {
+            "acousticness": 0.187,
+            "danceability": 0.718,
+            "energy": 0.655,
+            "instrumentalness": 0.0,
+            "loudness": 0.786033,
+            "speechiness": 0.0751,
+            "tempo": 0.3334,
+            "valence": 0.569
+          },
+          "position": 1,
+          "raw_features": {
+            "acousticness": 0.187,
+            "danceability": 0.718,
+            "energy": 0.655,
+            "instrumentalness": 0.0,
+            "loudness": -6.419,
+            "speechiness": 0.0751,
+            "tempo": 100.012,
+            "valence": 0.569
+          },
+          "role": "coherent_history",
+          "title": "Ram Ram"
+        }
+      ],
+      "request_template": {
+        "context": {},
+        "history": [
+          "49TNlAQZXmFBteKZBF9rj0"
+        ],
+        "limit": 10
+      },
+      "scenario_id": "coherent_hip_hop_h1"
+    },
+    {
+      "applicable_algorithms": [
+        "random",
+        "cbf",
+        "context_mmr"
+      ],
+      "audit": {
+        "genre": "hip-hop",
+        "history_length": 3,
+        "nested_history_family": "coherent_hip_hop",
+        "selection_method": "closest distinct-artist tracks to the normalized hip-hop centroid"
+      },
+      "category": "coherent_multi_track_history",
+      "description": "3-track coherent hip-hop history with distinct artists and no requested mood.",
+      "expected_candidate_count": 500,
+      "history_tracks": [
+        {
+          "artist": "Yo Yo Honey Singh",
+          "genres": [
+            "hip-hop",
+            "pop-film"
+          ],
+          "id": "342pJxy678kgQrZXCL9RG7",
+          "mood_fit": {
+            "calm": 0.557135,
+            "energetic": 0.79458,
+            "happy": 0.893906,
+            "sad": 0.564862
+          },
+          "normalized_features": {
+            "acousticness": 0.195,
+            "danceability": 0.792,
+            "energy": 0.703,
+            "instrumentalness": 0.0,
+            "loudness": 0.855233,
+            "speechiness": 0.0368,
+            "tempo": 0.366639,
+            "valence": 0.634
+          },
+          "position": 1,
+          "raw_features": {
+            "acousticness": 0.195,
+            "danceability": 0.792,
+            "energy": 0.703,
+            "instrumentalness": 0.0,
+            "loudness": -4.343,
+            "speechiness": 0.0368,
+            "tempo": 105.995,
+            "valence": 0.634
+          },
+          "role": "coherent_history",
+          "title": "Urvashi"
+        },
+        {
+          "artist": "Sachin-Jigar;Darshan Raval;Neha Kakkar",
+          "genres": [
+            "hip-hop",
+            "pop-film"
+          ],
+          "id": "2q0V50aNlI1RQXJyE5HDgD",
+          "mood_fit": {
+            "calm": 0.555526,
+            "energetic": 0.830379,
+            "happy": 0.807551,
+            "sad": 0.612977
+          },
+          "normalized_features": {
+            "acousticness": 0.233,
+            "danceability": 0.711,
+            "energy": 0.731,
+            "instrumentalness": 0.0,
+            "loudness": 0.7783,
+            "speechiness": 0.0569,
+            "tempo": 0.5,
+            "valence": 0.474
+          },
+          "position": 2,
+          "raw_features": {
+            "acousticness": 0.233,
+            "danceability": 0.711,
+            "energy": 0.731,
+            "instrumentalness": 0.0,
+            "loudness": -6.651,
+            "speechiness": 0.0569,
+            "tempo": 130.0,
+            "valence": 0.474
+          },
+          "role": "coherent_history",
+          "title": "Odhani (From \"Made in China\")"
+        },
+        {
+          "artist": "MC SQUARE",
+          "genres": [
+            "hip-hop"
+          ],
+          "id": "49TNlAQZXmFBteKZBF9rj0",
+          "mood_fit": {
+            "calm": 0.581127,
+            "energetic": 0.750657,
+            "happy": 0.844489,
+            "sad": 0.600812
+          },
+          "normalized_features": {
+            "acousticness": 0.187,
+            "danceability": 0.718,
+            "energy": 0.655,
+            "instrumentalness": 0.0,
+            "loudness": 0.786033,
+            "speechiness": 0.0751,
+            "tempo": 0.3334,
+            "valence": 0.569
+          },
+          "position": 3,
+          "raw_features": {
+            "acousticness": 0.187,
+            "danceability": 0.718,
+            "energy": 0.655,
+            "instrumentalness": 0.0,
+            "loudness": -6.419,
+            "speechiness": 0.0751,
+            "tempo": 100.012,
+            "valence": 0.569
+          },
+          "role": "coherent_history",
+          "title": "Ram Ram"
+        }
+      ],
+      "request_template": {
+        "context": {},
+        "history": [
+          "342pJxy678kgQrZXCL9RG7",
+          "2q0V50aNlI1RQXJyE5HDgD",
+          "49TNlAQZXmFBteKZBF9rj0"
+        ],
+        "limit": 10
+      },
+      "scenario_id": "coherent_hip_hop_h3"
+    },
+    {
+      "applicable_algorithms": [
+        "random",
+        "cbf",
+        "context_mmr"
+      ],
+      "audit": {
+        "genre": "hip-hop",
+        "history_length": 5,
+        "nested_history_family": "coherent_hip_hop",
+        "selection_method": "closest distinct-artist tracks to the normalized hip-hop centroid"
+      },
+      "category": "coherent_multi_track_history",
+      "description": "5-track coherent hip-hop history with distinct artists and no requested mood.",
+      "expected_candidate_count": 500,
+      "history_tracks": [
+        {
+          "artist": "Wiz Khalifa;Snoop Dogg",
+          "genres": [
+            "dance",
+            "hip-hop"
+          ],
+          "id": "3w7JADbLdKE1Qta6aH0SC6",
+          "mood_fit": {
+            "calm": 0.527044,
+            "energetic": 0.813925,
+            "happy": 0.834794,
+            "sad": 0.572122
+          },
+          "normalized_features": {
+            "acousticness": 0.145,
+            "danceability": 0.878,
+            "energy": 0.723,
+            "instrumentalness": 0.0,
+            "loudness": 0.778,
+            "speechiness": 0.0599,
+            "tempo": 0.439111,
+            "valence": 0.534
+          },
+          "position": 1,
+          "raw_features": {
+            "acousticness": 0.145,
+            "danceability": 0.878,
+            "energy": 0.723,
+            "instrumentalness": 0.0,
+            "loudness": -6.66,
+            "speechiness": 0.0599,
+            "tempo": 119.04,
+            "valence": 0.534
+          },
+          "role": "coherent_history",
+          "title": "Penthouse"
+        },
+        {
+          "artist": "Anirudh Ravichander;Inno Genga",
+          "genres": [
+            "hip-hop"
+          ],
+          "id": "7mNQwVYgoB3mtjkjCKsbXM",
+          "mood_fit": {
+            "calm": 0.543832,
+            "energetic": 0.811343,
+            "happy": 0.828604,
+            "sad": 0.592451
+          },
+          "normalized_features": {
+            "acousticness": 0.183,
+            "danceability": 0.713,
+            "energy": 0.727,
+            "instrumentalness": 1e-06,
+            "loudness": 0.761133,
+            "speechiness": 0.0388,
+            "tempo": 0.316806,
+            "valence": 0.515
+          },
+          "position": 2,
+          "raw_features": {
+            "acousticness": 0.183,
+            "danceability": 0.713,
+            "energy": 0.727,
+            "instrumentalness": 1.22e-06,
+            "loudness": -7.166,
+            "speechiness": 0.0388,
+            "tempo": 97.025,
+            "valence": 0.515
+          },
+          "role": "coherent_history",
+          "title": "Hoyna Hoyna"
+        },
+        {
+          "artist": "Yo Yo Honey Singh",
+          "genres": [
+            "hip-hop",
+            "pop-film"
+          ],
+          "id": "342pJxy678kgQrZXCL9RG7",
+          "mood_fit": {
+            "calm": 0.557135,
+            "energetic": 0.79458,
+            "happy": 0.893906,
+            "sad": 0.564862
+          },
+          "normalized_features": {
+            "acousticness": 0.195,
+            "danceability": 0.792,
+            "energy": 0.703,
+            "instrumentalness": 0.0,
+            "loudness": 0.855233,
+            "speechiness": 0.0368,
+            "tempo": 0.366639,
+            "valence": 0.634
+          },
+          "position": 3,
+          "raw_features": {
+            "acousticness": 0.195,
+            "danceability": 0.792,
+            "energy": 0.703,
+            "instrumentalness": 0.0,
+            "loudness": -4.343,
+            "speechiness": 0.0368,
+            "tempo": 105.995,
+            "valence": 0.634
+          },
+          "role": "coherent_history",
+          "title": "Urvashi"
+        },
+        {
+          "artist": "Sachin-Jigar;Darshan Raval;Neha Kakkar",
+          "genres": [
+            "hip-hop",
+            "pop-film"
+          ],
+          "id": "2q0V50aNlI1RQXJyE5HDgD",
+          "mood_fit": {
+            "calm": 0.555526,
+            "energetic": 0.830379,
+            "happy": 0.807551,
+            "sad": 0.612977
+          },
+          "normalized_features": {
+            "acousticness": 0.233,
+            "danceability": 0.711,
+            "energy": 0.731,
+            "instrumentalness": 0.0,
+            "loudness": 0.7783,
+            "speechiness": 0.0569,
+            "tempo": 0.5,
+            "valence": 0.474
+          },
+          "position": 4,
+          "raw_features": {
+            "acousticness": 0.233,
+            "danceability": 0.711,
+            "energy": 0.731,
+            "instrumentalness": 0.0,
+            "loudness": -6.651,
+            "speechiness": 0.0569,
+            "tempo": 130.0,
+            "valence": 0.474
+          },
+          "role": "coherent_history",
+          "title": "Odhani (From \"Made in China\")"
+        },
+        {
+          "artist": "MC SQUARE",
+          "genres": [
+            "hip-hop"
+          ],
+          "id": "49TNlAQZXmFBteKZBF9rj0",
+          "mood_fit": {
+            "calm": 0.581127,
+            "energetic": 0.750657,
+            "happy": 0.844489,
+            "sad": 0.600812
+          },
+          "normalized_features": {
+            "acousticness": 0.187,
+            "danceability": 0.718,
+            "energy": 0.655,
+            "instrumentalness": 0.0,
+            "loudness": 0.786033,
+            "speechiness": 0.0751,
+            "tempo": 0.3334,
+            "valence": 0.569
+          },
+          "position": 5,
+          "raw_features": {
+            "acousticness": 0.187,
+            "danceability": 0.718,
+            "energy": 0.655,
+            "instrumentalness": 0.0,
+            "loudness": -6.419,
+            "speechiness": 0.0751,
+            "tempo": 100.012,
+            "valence": 0.569
+          },
+          "role": "coherent_history",
+          "title": "Ram Ram"
+        }
+      ],
+      "request_template": {
+        "context": {},
+        "history": [
+          "3w7JADbLdKE1Qta6aH0SC6",
+          "7mNQwVYgoB3mtjkjCKsbXM",
+          "342pJxy678kgQrZXCL9RG7",
+          "2q0V50aNlI1RQXJyE5HDgD",
+          "49TNlAQZXmFBteKZBF9rj0"
+        ],
+        "limit": 10
+      },
+      "scenario_id": "coherent_hip_hop_h5"
+    },
+    {
+      "applicable_algorithms": [
+        "random",
+        "cbf",
+        "context_mmr"
+      ],
+      "audit": {
+        "expected_recent_direction": "energetic",
+        "requested_mood": "energetic",
+        "selection_method": "three high-fit source-mood tracks followed by two high-fit target-mood tracks; all artists distinct",
+        "source_mood": "calm"
+      },
+      "category": "transition_conflicting_history",
+      "description": "Earlier calm evidence transitions to recent energetic evidence; requested mood is energetic.",
+      "expected_candidate_count": 500,
+      "history_tracks": [
+        {
+          "artist": "Hans Zimmer;Adam Lukas;James Everingham;AURORA",
+          "genres": [
+            "german"
+          ],
+          "id": "2kVOldbA2NIwQGSDsc5wUE",
+          "mood_fit": {
+            "calm": 0.987349,
+            "energetic": 0.319462,
+            "happy": 0.352146,
+            "sad": 0.918468
+          },
+          "normalized_features": {
+            "acousticness": 0.689,
+            "danceability": 0.0967,
+            "energy": 0.198,
+            "instrumentalness": 0.681,
+            "loudness": 0.484533,
+            "speechiness": 0.0355,
+            "tempo": 0.271283,
+            "valence": 0.0378
+          },
+          "position": 1,
+          "raw_features": {
+            "acousticness": 0.689,
+            "danceability": 0.0967,
+            "energy": 0.198,
+            "instrumentalness": 0.681,
+            "loudness": -15.464,
+            "speechiness": 0.0355,
+            "tempo": 88.831,
+            "valence": 0.0378
+          },
+          "role": "earlier_source_mood",
+          "title": "Kingdoms of Ice"
+        },
+        {
+          "artist": "Cuco Sánchez",
+          "genres": [
+            "guitar"
+          ],
+          "id": "386HWu6z6nfODriGNIiKk3",
+          "mood_fit": {
+            "calm": 0.988193,
+            "energetic": 0.345123,
+            "happy": 0.593981,
+            "sad": 0.835752
+          },
+          "normalized_features": {
+            "acousticness": 0.7,
+            "danceability": 0.495,
+            "energy": 0.21,
+            "instrumentalness": 0.0,
+            "loudness": 0.636133,
+            "speechiness": 0.0387,
+            "tempo": 0.223856,
+            "valence": 0.52
+          },
+          "position": 2,
+          "raw_features": {
+            "acousticness": 0.7,
+            "danceability": 0.495,
+            "energy": 0.21,
+            "instrumentalness": 0.0,
+            "loudness": -10.916,
+            "speechiness": 0.0387,
+            "tempo": 80.294,
+            "valence": 0.52
+          },
+          "role": "earlier_source_mood",
+          "title": "Ya Se Te Fue El Tren"
+        },
+        {
+          "artist": "Elena Kamburova",
+          "genres": [
+            "romance"
+          ],
+          "id": "7zFcSxrve4D7vHsXisHbzY",
+          "mood_fit": {
+            "calm": 0.988679,
+            "energetic": 0.324721,
+            "happy": 0.482262,
+            "sad": 0.893412
+          },
+          "normalized_features": {
+            "acousticness": 0.722,
+            "danceability": 0.281,
+            "energy": 0.199,
+            "instrumentalness": 0.0217,
+            "loudness": 0.259433,
+            "speechiness": 0.0936,
+            "tempo": 0.218094,
+            "valence": 0.305
+          },
+          "position": 3,
+          "raw_features": {
+            "acousticness": 0.722,
+            "danceability": 0.281,
+            "energy": 0.199,
+            "instrumentalness": 0.0217,
+            "loudness": -22.217,
+            "speechiness": 0.0936,
+            "tempo": 79.257,
+            "valence": 0.305
+          },
+          "role": "earlier_source_mood",
+          "title": "Старая лестница"
+        },
+        {
+          "artist": "Dj Guuga;Biu do Piseiro;MC Myres",
+          "genres": [
+            "funk"
+          ],
+          "id": "3MkJ97Morkqto2ccyspJHQ",
+          "mood_fit": {
+            "calm": 0.38794,
+            "energetic": 0.996679,
+            "happy": 0.861171,
+            "sad": 0.391145
+          },
+          "normalized_features": {
+            "acousticness": 0.037,
+            "danceability": 0.712,
+            "energy": 0.9,
+            "instrumentalness": 0.0,
+            "loudness": 0.942133,
+            "speechiness": 0.144,
+            "tempo": 0.767267,
+            "valence": 0.773
+          },
+          "position": 4,
+          "raw_features": {
+            "acousticness": 0.037,
+            "danceability": 0.712,
+            "energy": 0.9,
+            "instrumentalness": 0.0,
+            "loudness": -1.736,
+            "speechiness": 0.144,
+            "tempo": 178.108,
+            "valence": 0.773
+          },
+          "role": "recent_target_mood",
+          "title": "Senta Pros Bandido"
+        },
+        {
+          "artist": "DRS;The Vanguard Project;Dynamite MC",
+          "genres": [
+            "drum-and-bass"
+          ],
+          "id": "5gddvGci7sRw7sAET2E7Hz",
+          "mood_fit": {
+            "calm": 0.391689,
+            "energetic": 0.996936,
+            "happy": 0.72709,
+            "sad": 0.484906
+          },
+          "normalized_features": {
+            "acousticness": 0.0397,
+            "danceability": 0.714,
+            "energy": 0.899,
+            "instrumentalness": 0.0191,
+            "loudness": 0.873733,
+            "speechiness": 0.0681,
+            "tempo": 0.744728,
+            "valence": 0.484
+          },
+          "position": 5,
+          "raw_features": {
+            "acousticness": 0.0397,
+            "danceability": 0.714,
+            "energy": 0.899,
+            "instrumentalness": 0.0191,
+            "loudness": -3.788,
+            "speechiness": 0.0681,
+            "tempo": 174.051,
+            "valence": 0.484
+          },
+          "role": "recent_target_mood",
+          "title": "Playing In The Dark"
+        }
+      ],
+      "request_template": {
+        "context": {
+          "mood": "energetic"
+        },
+        "history": [
+          "2kVOldbA2NIwQGSDsc5wUE",
+          "386HWu6z6nfODriGNIiKk3",
+          "7zFcSxrve4D7vHsXisHbzY",
+          "3MkJ97Morkqto2ccyspJHQ",
+          "5gddvGci7sRw7sAET2E7Hz"
+        ],
+        "limit": 10
+      },
+      "scenario_id": "transition_calm_to_energetic"
+    },
+    {
+      "applicable_algorithms": [
+        "random",
+        "cbf",
+        "context_mmr"
+      ],
+      "audit": {
+        "expected_recent_direction": "calm",
+        "requested_mood": "calm",
+        "selection_method": "three high-fit source-mood tracks followed by two high-fit target-mood tracks; all artists distinct",
+        "source_mood": "energetic"
+      },
+      "category": "transition_conflicting_history",
+      "description": "Earlier energetic evidence transitions to recent calm evidence; requested mood is calm.",
+      "expected_candidate_count": 500,
+      "history_tracks": [
+        {
+          "artist": "Biu do Piseiro",
+          "genres": [
+            "forro"
+          ],
+          "id": "1D2Ob2F7igYStJ60d4HB7S",
+          "mood_fit": {
+            "calm": 0.42527,
+            "energetic": 0.994929,
+            "happy": 0.845756,
+            "sad": 0.360051
+          },
+          "normalized_features": {
+            "acousticness": 0.126,
+            "danceability": 0.736,
+            "energy": 0.896,
+            "instrumentalness": 0.00269,
+            "loudness": 0.766767,
+            "speechiness": 0.0425,
+            "tempo": 0.739156,
+            "valence": 0.963
+          },
+          "position": 1,
+          "raw_features": {
+            "acousticness": 0.126,
+            "danceability": 0.736,
+            "energy": 0.896,
+            "instrumentalness": 0.00269,
+            "loudness": -6.997,
+            "speechiness": 0.0425,
+            "tempo": 173.048,
+            "valence": 0.963
+          },
+          "role": "earlier_source_mood",
+          "title": "Ela Ficou Chapada"
+        },
+        {
+          "artist": "Vitinho Imperador;Mila Sousa",
+          "genres": [
+            "forro"
+          ],
+          "id": "3k1ZHEHWHA6sl9JJFQvrPS",
+          "mood_fit": {
+            "calm": 0.441576,
+            "energetic": 0.995019,
+            "happy": 0.883883,
+            "sad": 0.417001
+          },
+          "normalized_features": {
+            "acousticness": 0.171,
+            "danceability": 0.714,
+            "energy": 0.901,
+            "instrumentalness": 0.000164,
+            "loudness": 0.8189,
+            "speechiness": 0.0409,
+            "tempo": 0.722311,
+            "valence": 0.823
+          },
+          "position": 2,
+          "raw_features": {
+            "acousticness": 0.171,
+            "danceability": 0.714,
+            "energy": 0.901,
+            "instrumentalness": 0.000164,
+            "loudness": -5.433,
+            "speechiness": 0.0409,
+            "tempo": 170.016,
+            "valence": 0.823
+          },
+          "role": "earlier_source_mood",
+          "title": "Botada Quente"
+        },
+        {
+          "artist": "Rustage",
+          "genres": [
+            "anime"
+          ],
+          "id": "5aEDSkaZzxDmZ2An1Zw3MV",
+          "mood_fit": {
+            "calm": 0.503616,
+            "energetic": 0.996598,
+            "happy": 0.783269,
+            "sad": 0.547963
+          },
+          "normalized_features": {
+            "acousticness": 0.381,
+            "danceability": 0.752,
+            "energy": 0.899,
+            "instrumentalness": 0.0,
+            "loudness": 0.8439,
+            "speechiness": 0.364,
+            "tempo": 0.778511,
+            "valence": 0.607
+          },
+          "position": 3,
+          "raw_features": {
+            "acousticness": 0.381,
+            "danceability": 0.752,
+            "energy": 0.899,
+            "instrumentalness": 0.0,
+            "loudness": -4.683,
+            "speechiness": 0.364,
+            "tempo": 180.132,
+            "valence": 0.607
+          },
+          "role": "earlier_source_mood",
+          "title": "Determination (Rock Lee Rap)"
+        },
+        {
+          "artist": "beosound",
+          "genres": [
+            "study"
+          ],
+          "id": "5P7KpZBx08HZ7MogQ3pORk",
+          "mood_fit": {
+            "calm": 0.986487,
+            "energetic": 0.354158,
+            "happy": 0.515745,
+            "sad": 0.892384
+          },
+          "normalized_features": {
+            "acousticness": 0.682,
+            "danceability": 0.729,
+            "energy": 0.202,
+            "instrumentalness": 0.915,
+            "loudness": 0.716333,
+            "speechiness": 0.058,
+            "tempo": 0.277728,
+            "valence": 0.356
+          },
+          "position": 4,
+          "raw_features": {
+            "acousticness": 0.682,
+            "danceability": 0.729,
+            "energy": 0.202,
+            "instrumentalness": 0.915,
+            "loudness": -8.51,
+            "speechiness": 0.058,
+            "tempo": 89.991,
+            "valence": 0.356
+          },
+          "role": "recent_target_mood",
+          "title": "Intriago"
+        },
+        {
+          "artist": "Wheels on the Bus",
+          "genres": [
+            "children"
+          ],
+          "id": "1FG2CSLOJWhi0By1E3ZiD7",
+          "mood_fit": {
+            "calm": 0.98712,
+            "energetic": 0.33867,
+            "happy": 0.641483,
+            "sad": 0.791442
+          },
+          "normalized_features": {
+            "acousticness": 0.694,
+            "danceability": 0.807,
+            "energy": 0.189,
+            "instrumentalness": 0.0,
+            "loudness": 0.537567,
+            "speechiness": 0.0454,
+            "tempo": 0.248683,
+            "valence": 0.645
+          },
+          "position": 5,
+          "raw_features": {
+            "acousticness": 0.694,
+            "danceability": 0.807,
+            "energy": 0.189,
+            "instrumentalness": 0.0,
+            "loudness": -13.873,
+            "speechiness": 0.0454,
+            "tempo": 84.763,
+            "valence": 0.645
+          },
+          "role": "recent_target_mood",
+          "title": "The Wheels on the Bus"
+        }
+      ],
+      "request_template": {
+        "context": {
+          "mood": "calm"
+        },
+        "history": [
+          "1D2Ob2F7igYStJ60d4HB7S",
+          "3k1ZHEHWHA6sl9JJFQvrPS",
+          "5aEDSkaZzxDmZ2An1Zw3MV",
+          "5P7KpZBx08HZ7MogQ3pORk",
+          "1FG2CSLOJWhi0By1E3ZiD7"
+        ],
+        "limit": 10
+      },
+      "scenario_id": "transition_energetic_to_calm"
+    },
+    {
+      "applicable_algorithms": [
+        "random",
+        "cbf",
+        "context_mmr"
+      ],
+      "audit": {
+        "expected_recent_direction": "happy",
+        "requested_mood": "happy",
+        "selection_method": "three high-fit source-mood tracks followed by two high-fit target-mood tracks; all artists distinct",
+        "source_mood": "sad"
+      },
+      "category": "transition_conflicting_history",
+      "description": "Earlier sad evidence transitions to recent happy evidence; requested mood is happy.",
+      "expected_candidate_count": 500,
+      "history_tracks": [
+        {
+          "artist": "Randy Newman",
+          "genres": [
+            "disney"
+          ],
+          "id": "1heYxjPhoCBgVYaFDQ0iZp",
+          "mood_fit": {
+            "calm": 0.912503,
+            "energetic": 0.378219,
+            "happy": 0.437274,
+            "sad": 0.981499
+          },
+          "normalized_features": {
+            "acousticness": 0.552,
+            "danceability": 0.485,
+            "energy": 0.244,
+            "instrumentalness": 0.00309,
+            "loudness": 0.625067,
+            "speechiness": 0.0266,
+            "tempo": 0.272239,
+            "valence": 0.147
+          },
+          "position": 1,
+          "raw_features": {
+            "acousticness": 0.552,
+            "danceability": 0.485,
+            "energy": 0.244,
+            "instrumentalness": 0.00309,
+            "loudness": -11.248,
+            "speechiness": 0.0266,
+            "tempo": 89.003,
+            "valence": 0.147
+          },
+          "role": "earlier_source_mood",
+          "title": "Every Time It Rains"
+        },
+        {
+          "artist": "Michael W. Smith",
+          "genres": [
+            "world-music"
+          ],
+          "id": "3f7Kj9ZX3DEIdAc2UnrOKi",
+          "mood_fit": {
+            "calm": 0.918361,
+            "energetic": 0.406852,
+            "happy": 0.444084,
+            "sad": 0.981689
+          },
+          "normalized_features": {
+            "acousticness": 0.616,
+            "danceability": 0.289,
+            "energy": 0.262,
+            "instrumentalness": 0.0012,
+            "loudness": 0.6031,
+            "speechiness": 0.0304,
+            "tempo": 0.535944,
+            "valence": 0.154
+          },
+          "position": 2,
+          "raw_features": {
+            "acousticness": 0.616,
+            "danceability": 0.289,
+            "energy": 0.262,
+            "instrumentalness": 0.0012,
+            "loudness": -11.907,
+            "speechiness": 0.0304,
+            "tempo": 136.47,
+            "valence": 0.154
+          },
+          "role": "earlier_source_mood",
+          "title": "Breathe - Live"
+        },
+        {
+          "artist": "Ilya Beshevli",
+          "genres": [
+            "ambient"
+          ],
+          "id": "51wV3bwTnQMNe4lZHiacGs",
+          "mood_fit": {
+            "calm": 0.930933,
+            "energetic": 0.376509,
+            "happy": 0.431722,
+            "sad": 0.98197
+          },
+          "normalized_features": {
+            "acousticness": 0.618,
+            "danceability": 0.11,
+            "energy": 0.266,
+            "instrumentalness": 0.917,
+            "loudness": 0.520967,
+            "speechiness": 0.0411,
+            "tempo": 0.242261,
+            "valence": 0.134
+          },
+          "position": 3,
+          "raw_features": {
+            "acousticness": 0.618,
+            "danceability": 0.11,
+            "energy": 0.266,
+            "instrumentalness": 0.917,
+            "loudness": -14.371,
+            "speechiness": 0.0411,
+            "tempo": 83.607,
+            "valence": 0.134
+          },
+          "role": "earlier_source_mood",
+          "title": "Compassion"
+        },
+        {
+          "artist": "Gorillaz",
+          "genres": [
+            "alternative"
+          ],
+          "id": "1foMv2HQwfQ2vntFf9HFeG",
+          "mood_fit": {
+            "calm": 0.516588,
+            "energetic": 0.786738,
+            "happy": 0.996813,
+            "sad": 0.464917
+          },
+          "normalized_features": {
+            "acousticness": 0.0869,
+            "danceability": 0.676,
+            "energy": 0.703,
+            "instrumentalness": 0.000687,
+            "loudness": 0.806167,
+            "speechiness": 0.0302,
+            "tempo": 0.293117,
+            "valence": 0.852
+          },
+          "position": 4,
+          "raw_features": {
+            "acousticness": 0.0869,
+            "danceability": 0.676,
+            "energy": 0.703,
+            "instrumentalness": 0.000687,
+            "loudness": -5.815,
+            "speechiness": 0.0302,
+            "tempo": 92.761,
+            "valence": 0.852
+          },
+          "role": "recent_target_mood",
+          "title": "Rhinestone Eyes"
+        },
+        {
+          "artist": "Joss Stone",
+          "genres": [
+            "british"
+          ],
+          "id": "63KVRfA7COiRBVnZAfbPxU",
+          "mood_fit": {
+            "calm": 0.635827,
+            "energetic": 0.811131,
+            "happy": 0.99689,
+            "sad": 0.551492
+          },
+          "normalized_features": {
+            "acousticness": 0.409,
+            "danceability": 0.591,
+            "energy": 0.699,
+            "instrumentalness": 0.000866,
+            "loudness": 0.828567,
+            "speechiness": 0.114,
+            "tempo": 0.667,
+            "valence": 0.852
+          },
+          "position": 5,
+          "raw_features": {
+            "acousticness": 0.409,
+            "danceability": 0.591,
+            "energy": 0.699,
+            "instrumentalness": 0.000866,
+            "loudness": -5.143,
+            "speechiness": 0.114,
+            "tempo": 160.06,
+            "valence": 0.852
+          },
+          "role": "recent_target_mood",
+          "title": "Never Forget My Love"
+        }
+      ],
+      "request_template": {
+        "context": {
+          "mood": "happy"
+        },
+        "history": [
+          "1heYxjPhoCBgVYaFDQ0iZp",
+          "3f7Kj9ZX3DEIdAc2UnrOKi",
+          "51wV3bwTnQMNe4lZHiacGs",
+          "1foMv2HQwfQ2vntFf9HFeG",
+          "63KVRfA7COiRBVnZAfbPxU"
+        ],
+        "limit": 10
+      },
+      "scenario_id": "transition_sad_to_happy"
+    },
+    {
+      "applicable_algorithms": [
+        "random",
+        "cbf",
+        "context_mmr"
+      ],
+      "audit": {
+        "expected_recent_direction": "sad",
+        "requested_mood": "sad",
+        "selection_method": "three high-fit source-mood tracks followed by two high-fit target-mood tracks; all artists distinct",
+        "source_mood": "happy"
+      },
+      "category": "transition_conflicting_history",
+      "description": "Earlier happy evidence transitions to recent sad evidence; requested mood is sad.",
+      "expected_candidate_count": 500,
+      "history_tracks": [
+        {
+          "artist": "Los Caligaris",
+          "genres": [
+            "ska"
+          ],
+          "id": "4KLzg840RrzV86gHQoKtT7",
+          "mood_fit": {
+            "calm": 0.576679,
+            "energetic": 0.785229,
+            "happy": 0.9956,
+            "sad": 0.50889
+          },
+          "normalized_features": {
+            "acousticness": 0.237,
+            "danceability": 0.644,
+            "energy": 0.699,
+            "instrumentalness": 0.0386,
+            "loudness": 0.723367,
+            "speechiness": 0.0314,
+            "tempo": 0.334117,
+            "valence": 0.858
+          },
+          "position": 1,
+          "raw_features": {
+            "acousticness": 0.237,
+            "danceability": 0.644,
+            "energy": 0.699,
+            "instrumentalness": 0.0386,
+            "loudness": -8.299,
+            "speechiness": 0.0314,
+            "tempo": 100.141,
+            "valence": 0.858
+          },
+          "role": "earlier_source_mood",
+          "title": "Aquella Solitaria Vaca Cubana"
+        },
+        {
+          "artist": "Eddie Cochran",
+          "genres": [
+            "rock-n-roll",
+            "rockabilly"
+          ],
+          "id": "7ItZM6DMZE2m1X7yIaRxjq",
+          "mood_fit": {
+            "calm": 0.513089,
+            "energetic": 0.820687,
+            "happy": 0.996555,
+            "sad": 0.459818
+          },
+          "normalized_features": {
+            "acousticness": 0.121,
+            "danceability": 0.627,
+            "energy": 0.7,
+            "instrumentalness": 0.0111,
+            "loudness": 0.6781,
+            "speechiness": 0.0522,
+            "tempo": 0.751833,
+            "valence": 0.856
+          },
+          "position": 2,
+          "raw_features": {
+            "acousticness": 0.121,
+            "danceability": 0.627,
+            "energy": 0.7,
+            "instrumentalness": 0.0111,
+            "loudness": -9.657,
+            "speechiness": 0.0522,
+            "tempo": 175.33,
+            "valence": 0.856
+          },
+          "role": "earlier_source_mood",
+          "title": "C’Mon Everybody"
+        },
+        {
+          "artist": "GReeeeN",
+          "genres": [
+            "j-rock"
+          ],
+          "id": "0Bvp54lGzbK6OueNgtiOxY",
+          "mood_fit": {
+            "calm": 0.490891,
+            "energetic": 0.788172,
+            "happy": 0.99668,
+            "sad": 0.44659
+          },
+          "normalized_features": {
+            "acousticness": 0.0269,
+            "danceability": 0.64,
+            "energy": 0.706,
+            "instrumentalness": 0.0,
+            "loudness": 0.821833,
+            "speechiness": 0.0298,
+            "tempo": 0.299922,
+            "valence": 0.85
+          },
+          "position": 3,
+          "raw_features": {
+            "acousticness": 0.0269,
+            "danceability": 0.64,
+            "energy": 0.706,
+            "instrumentalness": 0.0,
+            "loudness": -5.345,
+            "speechiness": 0.0298,
+            "tempo": 93.986,
+            "valence": 0.85
+          },
+          "role": "earlier_source_mood",
+          "title": "旅立ち"
+        },
+        {
+          "artist": "Elba Ramalho",
+          "genres": [
+            "mpb",
+            "samba"
+          ],
+          "id": "6vzEUwK4CbcDMDvmJ09WsY",
+          "mood_fit": {
+            "calm": 0.911904,
+            "energetic": 0.410316,
+            "happy": 0.460888,
+            "sad": 0.98115
+          },
+          "normalized_features": {
+            "acousticness": 0.596,
+            "danceability": 0.424,
+            "energy": 0.272,
+            "instrumentalness": 5e-06,
+            "loudness": 0.619933,
+            "speechiness": 0.0295,
+            "tempo": 0.398628,
+            "valence": 0.171
+          },
+          "position": 4,
+          "raw_features": {
+            "acousticness": 0.596,
+            "danceability": 0.424,
+            "energy": 0.272,
+            "instrumentalness": 4.64e-06,
+            "loudness": -11.402,
+            "speechiness": 0.0295,
+            "tempo": 111.753,
+            "valence": 0.171
+          },
+          "role": "recent_target_mood",
+          "title": "De Volta Pro Aconchego"
+        },
+        {
+          "artist": "Jam City",
+          "genres": [
+            "club"
+          ],
+          "id": "6Xggu3df2iPtollOOT5efM",
+          "mood_fit": {
+            "calm": 0.945314,
+            "energetic": 0.383868,
+            "happy": 0.442146,
+            "sad": 0.981404
+          },
+          "normalized_features": {
+            "acousticness": 0.644,
+            "danceability": 0.529,
+            "energy": 0.253,
+            "instrumentalness": 0.845,
+            "loudness": 0.5947,
+            "speechiness": 0.0306,
+            "tempo": 0.222211,
+            "valence": 0.145
+          },
+          "position": 5,
+          "raw_features": {
+            "acousticness": 0.644,
+            "danceability": 0.529,
+            "energy": 0.253,
+            "instrumentalness": 0.845,
+            "loudness": -12.159,
+            "speechiness": 0.0306,
+            "tempo": 79.998,
+            "valence": 0.145
+          },
+          "role": "recent_target_mood",
+          "title": "Proud"
+        }
+      ],
+      "request_template": {
+        "context": {
+          "mood": "sad"
+        },
+        "history": [
+          "4KLzg840RrzV86gHQoKtT7",
+          "7ItZM6DMZE2m1X7yIaRxjq",
+          "0Bvp54lGzbK6OueNgtiOxY",
+          "6vzEUwK4CbcDMDvmJ09WsY",
+          "6Xggu3df2iPtollOOT5efM"
+        ],
+        "limit": 10
+      },
+      "scenario_id": "transition_happy_to_sad"
+    },
+    {
+      "applicable_algorithms": [
+        "random",
+        "context_mmr"
+      ],
+      "audit": {
+        "requested_mood": "happy",
+        "selection_method": "no history selection"
+      },
+      "category": "mood_only",
+      "description": "No history; recommendation is driven by happy mood.",
+      "expected_candidate_count": 500,
+      "history_tracks": [],
+      "request_template": {
+        "context": {
+          "mood": "happy"
+        },
+        "history": [],
+        "limit": 10
+      },
+      "scenario_id": "mood_only_happy"
+    },
+    {
+      "applicable_algorithms": [
+        "random",
+        "context_mmr"
+      ],
+      "audit": {
+        "requested_mood": "energetic",
+        "selection_method": "no history selection"
+      },
+      "category": "mood_only",
+      "description": "No history; recommendation is driven by energetic mood.",
+      "expected_candidate_count": 500,
+      "history_tracks": [],
+      "request_template": {
+        "context": {
+          "mood": "energetic"
+        },
+        "history": [],
+        "limit": 10
+      },
+      "scenario_id": "mood_only_energetic"
+    },
+    {
+      "applicable_algorithms": [
+        "random",
+        "context_mmr"
+      ],
+      "audit": {
+        "requested_mood": "calm",
+        "selection_method": "no history selection"
+      },
+      "category": "mood_only",
+      "description": "No history; recommendation is driven by calm mood.",
+      "expected_candidate_count": 500,
+      "history_tracks": [],
+      "request_template": {
+        "context": {
+          "mood": "calm"
+        },
+        "history": [],
+        "limit": 10
+      },
+      "scenario_id": "mood_only_calm"
+    },
+    {
+      "applicable_algorithms": [
+        "random",
+        "context_mmr"
+      ],
+      "audit": {
+        "requested_mood": "sad",
+        "selection_method": "no history selection"
+      },
+      "category": "mood_only",
+      "description": "No history; recommendation is driven by sad mood.",
+      "expected_candidate_count": 500,
+      "history_tracks": [],
+      "request_template": {
+        "context": {
+          "mood": "sad"
+        },
+        "history": [],
+        "limit": 10
+      },
+      "scenario_id": "mood_only_sad"
+    }
+  ],
+  "schema_version": "nexttrack-scenarios-v1",
+  "source": {
+    "candidate_pool_sha256": "2ab4333447e6c46d34007fbe11bef6deec21a87431bfd7e2a2b238311177bae1",
+    "catalogue_sha256": "82bd95b1e5d4e983f172af116904740bb43eb599f5d7e37cd6e0f558f84de65b",
+    "catalogue_version": "spotify-tracks-kaggle-full",
+    "history_tracks_are_outside_candidate_pool": true
+  },
+  "status": "draft_requires_human_review"
+}

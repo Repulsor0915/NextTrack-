@@ -1,0 +1,22 @@
+{
+  "outputs": {
+    "candidate-pool.json": {
+      "bytes": 15914,
+      "sha256": "2ab4333447e6c46d34007fbe11bef6deec21a87431bfd7e2a2b238311177bae1"
+    },
+    "experiment-config.json": {
+      "bytes": 4766,
+      "sha256": "ffc057fec42bab436e065ebe9494b5df131daf5745d467b9e22aeb3d051df045"
+    },
+    "scenario-review.md": {
+      "bytes": 3474,
+      "sha256": "23eaaaaf5b7ed3a69c3fb1601e2eb51228e95a878c30f6c1248a8d491247b4e1"
+    },
+    "scenarios.draft.json": {
+      "bytes": 71044,
+      "sha256": "544ec158523cce4968d797e1b5270f877b57a09e9ac5fa871f42c77efea5449b"
+    }
+  },
+  "protocol_status": "awaiting_human_scenario_review",
+  "schema_version": "nexttrack-protocol-manifest-v1"
+}

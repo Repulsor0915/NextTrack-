@@ -136,3 +136,27 @@ Verification performed:
 - A full-catalogue database smoke run used three history tracks, 100 fixed
   candidates, happy mood, and diversity strength 0.20; Context+MMR returned all
   requested ten recommendations with the new mood model version.
+
+## 2026-09-19 — Offline protocol steps 6-8 draft
+
+Created a reproducible offline-evaluation protocol draft using algorithm commit
+`5a4c34845d2e1b04c46b9c73f6e28b71cb8b694e`.
+
+- Full catalogue: 89,566 tracks, SHA-256
+  `82bd95b1e5d4e983f172af116904740bb43eb599f5d7e37cd6e0f558f84de65b`.
+- Fixed candidate pool: 500 tracks selected with seed `221611`; all IDs are a
+  subset of the full catalogue.
+- Every selected history track is outside the candidate pool, so each scenario
+  retains exactly 500 eligible candidates.
+- Top-N: 10; history window: at most 5; algorithm configuration:
+  `baseline-panda-mood-v1`; BPM filter: none.
+- Scenario draft: 21 scenarios across four single-track, nine coherent-history,
+  four transition/conflicting, and four mood-only cases.
+- Random baseline: 30 explicit seeds (`221611` through `221640`); CBF and
+  Context+MMR are deterministic for fixed inputs.
+- Expected runs after approval: 668.
+- All 96 tests passed; Django checks passed; no model migrations were detected.
+
+The protocol status remains `awaiting_human_scenario_review`. No
+`scenarios.json`, evaluation runner, baseline result, or algorithm comparison
+has been created or claimed yet.
