@@ -5,17 +5,9 @@ from recommendations.audio_features import (
     build_feature_vector,
     normalize_feature,
 )
+from recommendations.domain.algorithm_config import CURRENT_FEATURE_WEIGHTS
 
-FEATURE_WEIGHTS = {
-    "tempo": 0.10,
-    "energy": 0.25,
-    "valence": 0.25,
-    "danceability": 0.15,
-    "acousticness": 0.10,
-    "instrumentalness": 0.05,
-    "loudness": 0.05,
-    "speechiness": 0.05,
-}
+FEATURE_WEIGHTS = CURRENT_FEATURE_WEIGHTS
 
 HISTORY_WINDOW_SIZE = 5
 
@@ -88,6 +80,40 @@ def weighted_cosine_similarity(
 
     similarity = dot_product / (magnitude_a * magnitude_b)
     return max(0.0, min(1.0, similarity))
+
+
+def weighted_euclidean_similarity(
+    vector_a,
+    vector_b,
+    *,
+    weights=FEATURE_WEIGHTS,
+):
+    """Convert normalized weighted Euclidean distance into [0, 1] similarity."""
+
+    total_weight = sum(weights.values())
+    if total_weight <= 0.0:
+        return 0.0
+
+    squared_distance = sum(
+        weights[name] * ((vector_a[name] - vector_b[name]) ** 2)
+        for name in FEATURE_NAMES
+    )
+    distance = sqrt(squared_distance / total_weight)
+    return max(0.0, min(1.0, 1.0 - distance))
+
+
+def calculate_similarity(
+    vector_a,
+    vector_b,
+    *,
+    metric="weighted_cosine",
+    weights=FEATURE_WEIGHTS,
+):
+    if metric == "weighted_cosine":
+        return weighted_cosine_similarity(vector_a, vector_b, weights=weights)
+    if metric == "weighted_euclidean":
+        return weighted_euclidean_similarity(vector_a, vector_b, weights=weights)
+    raise ValueError(f"Unsupported similarity metric: {metric!r}")
 
 
 def feature_closeness(vector, profile):

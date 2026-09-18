@@ -1,5 +1,6 @@
 from time import perf_counter
 
+from recommendations.domain.algorithm_config import DEFAULT_ALGORITHM_CONFIG
 from recommendations.domain.cbf_ranker import rank_cbf
 from recommendations.domain.context_ranker import score_context_candidates
 from recommendations.domain.explanations import (
@@ -7,7 +8,6 @@ from recommendations.domain.explanations import (
     build_context_explanation,
 )
 from recommendations.domain.feature_vectors import (
-    HISTORY_WINDOW_SIZE,
     build_recency_weighted_profile,
     build_session_profile,
 )
@@ -55,10 +55,18 @@ class MissingTrackFeaturesError(RecommendationServiceError):
 
 class RecommendationService:
     SUPPORTED_ALGORITHMS = {"auto", "random", "cbf", "context_mmr"}
-    DEFAULT_DIVERSITY_STRENGTH = 0.2
+    DEFAULT_DIVERSITY_STRENGTH = (
+        DEFAULT_ALGORITHM_CONFIG.default_diversity_strength
+    )
 
-    def __init__(self, *, random_source=None):
+    def __init__(
+        self,
+        *,
+        random_source=None,
+        algorithm_config=DEFAULT_ALGORITHM_CONFIG,
+    ):
         self.random_source = random_source
+        self.algorithm_config = algorithm_config
 
     def recommend(self, request_data):
         started_at = perf_counter()
@@ -120,7 +128,10 @@ class RecommendationService:
             history_vectors = [
                 build_feature_vector(track.features) for track in history_tracks
             ]
-            session_profile = build_session_profile(history_vectors)
+            session_profile = build_session_profile(
+                history_vectors,
+                window_size=self.algorithm_config.history_window_size,
+            )
             candidate_vectors = [
                 (track, build_feature_vector(track.features)) for track in candidates
             ]
@@ -128,20 +139,21 @@ class RecommendationService:
                 candidate_vectors,
                 session_profile,
                 request_data["limit"],
+                algorithm_config=self.algorithm_config,
             )
             recommendations = [
                 self._build_cbf_result(result, rank)
                 for rank, result in enumerate(ranked_candidates, start=1)
             ]
             meta["history_count_used"] = min(
-                len(history_tracks), HISTORY_WINDOW_SIZE
+                len(history_tracks), self.algorithm_config.history_window_size
             )
-            meta["history_window_size"] = HISTORY_WINDOW_SIZE
+            meta["history_window_size"] = self.algorithm_config.history_window_size
             meta.update({"relevance_model": "history_cbf", "reranker": None})
         else:
             diversity_strength = context.get(
                 "diversity_strength",
-                self.DEFAULT_DIVERSITY_STRENGTH,
+                self.algorithm_config.default_diversity_strength,
             )
             history_tracks = self._get_history_tracks(history) if history else []
             session_profile = None
@@ -150,9 +162,20 @@ class RecommendationService:
                     build_feature_vector(track.features) for track in history_tracks
                 ]
                 if resolved_algorithm == "cbf":
-                    session_profile = build_session_profile(history_vectors)
+                    session_profile = build_session_profile(
+                        history_vectors,
+                        window_size=self.algorithm_config.history_window_size,
+                    )
+                elif self.algorithm_config.context_history_strategy == "equal":
+                    session_profile = build_session_profile(
+                        history_vectors,
+                        window_size=self.algorithm_config.history_window_size,
+                    )
                 else:
-                    session_profile = build_recency_weighted_profile(history_vectors)
+                    session_profile = build_recency_weighted_profile(
+                        history_vectors,
+                        window_size=self.algorithm_config.history_window_size,
+                    )
 
             candidate_vectors = [
                 (track, build_feature_vector(track.features)) for track in candidates
@@ -162,11 +185,13 @@ class RecommendationService:
                 session_profile=session_profile,
                 mood=mood,
                 bpm_constraint_applied=bool(context.get("bpm")),
+                algorithm_config=self.algorithm_config,
             )
             reranked_candidates = rerank_mmr(
                 context_rankings,
                 request_data["limit"],
                 diversity_strength=diversity_strength,
+                algorithm_config=self.algorithm_config,
             )
             recommendations = [
                 self._build_context_result(
@@ -180,9 +205,9 @@ class RecommendationService:
             meta.update(
                 {
                     "history_count_used": min(
-                        len(history_tracks), HISTORY_WINDOW_SIZE
+                        len(history_tracks), self.algorithm_config.history_window_size
                     ),
-                    "history_window_size": HISTORY_WINDOW_SIZE,
+                    "history_window_size": self.algorithm_config.history_window_size,
                     "mood": mood,
                     "mood_model": MOOD_MODEL_VERSION if mood else None,
                     "relevance_model": self._relevance_model(
@@ -296,8 +321,7 @@ class RecommendationService:
             },
         }
 
-    @staticmethod
-    def _build_cbf_result(result, rank):
+    def _build_cbf_result(self, result, rank):
         rounded_closeness = {
             feature_name: round(value, 4)
             for feature_name, value in result.feature_closeness.items()
@@ -319,6 +343,7 @@ class RecommendationService:
             "explanation": build_cbf_explanation(
                 result.score,
                 result.feature_closeness,
+                feature_weights=self.algorithm_config.feature_weights,
             ),
         }
 

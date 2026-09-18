@@ -1,10 +1,11 @@
 from dataclasses import dataclass, field
 
-from .feature_vectors import feature_closeness, weighted_cosine_similarity
+from .algorithm_config import DEFAULT_ALGORITHM_CONFIG
+from .feature_vectors import calculate_similarity, feature_closeness
 from .mood_model import score_mood
 
-HISTORY_RELEVANCE_WEIGHT = 0.65
-MOOD_RELEVANCE_WEIGHT = 0.35
+HISTORY_RELEVANCE_WEIGHT = DEFAULT_ALGORITHM_CONFIG.history_relevance_weight
+MOOD_RELEVANCE_WEIGHT = DEFAULT_ALGORITHM_CONFIG.mood_relevance_weight
 
 
 @dataclass(frozen=True)
@@ -25,6 +26,7 @@ def score_context_candidates(
     session_profile=None,
     mood=None,
     bpm_constraint_applied=False,
+    algorithm_config=DEFAULT_ALGORITHM_CONFIG,
 ):
     """Score candidates using available session and explicit mood evidence."""
 
@@ -34,17 +36,30 @@ def score_context_candidates(
     rankings = []
     for candidate, vector in candidate_vectors:
         history_similarity = (
-            weighted_cosine_similarity(session_profile, vector)
+            calculate_similarity(
+                session_profile,
+                vector,
+                metric=algorithm_config.relevance_similarity_metric,
+                weights=algorithm_config.feature_weights,
+            )
             if session_profile is not None
             else None
         )
-        mood_score = score_mood(vector, mood) if mood is not None else None
+        mood_score = (
+            score_mood(
+                vector,
+                mood,
+                feature_weights=algorithm_config.mood_feature_weights,
+            )
+            if mood is not None
+            else None
+        )
         mood_fit = mood_score.fit if mood_score is not None else None
 
         if history_similarity is not None and mood_fit is not None:
             relevance = (
-                HISTORY_RELEVANCE_WEIGHT * history_similarity
-                + MOOD_RELEVANCE_WEIGHT * mood_fit
+                algorithm_config.history_relevance_weight * history_similarity
+                + algorithm_config.mood_relevance_weight * mood_fit
             )
         elif history_similarity is not None:
             relevance = history_similarity

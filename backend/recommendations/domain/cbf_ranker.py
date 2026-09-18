@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from .feature_vectors import feature_closeness, weighted_cosine_similarity
+from .algorithm_config import DEFAULT_ALGORITHM_CONFIG
+from .feature_vectors import calculate_similarity, feature_closeness
 
 
 @dataclass(frozen=True)
@@ -10,8 +11,14 @@ class CbfRanking:
     feature_closeness: dict
 
 
-def rank_cbf(candidate_vectors, session_profile, limit):
-    """Rank ``(candidate, vector)`` pairs by weighted cosine similarity."""
+def rank_cbf(
+    candidate_vectors,
+    session_profile,
+    limit,
+    *,
+    algorithm_config=DEFAULT_ALGORITHM_CONFIG,
+):
+    """Rank candidates using the configured eight-feature similarity."""
 
     if limit < 1:
         raise ValueError("limit must be at least 1")
@@ -21,7 +28,12 @@ def rank_cbf(candidate_vectors, session_profile, limit):
         scored_candidates.append(
             CbfRanking(
                 candidate=candidate,
-                score=weighted_cosine_similarity(session_profile, vector),
+                score=calculate_similarity(
+                    session_profile,
+                    vector,
+                    metric=algorithm_config.relevance_similarity_metric,
+                    weights=algorithm_config.feature_weights,
+                ),
                 feature_closeness=feature_closeness(vector, session_profile),
             )
         )

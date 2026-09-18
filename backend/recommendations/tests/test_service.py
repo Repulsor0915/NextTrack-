@@ -1,8 +1,10 @@
 import random
+from dataclasses import replace
 
 from django.test import TestCase
 
 from recommendations.models import Track, TrackFeatures
+from recommendations.domain.algorithm_config import DEFAULT_ALGORITHM_CONFIG
 from recommendations.services.recommendation_service import (
     MissingTrackFeaturesError,
     NoCandidatesError,
@@ -208,6 +210,30 @@ class RecommendationServiceTests(TestCase):
 
         self.assertEqual(result["meta"]["history_count_used"], 5)
         self.assertEqual(result["meta"]["history_window_size"], 5)
+
+    def test_service_uses_injected_algorithm_config(self):
+        config = replace(
+            DEFAULT_ALGORITHM_CONFIG,
+            name="test-two-track-window",
+            history_window_size=2,
+        )
+        service = RecommendationService(algorithm_config=config)
+
+        result = service.recommend(
+            self._request(
+                algorithm="cbf",
+                history=[
+                    "track-a",
+                    "track-b",
+                    "track-a",
+                    "track-b",
+                ],
+                candidate_ids=["track-c", "track-d"],
+            )
+        )
+
+        self.assertEqual(result["meta"]["history_count_used"], 2)
+        self.assertEqual(result["meta"]["history_window_size"], 2)
 
     def test_mood_does_not_influence_basic_cbf(self):
         request = self._request(

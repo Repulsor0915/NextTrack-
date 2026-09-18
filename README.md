@@ -147,6 +147,21 @@ For mood requests, `meta.mood_model` identifies the profile version and each
 result exposes `components.mood_feature_closeness`. These values let the
 deterministic explanation cite the actual feature cues used in `mood_fit`.
 
+## Internal algorithm configuration
+
+The finalized baseline parameters are collected in the immutable
+`AlgorithmConfig` defined in
+`backend/recommendations/domain/algorithm_config.py`. This lets the future
+offline evaluator inject and record alternative feature weights, similarity
+metrics, history:mood ratios, mood-feature weights, and MMR defaults without
+editing ranker source code. The public API does not accept this complete
+configuration object.
+
+The default configuration is named `baseline-current-v1` and preserves the
+behaviour documented above. The detailed algorithm boundary and configurable
+experiment choices are recorded in
+`backend/recommendations/domain/README.md`.
+
 ## Error responses
 
 Parser, serializer, and recommendation-service errors use one envelope while

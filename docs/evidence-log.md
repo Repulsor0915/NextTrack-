@@ -80,3 +80,39 @@ the 500-track IDs are a subset of the full catalogue IDs.
 The preprocessing baseline is ready. Formal scenario construction, experiment
 configuration, repeated runs, metric aggregation, and performance comparison
 belong to evaluation protocol 2.1 and have not been claimed here.
+
+## 2026-09-18 — Recommendation algorithm baseline
+
+### Frozen explicit modes
+
+- `random`: seedable sample without replacement; history and mood do not alter
+  its ranking.
+- `cbf`: equal profile of at most five recent history events, current
+  eight-feature heuristic weights, and weighted cosine similarity; no mood or
+  MMR contribution.
+- `context_mmr`: linearly recency-weighted history and/or mood relevance,
+  followed by MMR diversification.
+- `auto` remains request routing and is not counted as a fourth algorithm.
+
+### Baseline configuration
+
+The immutable configuration is named `baseline-current-v1`. It preserves the
+existing defaults: weighted cosine relevance, 65:35 history:mood relevance,
+equal weights within each mood profile, and MMR diversity strength 0.20
+(standard MMR lambda 0.80).
+
+The algorithm layer now permits controlled offline comparisons without source
+edits: feature-weight presets, weighted cosine versus normalized weighted
+Euclidean relevance, mood feature weights, history:mood ratio, history strategy,
+and MMR similarity/default strength. The public API does not accept the complete
+configuration object.
+
+### Verification performed
+
+- All 92 recommendation tests passed, including the existing API/service
+  regression suite and new configuration, Euclidean-distance, mood-weight, and
+  parameter-injection tests.
+- Django system checks passed.
+- `makemigrations --check --dry-run` reported no model changes.
+- Formal offline evaluation has not started; passing regression tests is not
+  reported as evidence that one algorithm has better recommendation quality.

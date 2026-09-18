@@ -1,8 +1,13 @@
 import random
+from dataclasses import replace
 
 from django.test import SimpleTestCase
 
 from recommendations.domain.cbf_ranker import rank_cbf
+from recommendations.domain.algorithm_config import (
+    DEFAULT_ALGORITHM_CONFIG,
+    AlgorithmConfig,
+)
 from recommendations.domain.context_ranker import (
     ContextRanking,
     score_context_candidates,
@@ -12,6 +17,7 @@ from recommendations.domain.feature_vectors import (
     build_recency_weighted_profile,
     build_session_profile,
     weighted_cosine_similarity,
+    weighted_euclidean_similarity,
 )
 from recommendations.domain.mmr import rerank_mmr
 from recommendations.domain.mood_model import (
@@ -122,6 +128,19 @@ class FeatureVectorTests(SimpleTestCase):
             0.0,
         )
 
+    def test_euclidean_similarity_uses_normalised_distance(self):
+        zero_vector = self._uniform_vector(0.0)
+        one_vector = self._uniform_vector(1.0)
+
+        self.assertEqual(
+            weighted_euclidean_similarity(zero_vector, zero_vector),
+            1.0,
+        )
+        self.assertEqual(
+            weighted_euclidean_similarity(zero_vector, one_vector),
+            0.0,
+        )
+
     def test_session_profile_uses_only_the_most_recent_window(self):
         history_vectors = [
             self._uniform_vector(value) for value in (0.0, 0.2, 0.4, 0.6, 0.8, 1.0)
@@ -223,6 +242,45 @@ class CbfRankerTests(SimpleTestCase):
         with self.assertRaises(ValueError):
             rank_cbf([], self._uniform_vector(0.5), limit=0)
 
+    def test_similarity_metric_can_be_changed_without_editing_ranker_code(self):
+        weights = {feature_name: 0.0 for feature_name in FEATURE_NAMES}
+        weights.update({"energy": 0.5, "valence": 0.5})
+        cosine_config = AlgorithmConfig(
+            name="test-cosine",
+            feature_weights=weights,
+        )
+        euclidean_config = replace(
+            cosine_config,
+            name="test-euclidean",
+            relevance_similarity_metric="weighted_euclidean",
+        )
+        profile = self._uniform_vector(0.0)
+        profile["energy"] = 1.0
+        direction_match = self._uniform_vector(0.0)
+        direction_match["energy"] = 0.5
+        distance_match = self._uniform_vector(0.0)
+        distance_match.update({"energy": 1.0, "valence": 0.4})
+        candidates = [
+            ("direction-match", direction_match),
+            ("distance-match", distance_match),
+        ]
+
+        cosine_results = rank_cbf(
+            candidates,
+            profile,
+            2,
+            algorithm_config=cosine_config,
+        )
+        euclidean_results = rank_cbf(
+            candidates,
+            profile,
+            2,
+            algorithm_config=euclidean_config,
+        )
+
+        self.assertEqual(cosine_results[0].candidate, "direction-match")
+        self.assertEqual(euclidean_results[0].candidate, "distance-match")
+
 
 class ContextRankerTests(SimpleTestCase):
     @staticmethod
@@ -270,6 +328,28 @@ class ContextRankerTests(SimpleTestCase):
             {"valence", "energy", "danceability"},
         )
 
+    def test_mood_feature_weights_can_be_configured(self):
+        mood_weights = {feature_name: 0.01 for feature_name in FEATURE_NAMES}
+        mood_weights.update(
+            {
+                "valence": 0.80,
+                "energy": 0.10,
+                "danceability": 0.05,
+            }
+        )
+        vector = self._vector(valence=0.85, energy=0.0, danceability=0.65)
+
+        equal_score = score_mood(vector, "happy")
+        weighted_score = score_mood(
+            vector,
+            "happy",
+            feature_weights=mood_weights,
+        )
+
+        self.assertAlmostEqual(equal_score.fit, (1.0 + 0.3 + 1.0) / 3)
+        self.assertAlmostEqual(weighted_score.fit, 0.88 / 0.95)
+        self.assertGreater(weighted_score.fit, equal_score.fit)
+
     def test_mood_only_context_can_rank_without_history(self):
         candidates = [
             (
@@ -303,6 +383,26 @@ class ContextRankerTests(SimpleTestCase):
         )[0]
 
         expected = 0.65 * result.history_similarity + 0.35 * result.mood_fit
+        self.assertAlmostEqual(result.relevance, expected)
+
+    def test_history_mood_ratio_comes_from_algorithm_config(self):
+        config = replace(
+            DEFAULT_ALGORITHM_CONFIG,
+            name="test-mood-heavy",
+            history_relevance_weight=0.2,
+            mood_relevance_weight=0.8,
+        )
+        profile = self._vector(energy=0.8, valence=0.8)
+        candidate = self._vector(energy=0.7, valence=0.85, danceability=0.65)
+
+        result = score_context_candidates(
+            [("track-a", candidate)],
+            session_profile=profile,
+            mood="happy",
+            algorithm_config=config,
+        )[0]
+
+        expected = 0.2 * result.history_similarity + 0.8 * result.mood_fit
         self.assertAlmostEqual(result.relevance, expected)
 
     def test_bpm_constraint_is_reported_as_hard_fit(self):

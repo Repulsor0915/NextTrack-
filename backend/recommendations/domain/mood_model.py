@@ -39,7 +39,7 @@ class MoodScore:
     feature_closeness: dict
 
 
-def score_mood(vector, mood):
+def score_mood(vector, mood, *, feature_weights=None):
     """Score proximity to a project-defined mood profile.
 
     No standalone arousal or dominance value is inferred. Activation-related
@@ -55,15 +55,30 @@ def score_mood(vector, mood):
         feature_name: 1.0 - abs(vector[feature_name] - target)
         for feature_name, target in targets.items()
     }
+    if feature_weights is None:
+        active_weights = {feature_name: 1.0 for feature_name in targets}
+    else:
+        active_weights = {
+            feature_name: feature_weights[feature_name]
+            for feature_name in targets
+        }
+    active_weight_total = sum(active_weights.values())
+    if active_weight_total <= 0.0:
+        raise ValueError("The requested mood must have at least one positive weight")
+
     return MoodScore(
-        fit=sum(closeness.values()) / len(closeness),
+        fit=sum(
+            active_weights[feature_name] * closeness[feature_name]
+            for feature_name in targets
+        )
+        / active_weight_total,
         feature_closeness=closeness,
     )
 
 
-def calculate_mood_fit(vector, mood):
+def calculate_mood_fit(vector, mood, *, feature_weights=None):
     """Return the scalar fit for callers that do not need evidence details."""
 
     if mood is None:
         return None
-    return score_mood(vector, mood).fit
+    return score_mood(vector, mood, feature_weights=feature_weights).fit

@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from .feature_vectors import weighted_cosine_similarity
+from .algorithm_config import DEFAULT_ALGORITHM_CONFIG
+from .feature_vectors import calculate_similarity
 
 
 @dataclass(frozen=True)
@@ -11,7 +12,13 @@ class MmrRanking:
     diversity_gain: float
 
 
-def rerank_mmr(context_rankings, limit, *, diversity_strength):
+def rerank_mmr(
+    context_rankings,
+    limit,
+    *,
+    diversity_strength,
+    algorithm_config=DEFAULT_ALGORITHM_CONFIG,
+):
     """Greedily balance contextual relevance and intra-list diversity.
 
     For selections after rank one, the normalized utility is equivalent to the
@@ -39,9 +46,11 @@ def rerank_mmr(context_rankings, limit, *, diversity_strength):
                 mmr_score = context.relevance
             else:
                 diversity_penalty = max(
-                    weighted_cosine_similarity(
+                    calculate_similarity(
                         context.vector,
                         selected_context.vector,
+                        metric=algorithm_config.diversity_similarity_metric,
+                        weights=algorithm_config.feature_weights,
                     )
                     for selected_context in selected_contexts
                 )

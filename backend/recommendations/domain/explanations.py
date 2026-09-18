@@ -13,7 +13,7 @@ FEATURE_LABELS = {
 }
 
 
-def build_cbf_explanation(score, closeness):
+def build_cbf_explanation(score, closeness, *, feature_weights=FEATURE_WEIGHTS):
     """Generate a deterministic explanation supported by ranking evidence."""
 
     if score >= 0.90:
@@ -25,7 +25,7 @@ def build_cbf_explanation(score, closeness):
 
     strongest_matches = sorted(
         closeness.items(),
-        key=lambda item: (-(item[1] * FEATURE_WEIGHTS[item[0]]), item[0]),
+        key=lambda item: (-(item[1] * feature_weights[item[0]]), item[0]),
     )
     evidence = [f"weighted history similarity {score:.2f}"]
     evidence.extend(
