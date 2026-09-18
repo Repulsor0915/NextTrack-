@@ -1,1 +1,3 @@
 data/processed/*/*.json text eol=lf
+evaluation/*.json text eol=lf
+evaluation/scenario-review.md text eol=lf
