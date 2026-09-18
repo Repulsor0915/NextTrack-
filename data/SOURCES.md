@@ -1,176 +1,92 @@
-# NextTrack catalogue source and processing record
+# NextTrack data source
 
-Last verified: 2026-09-04
+Last reviewed: 2026-09-18
 
-## Selected source
+## Selected raw source
 
-The runtime catalogue is derived from MaharshiPandya's **Spotify Tracks
-Dataset**, version 1:
+NextTrack currently selects MaharshiPandya's **Spotify Tracks Dataset**, version
+1, as its only catalogue source.
 
-- Canonical dataset page:
-  <https://www.kaggle.com/datasets/maharshipandya/-spotify-tracks-dataset>
-- Kaggle metadata API:
-  <https://www.kaggle.com/api/v1/datasets/view/maharshipandya/-spotify-tracks-dataset>
-- Pinned retrieval copy:
-  <https://huggingface.co/datasets/maharshipandya/spotify-tracks-dataset/resolve/c4609440b24ac4075899f6e60b33775acbe00827/dataset.csv>
-- Pinned retrieval revision: `c4609440b24ac4075899f6e60b33775acbe00827`
-- Source version: `1`
+- Dataset page: <https://www.kaggle.com/datasets/maharshipandya/-spotify-tracks-dataset>
+- Pinned copy: <https://huggingface.co/datasets/maharshipandya/spotify-tracks-dataset/resolve/c4609440b24ac4075899f6e60b33775acbe00827/dataset.csv>
+- Pinned revision: `c4609440b24ac4075899f6e60b33775acbe00827`
 - Source last updated: `2022-10-22T14:40:15.3Z`
-- Retrieved for this project: `2026-09-04`
-- Raw filename: `dataset.csv`
+- Retrieved for NextTrack: `2026-09-04`
+- Local raw file: `data/raw/spotify-tracks-kaggle/dataset.csv`
 - Raw bytes: `20,118,244`
-- Raw SHA-256:
-  `b202fa49909b2d5cef71a04b1d21243cfeb36414535f2ca9272aa646721177bd`
+- Raw SHA-256: `b202fa49909b2d5cef71a04b1d21243cfeb36414535f2ca9272aa646721177bd`
 
-The raw CSV is deliberately Git-ignored. It can be reconstructed from the
-pinned URL and verified against the recorded hash. NextTrack does not call the
-Spotify API at recommendation time and does not scrape Spotify webpages.
+The raw file is immutable and Git-ignored. A downloaded copy is accepted only
+when its SHA-256 matches the value above.
 
-## Licence and attribution boundary
+## Licence boundary
 
-The Kaggle metadata declares: **Database: Open Database, Contents: © Original
-Authors**. The applicable database licence is the Open Database Licence 1.0:
+The Kaggle metadata declares **Database: Open Database, Contents: © Original
+Authors** and identifies the Open Database Licence 1.0:
 <https://opendatacommons.org/licenses/odbl/1-0/>.
 
-For this project, retain this source record, the licence notice, version, and
-checksums with every processed catalogue. ODbL attribution, share-alike, and
-database-access obligations should be reviewed before publishing an adapted
-database. Track names, artist names, and other individual contents are not
-claimed as project-owned. This record documents the declared licence; it is not
-legal advice and does not guarantee that every upstream content right is
-covered.
+Preserve source attribution and review ODbL obligations before distributing an
+adapted database. Track and artist names are not claimed as project-owned. This
+record documents the declared upstream terms and is not legal advice.
 
-The dataset description says its audio features were collected using the
-Spotify Web API. Consequently, the processed catalogue supports a reproducible
-engineering evaluation, but it must not be described as a first-party Spotify
-release or as features calculated by NextTrack.
+The dataset description states that its audio features were collected using the
+Spotify Web API. NextTrack does not call Spotify or scrape Spotify webpages at
+recommendation time.
 
-## Field mapping
+## Current field contract
 
-One source row is transformed into the existing Django schema as follows:
-
-| NextTrack field | Source column | Rule |
+| NextTrack field | Source column | Hard-validity rule |
 |---|---|---|
-| `id` | `track_id` | Required; deduplication key; maximum 100 characters |
-| `title` | `track_name` | Required; maximum 255 characters |
-| `artist` | `artists` | Required; source text retained; maximum 255 characters |
-| `genre` | `track_genre` | Required; source label retained; maximum 100 characters |
-| `year` | — | Stored as `null`; source has no release-year column |
-| `tempo` | `tempo` | Required finite number, `(0, 300]` BPM |
+| `id` | `track_id` | Non-empty; maximum 100 characters; deduplication key |
+| `title` | `track_name` | Non-empty; maximum 255 characters |
+| `artist` | `artists` | Non-empty; maximum 255 characters |
+| `genres` | `track_genre` | Column required; blank allowed; duplicate labels merged into a sorted list |
+| `explicit` | `explicit` | Required boolean; stored as metadata; does not exclude the track |
+| `year` | — | Stored as `null` because the source has no release year |
+| `tempo` | `tempo` | Required finite number greater than zero |
 | `energy` | `energy` | Required finite number in `[0, 1]` |
 | `valence` | `valence` | Required finite number in `[0, 1]` |
 | `danceability` | `danceability` | Required finite number in `[0, 1]` |
 | `acousticness` | `acousticness` | Required finite number in `[0, 1]` |
 | `instrumentalness` | `instrumentalness` | Required finite number in `[0, 1]` |
-| `loudness` | `loudness` | Required finite number in `[-60, 5]` dB |
+| `loudness` | `loudness` | Required finite number |
 | `speechiness` | `speechiness` | Required finite number in `[0, 1]` |
 
-The unnamed CSV index column and unused fields are ignored. The source supplies
-all eight features already used by `TrackFeatures`, so no `0002` migration is
-needed. No `arousal` or `dominance` column is derived.
+## Preprocessing boundary
 
-Processed JSON and SQLite retain these validated raw values. Min-max scaling and
-clamping are performed by `recommendations/preprocessing/normalization.py` when
-the recommender builds its eight-dimensional vectors; the normalization ranges
-are recorded in the generated manifest.
+The offline implementation lives in `backend/catalogue_pipeline/` and performs:
 
-## Quality rules and observed results
+1. Source-column validation.
+2. Row-level hard validation.
+3. Deduplication by `track_id`, keeping the first hard-valid occurrence.
+4. Deterministic full selection in track-ID order.
+5. Generation of `catalogue.json`, `preprocessing-report.json`, and
+   `manifest.json` in a new empty output directory.
 
-The pipeline reads all 114,000 rows before selecting a catalogue. It retains
-80,584 schema-compatible valid unique tracks and excludes 33,416 source rows. A row may have more
-than one reason, so reason counts need not sum exactly to excluded rows.
+The pipeline stores but does not exclude explicit tracks. It also does not
+exclude comedy, sleep, or high-speechiness tracks. Those are possible content-
+policy choices, not invalid data.
 
-| Exclusion reason | Count | Rule |
-|---|---:|---|
-| Duplicate `track_id` | 22,206 | Keep the first valid occurrence |
-| Source `explicit=true` | 9,747 | Exclude from this project catalogue |
-| `comedy` or `sleep` genre | 2,000 | Exclude obvious non-song categories |
-| `speechiness > 0.66` | 88 | Exclude likely spoken-word recordings |
-| Tempo outside `(0, 300]` | 19 | Exclude invalid range |
-| Artist longer than 255 characters | 18 | Must fit the Django field |
-| Title longer than 255 characters | 1 | Must fit the Django field |
-| Missing artist | 1 | Required field |
-| Missing title | 1 | Required field |
+Raw values are stored in the catalogue and database. Normalization is a runtime
+model operation defined in `backend/recommendations/audio_features.py`.
 
-No required audio-feature value is missing. The existing robust normalisation
-ranges cover 99.976% of valid tempo values and 99.454% of valid loudness values;
-the current normaliser clamps the small number of more extreme values. All six
-other feature ranges cover every retained value. This behaviour must be stated
-as clamping rather than silently described as lossless normalisation.
+The 20- and 500-track test catalogues must be generated from the frozen full
+catalogue with `sample_catalogue`, not independently from the raw CSV. Their
+manifests record the parent catalogue checksum and selection seed.
 
-Known limitations:
+## Frozen catalogue versions
 
-- Source-provided `explicit` and genre labels may be incomplete or imperfect.
-- Track and artist text is retained as supplied and is not a content-safety
-  guarantee.
-- Keeping the first valid duplicate is deterministic but may discard a later
-  genre assignment for the same track.
-- The full catalogue contains every schema-compatible valid unique track; it is
-  not popularity-balanced or user-personalised.
-- DEAM informs the valence/arousal literature and mood rationale only; no DEAM
-  audio or annotations are merged into this catalogue.
+| Version | Tracks | Catalogue SHA-256 | Purpose |
+|---|---:|---|---|
+| `spotify-tracks-kaggle-full` | 89,566 | `82bd95b1e5d4e983f172af116904740bb43eb599f5d7e37cd6e0f558f84de65b` | Formal full catalogue |
+| `spotify-tracks-kaggle-test-20` | 20 | `9966891bbeae7b20d756a17012f6977431f1f53face0ba05ddd9c6d8f4779616` | Fast import/API smoke test |
+| `spotify-tracks-kaggle-test-500` | 500 | `b679f39c76eb8e14a9dd16fec999125d966cdc64342af4e0c7100d0e3702c36d` | Development algorithm test pool |
 
-## Generated catalogue versions
+The samples use seed `221611`. The subset relationship was verified as
+`20 ⊂ 500 ⊂ full`, and every generated output checksum matches its manifest.
 
-| Version | Tracks | Artists | Genres | Purpose |
-|---|---:|---:|---:|---|
-| `spotify-tracks-kaggle-v1-spike-20` | 20 | 20 | 19 | Schema/import/API spike |
-| `spotify-tracks-kaggle-v1-500` | 500 | 477 | 107 | Retained intermediate milestone |
-| `spotify-tracks-kaggle-v1-full` | 80,584 | 28,153 | 111 | Formal full catalogue |
+## Other downloaded data
 
-Sample selection is reproducible: candidates are ordered by the SHA-256 value
-of `20260904:<track_id>` and the lowest priorities are selected. The full
-version does not sample: it retains every valid unique candidate. All output is
-sorted by track ID. Each version contains:
-
-- `catalogue.json`: importable processed data;
-- `dataset-summary.json`: source shape, missing values, feature distributions,
-  and selection coverage;
-- `excluded-rows-summary.json`: reason totals and the first 100 examples;
-- `excluded-rows.json` in the 500-track and full versions: all excluded source
-  rows and their reasons;
-- `manifest.json`: source identity, raw checksum, transform policy, and SHA-256
-  checksum for every generated JSON artefact;
-- `smoke-test-result.json`: observed import/API result.
-
-## Reproduction
-
-Run from the `NextTrack` directory in PowerShell after downloading the pinned
-CSV to `data/raw/spotify-tracks-kaggle-v1/dataset.csv`:
-
-```powershell
-Get-FileHash -Algorithm SHA256 data\raw\spotify-tracks-kaggle-v1\dataset.csv
-
-.\.venv\Scripts\python.exe backend\manage.py prepare_catalogue `
-  data\raw\spotify-tracks-kaggle-v1\dataset.csv `
-  data\processed\spotify-tracks-kaggle-v1-full `
-  --all-valid `
-  --catalogue-version spotify-tracks-kaggle-v1-full `
-  --retrieved-date 2026-09-05 `
-  --write-full-exclusions
-
-$env:NEXTTRACK_DB_PATH = "data\processed\spotify-tracks-kaggle-v1-full\verification.sqlite3"
-.\.venv\Scripts\python.exe backend\manage.py migrate --noinput
-.\.venv\Scripts\python.exe backend\manage.py import_catalogue `
-  data\processed\spotify-tracks-kaggle-v1-full\catalogue.json `
-  --data-source spotify-tracks-kaggle-v1-full
-```
-
-`NEXTTRACK_DB_PATH` keeps verification separate from the developer database.
-Generated SQLite files are ignored and are not research artefacts.
-
-The verified full import created 80,584 Track and 80,584 TrackFeatures rows.
-The current row-by-row importer took approximately 160 seconds, and one
-full-catalogue history + mood + MMR request took approximately 7.5 seconds in
-the local development environment. These are functionality checks, not final
-performance benchmarks; import batching and candidate-search optimisation
-remain production/performance work.
-
-## Candidate not selected
-
-MusicOSet was inspected because it exposes all eight required fields and states
-that the dataset has open, unrestricted access:
-<https://marianaossilva.github.io/DSW2019/>. It was not selected because the
-available project page did not identify a sufficiently clear standard licence
-for the files. It remains a literature/data comparison candidate, not a mixed
-source for the final catalogue.
+MusicOSet remains under `data/raw/musicoset/` but is not selected, joined, or
+used by the current pipeline. It should be removed separately if the project no
+longer needs it as a source-comparison candidate.

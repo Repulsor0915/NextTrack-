@@ -5,8 +5,8 @@ from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 
+from recommendations.audio_features import FEATURE_NAMES
 from recommendations.models import Track, TrackFeatures
-from recommendations.preprocessing.schema import FEATURE_FIELDS
 
 
 class Command(BaseCommand):
@@ -23,6 +23,11 @@ class Command(BaseCommand):
             default="unknown",
             help="Provenance label stored with every imported track.",
         )
+        parser.add_argument(
+            "--replace",
+            action="store_true",
+            help="Delete the existing track catalogue before importing.",
+        )
 
     @transaction.atomic
     def handle(self, *args, **options):
@@ -33,6 +38,9 @@ class Command(BaseCommand):
             raise CommandError("--data-source cannot be empty.")
 
         catalogue = self._read_catalogue(path)
+        if options["replace"]:
+            Track.objects.all().delete()
+
         created_count = 0
         updated_count = 0
         seen_ids = set()
@@ -55,7 +63,8 @@ class Command(BaseCommand):
 
                 track.title = item["title"]
                 track.artist = item["artist"]
-                track.genre = item.get("genre", "")
+                track.genres = item.get("genres", [])
+                track.explicit = item["explicit"]
                 track.year = item.get("year")
                 track.data_source = data_source
                 track.full_clean()
@@ -65,7 +74,7 @@ class Command(BaseCommand):
                 if features is None:
                     features = TrackFeatures(track=track)
 
-                for field_name in FEATURE_FIELDS:
+                for field_name in FEATURE_NAMES:
                     setattr(features, field_name, features_data[field_name])
                 features.feature_source = data_source
                 features.full_clean()
@@ -81,7 +90,8 @@ class Command(BaseCommand):
         self.stdout.write(
             self.style.SUCCESS(
                 f"Imported {len(catalogue)} tracks from {path} "
-                f"({created_count} created, {updated_count} updated)."
+                f"({created_count} created, {updated_count} updated, "
+                f'replace={options["replace"]}).'
             )
         )
 

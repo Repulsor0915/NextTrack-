@@ -1,0 +1,81 @@
+{
+  "catalogue_version": "spotify-tracks-kaggle-full",
+  "outputs": {
+    "catalogue.json": {
+      "bytes": 39414578,
+      "sha256": "82bd95b1e5d4e983f172af116904740bb43eb599f5d7e37cd6e0f558f84de65b"
+    },
+    "preprocessing-report.json": {
+      "bytes": 19096,
+      "sha256": "e9c892ff1983f3bf302a876b8499beb9ec1c0d5e3f5c37e9853b941d51450cd2"
+    }
+  },
+  "preprocessing": {
+    "deduplication_key": "track_id",
+    "genre_policy": "merge unique non-empty labels and sort",
+    "hard_validation_policy": {
+      "allow_blank_genre": true,
+      "content_policy_filters": [],
+      "duplicate_policy": "keep_first_hard_valid",
+      "require_boolean_explicit": true,
+      "require_positive_tempo": true
+    },
+    "required_features": [
+      "tempo",
+      "energy",
+      "valence",
+      "danceability",
+      "acousticness",
+      "instrumentalness",
+      "loudness",
+      "speechiness"
+    ],
+    "selection": {
+      "method": "all hard-valid unique tracks sorted by track_id",
+      "mode": "all_valid_unique"
+    },
+    "stored_feature_values": "raw source values",
+    "validation_policy": "hard validity only"
+  },
+  "retrieved_date": "2026-09-04",
+  "runtime_normalization": {
+    "acousticness": {
+      "maximum": 1.0,
+      "minimum": 0.0
+    },
+    "danceability": {
+      "maximum": 1.0,
+      "minimum": 0.0
+    },
+    "energy": {
+      "maximum": 1.0,
+      "minimum": 0.0
+    },
+    "instrumentalness": {
+      "maximum": 1.0,
+      "minimum": 0.0
+    },
+    "loudness": {
+      "maximum": 0.0,
+      "minimum": -30.0
+    },
+    "speechiness": {
+      "maximum": 1.0,
+      "minimum": 0.0
+    },
+    "tempo": {
+      "maximum": 220.0,
+      "minimum": 40.0
+    },
+    "valence": {
+      "maximum": 1.0,
+      "minimum": 0.0
+    }
+  },
+  "schema_version": "nexttrack-catalogue-v2",
+  "source": {
+    "bytes": 20118244,
+    "file_name": "dataset.csv",
+    "sha256": "b202fa49909b2d5cef71a04b1d21243cfeb36414535f2ca9272aa646721177bd"
+  }
+}

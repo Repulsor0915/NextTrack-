@@ -1,6 +1,6 @@
 from math import sqrt
 
-from recommendations.preprocessing.normalization import (
+from recommendations.audio_features import (
     FEATURE_NAMES,
     build_feature_vector,
     normalize_feature,

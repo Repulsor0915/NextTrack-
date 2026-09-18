@@ -5,160 +5,166 @@ from tempfile import TemporaryDirectory
 
 from django.test import SimpleTestCase
 
-from recommendations.preprocessing.catalogue import (
+from catalogue_pipeline import (
     CataloguePreparationError,
     prepare_catalogue,
+    sample_catalogue,
 )
-from recommendations.preprocessing.schema import FEATURE_FIELDS
+from catalogue_pipeline.schema import REQUIRED_SOURCE_COLUMNS
+from catalogue_pipeline.validation import validate_source_row
 
 
-class CataloguePipelineTests(SimpleTestCase):
-    def setUp(self):
-        self.temporary_directory = TemporaryDirectory()
-        self.addCleanup(self.temporary_directory.cleanup)
-        self.root = Path(self.temporary_directory.name)
-        self.source_path = self.root / "source.csv"
-        self.output_directory = self.root / "processed"
-
+class CatalogueValidationTests(SimpleTestCase):
     @staticmethod
-    def _row(track_id, **overrides):
+    def _row(**overrides):
         row = {
-            "track_id": track_id,
-            "track_name": f"Song {track_id}",
-            "artists": "Test Artist",
-            "track_genre": "test",
-            "explicit": "False",
+            "track_id": "track-1",
+            "track_name": "Song",
+            "artists": "Artist",
+            "track_genre": "",
+            "explicit": "true",
             "tempo": "120",
-            "energy": "0.6",
+            "energy": "0.8",
             "valence": "0.7",
-            "danceability": "0.5",
-            "acousticness": "0.2",
+            "danceability": "0.6",
+            "acousticness": "0.1",
             "instrumentalness": "0.0",
-            "loudness": "-8.0",
+            "loudness": "-8",
             "speechiness": "0.05",
         }
         row.update(overrides)
         return row
 
-    def _write_rows(self, rows):
-        field_names = [
-            "track_id",
-            "track_name",
-            "artists",
-            "track_genre",
-            "explicit",
-            *FEATURE_FIELDS,
-        ]
-        with self.source_path.open("w", encoding="utf-8", newline="") as source:
-            writer = csv.DictWriter(source, fieldnames=field_names)
-            writer.writeheader()
-            writer.writerows(rows)
+    def test_accepts_blank_genre_and_stores_explicit_boolean(self):
+        result = validate_source_row(self._row())
 
-    def test_prepares_deterministic_import_catalogue_and_evidence_files(self):
-        self._write_rows(
-            [
-                self._row("track-a"),
-                self._row("track-b", energy="0.8"),
-                self._row("track-c", valence="0.2"),
-            ]
-        )
+        self.assertEqual(result.reasons, ())
+        self.assertEqual(result.record["genres"], [])
+        self.assertIs(result.record["explicit"], True)
 
-        result = prepare_catalogue(
-            self.source_path,
-            self.output_directory,
-            limit=2,
-            seed=42,
-            catalogue_version="test-v1",
-            retrieved_date="2026-09-04",
-        )
+    def test_rejects_invalid_explicit_value(self):
+        result = validate_source_row(self._row(explicit="unknown"))
 
-        with result["catalogue_path"].open(encoding="utf-8") as catalogue_file:
-            catalogue = json.load(catalogue_file)
-        with result["manifest_path"].open(encoding="utf-8") as manifest_file:
-            manifest = json.load(manifest_file)
+        self.assertIn("invalid_explicit", result.reasons)
 
-        self.assertEqual(len(catalogue), 2)
-        self.assertEqual(set(catalogue[0]["features"]), set(FEATURE_FIELDS))
-        self.assertEqual(manifest["catalogue_version"], "test-v1")
-        self.assertIn("catalogue.json", manifest["outputs"])
+    def test_requires_strictly_positive_tempo(self):
+        result = validate_source_row(self._row(tempo="0"))
 
-    def test_reports_duplicate_missing_and_out_of_range_rows(self):
-        self._write_rows(
-            [
-                self._row("track-a"),
-                self._row("track-a"),
-                self._row("track-missing", energy=""),
-                self._row("track-invalid", valence="1.2"),
-                self._row("track-spoken", speechiness="0.9"),
-                self._row("track-explicit", explicit="True"),
-                self._row("track-non-song", track_genre="sleep"),
-                self._row("track-long-artist", artists="A" * 256),
-            ]
-        )
+        self.assertIn("out_of_range_tempo", result.reasons)
 
-        result = prepare_catalogue(
-            self.source_path,
-            self.output_directory,
-            limit=1,
-            seed=42,
-            catalogue_version="test-v1",
-            retrieved_date="2026-09-04",
-        )
+    def test_accepts_extreme_finite_loudness_but_rejects_non_finite(self):
+        finite = validate_source_row(self._row(loudness="-100"))
+        non_finite = validate_source_row(self._row(loudness="nan"))
 
-        with result["exclusions_summary_path"].open(
-            encoding="utf-8"
-        ) as report_file:
-            report = json.load(report_file)
+        self.assertEqual(finite.reasons, ())
+        self.assertIn("non_finite_loudness", non_finite.reasons)
 
-        self.assertEqual(report["excluded_source_row_count"], 7)
-        self.assertEqual(report["reason_counts"]["duplicate_track_id"], 1)
-        self.assertEqual(report["reason_counts"]["missing_energy"], 1)
-        self.assertEqual(report["reason_counts"]["out_of_range_valence"], 1)
-        self.assertEqual(report["reason_counts"]["likely_spoken_word"], 1)
-        self.assertEqual(report["reason_counts"]["explicit_content"], 1)
-        self.assertEqual(report["reason_counts"]["non_song_genre"], 1)
-        self.assertEqual(report["reason_counts"]["too_long_artists"], 1)
 
-    def test_all_valid_mode_keeps_every_valid_unique_track(self):
-        self._write_rows(
-            [
-                self._row("track-c"),
-                self._row("track-a"),
-                self._row("track-b"),
-            ]
-        )
-
-        result = prepare_catalogue(
-            self.source_path,
-            self.output_directory,
-            limit=None,
-            seed=42,
-            catalogue_version="test-full-v1",
-            retrieved_date="2026-09-05",
-        )
-
-        with result["catalogue_path"].open(encoding="utf-8") as catalogue_file:
-            catalogue = json.load(catalogue_file)
-        with result["summary_path"].open(encoding="utf-8") as summary_file:
-            summary = json.load(summary_file)
-
-        self.assertEqual(
-            [track["id"] for track in catalogue],
-            ["track-a", "track-b", "track-c"],
-        )
-        self.assertEqual(summary["selection_mode"], "all_valid_unique")
-        self.assertIsNone(summary["selection_seed"])
-
-    def test_rejects_missing_required_source_column(self):
-        with self.source_path.open("w", encoding="utf-8", newline="") as source:
-            source.write("track_id,track_name\ntrack-a,Song A\n")
-
-        with self.assertRaises(CataloguePreparationError):
-            prepare_catalogue(
-                self.source_path,
-                self.output_directory,
-                limit=1,
-                seed=42,
-                catalogue_version="test-v1",
-                retrieved_date="2026-09-04",
+class CataloguePipelineTests(SimpleTestCase):
+    def test_keeps_first_valid_duplicate_and_reports_conflicts(self):
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            source_path = root / "source.csv"
+            output_directory = root / "output"
+            first = CatalogueValidationTests._row()
+            second = CatalogueValidationTests._row(
+                track_genre="rock",
+                explicit="false",
+                energy="0.6",
             )
+            with source_path.open("w", encoding="utf-8", newline="") as source:
+                writer = csv.DictWriter(source, fieldnames=REQUIRED_SOURCE_COLUMNS)
+                writer.writeheader()
+                writer.writerows([first, second])
+
+            prepare_catalogue(
+                source_path,
+                output_directory,
+                catalogue_version="test-v1",
+                retrieved_date="2026-09-18",
+            )
+
+            with (output_directory / "catalogue.json").open(encoding="utf-8") as file:
+                catalogue = json.load(file)
+            with (output_directory / "preprocessing-report.json").open(
+                encoding="utf-8"
+            ) as file:
+                report = json.load(file)
+
+            self.assertEqual(len(catalogue), 1)
+            self.assertEqual(catalogue[0]["genres"], ["rock"])
+            self.assertIs(catalogue[0]["explicit"], True)
+            self.assertEqual(report["rejection_reason_counts"]["duplicate_track_id"], 1)
+            self.assertEqual(
+                report["rejection_reason_counts"]["duplicate_conflicting_genres"],
+                1,
+            )
+            self.assertEqual(
+                report["rejection_reason_counts"]["duplicate_conflicting_explicit"],
+                1,
+            )
+            self.assertEqual(
+                report["rejection_reason_counts"]["duplicate_conflicting_features"],
+                1,
+            )
+
+    def test_refuses_to_mix_outputs_in_a_non_empty_directory(self):
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            source_path = root / "source.csv"
+            output_directory = root / "output"
+            output_directory.mkdir()
+            (output_directory / "old.json").write_text("{}", encoding="utf-8")
+            with source_path.open("w", encoding="utf-8", newline="") as source:
+                writer = csv.DictWriter(source, fieldnames=REQUIRED_SOURCE_COLUMNS)
+                writer.writeheader()
+                writer.writerow(CatalogueValidationTests._row())
+
+            with self.assertRaises(CataloguePreparationError):
+                prepare_catalogue(
+                    source_path,
+                    output_directory,
+                    catalogue_version="test-v1",
+                    retrieved_date="2026-09-18",
+                )
+
+    def test_sample_is_derived_from_the_frozen_parent_catalogue(self):
+        with TemporaryDirectory() as temporary_directory:
+            root = Path(temporary_directory)
+            source_path = root / "source.csv"
+            full_directory = root / "full"
+            sample_directory = root / "sample"
+            rows = [
+                CatalogueValidationTests._row(
+                    track_id=f"track-{index}",
+                    track_name=f"Song {index}",
+                )
+                for index in range(1, 4)
+            ]
+            with source_path.open("w", encoding="utf-8", newline="") as source:
+                writer = csv.DictWriter(source, fieldnames=REQUIRED_SOURCE_COLUMNS)
+                writer.writeheader()
+                writer.writerows(rows)
+
+            prepare_catalogue(
+                source_path,
+                full_directory,
+                catalogue_version="full-v1",
+                retrieved_date="2026-09-18",
+            )
+            sample_catalogue(
+                full_directory / "catalogue.json",
+                sample_directory,
+                catalogue_version="sample-v1",
+                limit=2,
+                seed=7,
+            )
+
+            with (sample_directory / "catalogue.json").open(encoding="utf-8") as file:
+                sample = json.load(file)
+            with (sample_directory / "manifest.json").open(encoding="utf-8") as file:
+                manifest = json.load(file)
+
+            self.assertEqual(len(sample), 2)
+            self.assertEqual(manifest["parent"]["catalogue_version"], "full-v1")
+            self.assertEqual(manifest["selection"]["seed"], 7)

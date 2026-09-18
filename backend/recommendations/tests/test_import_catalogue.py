@@ -25,7 +25,8 @@ class ImportCatalogueCommandTests(TestCase):
             "id": track_id,
             "title": title,
             "artist": "Test Artist",
-            "genre": "pop",
+            "genres": ["pop"],
+            "explicit": False,
             "year": 2024,
             "features": {
                 "tempo": 120,

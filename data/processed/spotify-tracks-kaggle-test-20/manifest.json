@@ -1,0 +1,26 @@
+{
+  "catalogue_version": "spotify-tracks-kaggle-test-20",
+  "outputs": {
+    "catalogue.json": {
+      "bytes": 8925,
+      "sha256": "9966891bbeae7b20d756a17012f6977431f1f53face0ba05ddd9c6d8f4779616"
+    },
+    "sample-report.json": {
+      "bytes": 162,
+      "sha256": "96e012a7323d7c8b7aca089066e83bbf278f67b58cf4aae357cbd4be510d94d5"
+    }
+  },
+  "parent": {
+    "bytes": 39414578,
+    "catalogue_version": "spotify-tracks-kaggle-full",
+    "file_name": "catalogue.json",
+    "sha256": "82bd95b1e5d4e983f172af116904740bb43eb599f5d7e37cd6e0f558f84de65b"
+  },
+  "schema_version": "nexttrack-catalogue-sample-v1",
+  "selection": {
+    "limit": 20,
+    "method": "lowest SHA-256 priorities of seed:track_id over parent catalogue",
+    "mode": "deterministic_hash_sample",
+    "seed": 221611
+  }
+}

@@ -10,7 +10,7 @@ class TrackModelTests(TestCase):
             id="test-track-001",
             title="Test Song",
             artist="Test Artist",
-            genre="pop",
+            genres=["pop"],
             year=2024,
             data_source="test-fixture",
         )

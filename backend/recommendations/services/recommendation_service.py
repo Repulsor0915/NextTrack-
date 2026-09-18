@@ -15,7 +15,7 @@ from recommendations.domain.mmr import rerank_mmr
 from recommendations.domain.mood_model import MOOD_MODEL_VERSION
 from recommendations.domain.random_ranker import rank_random
 from recommendations.models import Track
-from recommendations.preprocessing.normalization import build_feature_vector
+from recommendations.audio_features import build_feature_vector
 
 
 class RecommendationServiceError(Exception):

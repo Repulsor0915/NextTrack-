@@ -8,7 +8,8 @@ class Track(models.Model):
     id = models.CharField(primary_key=True, max_length=100)
     title = models.CharField(max_length=255)
     artist = models.CharField(max_length=255, db_index=True)
-    genre = models.CharField(max_length=100, blank=True, db_index=True)
+    genres = models.JSONField(default=list, blank=True)
+    explicit = models.BooleanField(default=False)
     year = models.PositiveSmallIntegerField(
         null=True,
         blank=True,

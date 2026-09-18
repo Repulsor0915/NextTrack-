@@ -36,7 +36,7 @@ class RecommendationServiceTests(TestCase):
             id=track_id,
             title=f"Song {track_id}",
             artist="Test Artist",
-            genre="test",
+            genres=["test"],
             year=2024,
             data_source="test-catalogue-v1",
         )
