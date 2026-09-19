@@ -50,3 +50,22 @@ sampling variability, not 30 independent user preferences.
 `results/interpretation.zh-CN.md` records the first numeric observations and
 their limitations in Chinese. The production algorithm remains on the frozen
 65:35 context ratio and 80:20 MMR ratio; comparisons do not silently change it.
+
+## Step 2.2: feature weights and similarity metric
+
+The Basic CBF-only 3x2 study is under `studies/feature-similarity-v2/`.
+It uses the same 17 frozen history scenarios and 500 candidates, ignores
+requested mood (as Basic CBF does), and leaves the production defaults alone.
+To reproduce it into a **new empty directory** from the NextTrack root:
+
+```powershell
+.\.venv\Scripts\python.exe backend\manage.py run_feature_similarity_study --output-dir evaluation/studies/feature-similarity-reproduction
+```
+
+The command refuses to overwrite an existing study and verifies that
+`current_cosine` reproduces the previous baseline Top-10 for every scenario.
+It writes raw scores for all 500 candidates, Top-10 playlists, per-scenario
+metrics, paired 3x2 comparisons, summary JSON/CSV, and a checksum manifest.
+Ranking latency is measured after warm-up for five repetitions and excludes
+database loading and serialization. The Chinese provisional interpretation
+is in `studies/feature-similarity-v2/interpretation.zh-CN.md`.

@@ -1,0 +1,58 @@
+{
+  "candidate_pool_sha256": "2ab4333447e6c46d34007fbe11bef6deec21a87431bfd7e2a2b238311177bae1",
+  "catalogue_sha256": "82bd95b1e5d4e983f172af116904740bb43eb599f5d7e37cd6e0f558f84de65b",
+  "outputs": {
+    "comparisons.csv": {
+      "bytes": 15253,
+      "sha256": "b72b9d1c38f20ae96c582b28e9e67589b44e5c6ec89f87a1dd8b18fbe3966cd3"
+    },
+    "comparisons.json": {
+      "bytes": 455232,
+      "sha256": "099290b6001e1013e6eaeb62728accc3d620e03da25cae5971a7da66883fc4a1"
+    },
+    "experiment-config.json": {
+      "bytes": 12659,
+      "sha256": "9a735562d827c7fe281545b4d88723f220f3f5c671511c2cd9f7d244f5e8b4f9"
+    },
+    "factorial-comparisons.csv": {
+      "bytes": 17415,
+      "sha256": "0bf4a7761d1d71bcb72905437682572944b2ec25fe0acf111518752d0bac2040"
+    },
+    "factorial-comparisons.json": {
+      "bytes": 357289,
+      "sha256": "003c2a8fbd03ba9824c07c2f1d700a293de44ffc1bafe1c5ec64cf00947c69f6"
+    },
+    "factorial-summary.csv": {
+      "bytes": 3204,
+      "sha256": "eb1b1118b97f501a8fefeaf8ac8a860352d4a9762589c73896cdb5d236107af5"
+    },
+    "factorial-summary.json": {
+      "bytes": 10294,
+      "sha256": "f1177ace3f0c1d88aa093336231e3baa8d2b88b6a2d160b1f6141de4df4c8ada"
+    },
+    "runs.json": {
+      "bytes": 6873968,
+      "sha256": "47b149847ad97a7c25c60ba2040082d886bb374802e7f8509dd97f22d6497897"
+    },
+    "scenario-metrics.csv": {
+      "bytes": 54266,
+      "sha256": "67ae6c1e7c5c68a46c69eac74a5835cca5aceb50f942792ff8671e4f2d4367ef"
+    },
+    "scenario-metrics.json": {
+      "bytes": 143636,
+      "sha256": "144514f5b99c18767968ba2e81af5ded977ed42ec9a849842eaa017406de80fb"
+    },
+    "summary.csv": {
+      "bytes": 15114,
+      "sha256": "838e553bc3a7ca2259d9fd27c2b0f484c797fc8312afe2c83dc4fb9b6b456b39"
+    },
+    "summary.json": {
+      "bytes": 43870,
+      "sha256": "7179adf8bb1ef214807cf20ae2bbf426fda5e8bf6504dad8a98364071fa9828e"
+    }
+  },
+  "primary_run_count": 102,
+  "scenarios_sha256": "28df17f94b6b5ab0ab877515e40f6631829cbef432afd515b383963a8643d2ea",
+  "schema_version": "nexttrack-feature-similarity-study-v1",
+  "sensitivity_run_count": 51
+}

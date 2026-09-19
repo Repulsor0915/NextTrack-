@@ -1,0 +1,285 @@
+{
+  "rows": [
+    {
+      "category": "all_history",
+      "mean_absolute_rank_change_common": 3.2738095238095237,
+      "mean_top10_jaccard": 0.2795459058434837,
+      "mean_top10_overlap_count": 4.235294117647059,
+      "reference_config_id": "current_cosine",
+      "scenario_count": 17,
+      "top1_changed_count": 14,
+      "variant_config_id": "current_euclidean"
+    },
+    {
+      "category": "coherent_multi_track_history",
+      "mean_absolute_rank_change_common": 3.938888888888889,
+      "mean_top10_jaccard": 0.23915862641352836,
+      "mean_top10_overlap_count": 3.7777777777777777,
+      "reference_config_id": "current_cosine",
+      "scenario_count": 9,
+      "top1_changed_count": 8,
+      "variant_config_id": "current_euclidean"
+    },
+    {
+      "category": "single_track_history",
+      "mean_absolute_rank_change_common": 2.2928571428571427,
+      "mean_top10_jaccard": 0.38759157509157505,
+      "mean_top10_overlap_count": 5.5,
+      "reference_config_id": "current_cosine",
+      "scenario_count": 4,
+      "top1_changed_count": 4,
+      "variant_config_id": "current_euclidean"
+    },
+    {
+      "category": "transition_conflicting_history",
+      "mean_absolute_rank_change_common": 2.7583333333333333,
+      "mean_top10_jaccard": 0.2623716153127918,
+      "mean_top10_overlap_count": 4,
+      "reference_config_id": "current_cosine",
+      "scenario_count": 4,
+      "top1_changed_count": 2,
+      "variant_config_id": "current_euclidean"
+    },
+    {
+      "category": "all_history",
+      "mean_absolute_rank_change_common": 1.828921568627451,
+      "mean_top10_jaccard": 0.6357123268887974,
+      "mean_top10_overlap_count": 7.647058823529412,
+      "reference_config_id": "current_cosine",
+      "scenario_count": 17,
+      "top1_changed_count": 10,
+      "variant_config_id": "equal_cosine"
+    },
+    {
+      "category": "coherent_multi_track_history",
+      "mean_absolute_rank_change_common": 2.049382716049383,
+      "mean_top10_jaccard": 0.5837865837865838,
+      "mean_top10_overlap_count": 7.333333333333333,
+      "reference_config_id": "current_cosine",
+      "scenario_count": 9,
+      "top1_changed_count": 3,
+      "variant_config_id": "equal_cosine"
+    },
+    {
+      "category": "single_track_history",
+      "mean_absolute_rank_change_common": 1.5972222222222223,
+      "mean_top10_jaccard": 0.6003787878787878,
+      "mean_top10_overlap_count": 7.25,
+      "reference_config_id": "current_cosine",
+      "scenario_count": 4,
+      "top1_changed_count": 3,
+      "variant_config_id": "equal_cosine"
+    },
+    {
+      "category": "transition_conflicting_history",
+      "mean_absolute_rank_change_common": 1.5645833333333332,
+      "mean_top10_jaccard": 0.7878787878787878,
+      "mean_top10_overlap_count": 8.75,
+      "reference_config_id": "current_cosine",
+      "scenario_count": 4,
+      "top1_changed_count": 4,
+      "variant_config_id": "equal_cosine"
+    },
+    {
+      "category": "all_history",
+      "mean_absolute_rank_change_common": 2.179271708683473,
+      "mean_top10_jaccard": 0.43577385705413385,
+      "mean_top10_overlap_count": 5.9411764705882355,
+      "reference_config_id": "current_cosine",
+      "scenario_count": 17,
+      "top1_changed_count": 10,
+      "variant_config_id": "literature_cosine"
+    },
+    {
+      "category": "coherent_multi_track_history",
+      "mean_absolute_rank_change_common": 2.2862433862433864,
+      "mean_top10_jaccard": 0.3891941391941392,
+      "mean_top10_overlap_count": 5.555555555555555,
+      "reference_config_id": "current_cosine",
+      "scenario_count": 9,
+      "top1_changed_count": 4,
+      "variant_config_id": "literature_cosine"
+    },
+    {
+      "category": "single_track_history",
+      "mean_absolute_rank_change_common": 2.2845238095238094,
+      "mean_top10_jaccard": 0.4287330316742081,
+      "mean_top10_overlap_count": 5.75,
+      "reference_config_id": "current_cosine",
+      "scenario_count": 4,
+      "top1_changed_count": 3,
+      "variant_config_id": "literature_cosine"
+    },
+    {
+      "category": "transition_conflicting_history",
+      "mean_absolute_rank_change_common": 1.8333333333333333,
+      "mean_top10_jaccard": 0.5476190476190476,
+      "mean_top10_overlap_count": 7,
+      "reference_config_id": "current_cosine",
+      "scenario_count": 4,
+      "top1_changed_count": 3,
+      "variant_config_id": "literature_cosine"
+    },
+    {
+      "category": "all_history",
+      "mean_absolute_rank_change_common": 1.8792717086834734,
+      "mean_top10_jaccard": 0.5847828641946289,
+      "mean_top10_overlap_count": 7.235294117647059,
+      "reference_config_id": "current_euclidean",
+      "scenario_count": 17,
+      "top1_changed_count": 8,
+      "variant_config_id": "equal_euclidean"
+    },
+    {
+      "category": "coherent_multi_track_history",
+      "mean_absolute_rank_change_common": 2.007936507936508,
+      "mean_top10_jaccard": 0.49623524623524623,
+      "mean_top10_overlap_count": 6.555555555555555,
+      "reference_config_id": "current_euclidean",
+      "scenario_count": 9,
+      "top1_changed_count": 6,
+      "variant_config_id": "equal_euclidean"
+    },
+    {
+      "category": "single_track_history",
+      "mean_absolute_rank_change_common": 2.0880952380952382,
+      "mean_top10_jaccard": 0.6584249084249084,
+      "mean_top10_overlap_count": 7.75,
+      "reference_config_id": "current_euclidean",
+      "scenario_count": 4,
+      "top1_changed_count": 0,
+      "variant_config_id": "equal_euclidean"
+    },
+    {
+      "category": "transition_conflicting_history",
+      "mean_absolute_rank_change_common": 1.380952380952381,
+      "mean_top10_jaccard": 0.7103729603729604,
+      "mean_top10_overlap_count": 8.25,
+      "reference_config_id": "current_euclidean",
+      "scenario_count": 4,
+      "top1_changed_count": 2,
+      "variant_config_id": "equal_euclidean"
+    },
+    {
+      "category": "all_history",
+      "mean_absolute_rank_change_common": 2.3971988795518206,
+      "mean_top10_jaccard": 0.4011548812586875,
+      "mean_top10_overlap_count": 5.588235294117647,
+      "reference_config_id": "current_euclidean",
+      "scenario_count": 17,
+      "top1_changed_count": 8,
+      "variant_config_id": "literature_euclidean"
+    },
+    {
+      "category": "coherent_multi_track_history",
+      "mean_absolute_rank_change_common": 2.7185185185185183,
+      "mean_top10_jaccard": 0.3860099595393713,
+      "mean_top10_overlap_count": 5.444444444444445,
+      "reference_config_id": "current_euclidean",
+      "scenario_count": 9,
+      "top1_changed_count": 5,
+      "variant_config_id": "literature_euclidean"
+    },
+    {
+      "category": "single_track_history",
+      "mean_absolute_rank_change_common": 1.7678571428571428,
+      "mean_top10_jaccard": 0.35286935286935284,
+      "mean_top10_overlap_count": 5,
+      "reference_config_id": "current_euclidean",
+      "scenario_count": 4,
+      "top1_changed_count": 1,
+      "variant_config_id": "literature_euclidean"
+    },
+    {
+      "category": "transition_conflicting_history",
+      "mean_absolute_rank_change_common": 2.3035714285714284,
+      "mean_top10_jaccard": 0.48351648351648346,
+      "mean_top10_overlap_count": 6.5,
+      "reference_config_id": "current_euclidean",
+      "scenario_count": 4,
+      "top1_changed_count": 2,
+      "variant_config_id": "literature_euclidean"
+    },
+    {
+      "category": "all_history",
+      "mean_absolute_rank_change_common": 2.886344537815126,
+      "mean_top10_jaccard": 0.381509013861955,
+      "mean_top10_overlap_count": 5.352941176470588,
+      "reference_config_id": "equal_cosine",
+      "scenario_count": 17,
+      "top1_changed_count": 10,
+      "variant_config_id": "equal_euclidean"
+    },
+    {
+      "category": "coherent_multi_track_history",
+      "mean_absolute_rank_change_common": 3.4066137566137566,
+      "mean_top10_jaccard": 0.34466151132817796,
+      "mean_top10_overlap_count": 5,
+      "reference_config_id": "equal_cosine",
+      "scenario_count": 9,
+      "top1_changed_count": 5,
+      "variant_config_id": "equal_euclidean"
+    },
+    {
+      "category": "single_track_history",
+      "mean_absolute_rank_change_common": 2.5520833333333335,
+      "mean_top10_jaccard": 0.4709249084249084,
+      "mean_top10_overlap_count": 6.25,
+      "reference_config_id": "equal_cosine",
+      "scenario_count": 4,
+      "top1_changed_count": 3,
+      "variant_config_id": "equal_euclidean"
+    },
+    {
+      "category": "transition_conflicting_history",
+      "mean_absolute_rank_change_common": 2.05,
+      "mean_top10_jaccard": 0.375,
+      "mean_top10_overlap_count": 5.25,
+      "reference_config_id": "equal_cosine",
+      "scenario_count": 4,
+      "top1_changed_count": 2,
+      "variant_config_id": "equal_euclidean"
+    },
+    {
+      "category": "all_history",
+      "mean_absolute_rank_change_common": 3.089075630252101,
+      "mean_top10_jaccard": 0.3293789771207363,
+      "mean_top10_overlap_count": 4.764705882352941,
+      "reference_config_id": "literature_cosine",
+      "scenario_count": 17,
+      "top1_changed_count": 11,
+      "variant_config_id": "literature_euclidean"
+    },
+    {
+      "category": "coherent_multi_track_history",
+      "mean_absolute_rank_change_common": 3.6973544973544974,
+      "mean_top10_jaccard": 0.28214137656862115,
+      "mean_top10_overlap_count": 4.222222222222222,
+      "reference_config_id": "literature_cosine",
+      "scenario_count": 9,
+      "top1_changed_count": 7,
+      "variant_config_id": "literature_euclidean"
+    },
+    {
+      "category": "single_track_history",
+      "mean_absolute_rank_change_common": 2.830357142857143,
+      "mean_top10_jaccard": 0.46794871794871795,
+      "mean_top10_overlap_count": 6.25,
+      "reference_config_id": "literature_cosine",
+      "scenario_count": 4,
+      "top1_changed_count": 3,
+      "variant_config_id": "literature_euclidean"
+    },
+    {
+      "category": "transition_conflicting_history",
+      "mean_absolute_rank_change_common": 1.9791666666666667,
+      "mean_top10_jaccard": 0.297093837535014,
+      "mean_top10_overlap_count": 4.5,
+      "reference_config_id": "literature_cosine",
+      "scenario_count": 4,
+      "top1_changed_count": 1,
+      "variant_config_id": "literature_euclidean"
+    }
+  ],
+  "schema_version": "nexttrack-feature-similarity-study-v1"
+}

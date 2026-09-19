@@ -4,3 +4,4 @@ __pycache__/
 *.sqlite3
 .env
 data/raw/
+evaluation/studies/feature-similarity-v1/

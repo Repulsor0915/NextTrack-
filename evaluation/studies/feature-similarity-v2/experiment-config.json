@@ -1,0 +1,329 @@
+{
+  "algorithm": "basic_cbf_only",
+  "candidate_count": 500,
+  "candidate_pool_selection_seed": 221611,
+  "candidate_pool_sha256": "2ab4333447e6c46d34007fbe11bef6deec21a87431bfd7e2a2b238311177bae1",
+  "catalogue_sha256": "82bd95b1e5d4e983f172af116904740bb43eb599f5d7e37cd6e0f558f84de65b",
+  "configs": {
+    "current_cosine": {
+      "context_history_strategy": "linear_recency",
+      "default_diversity_strength": 0.2,
+      "diversity_similarity_metric": "weighted_cosine",
+      "feature_weights": {
+        "acousticness": 0.1,
+        "danceability": 0.15,
+        "energy": 0.25,
+        "instrumentalness": 0.05,
+        "loudness": 0.05,
+        "speechiness": 0.05,
+        "tempo": 0.1,
+        "valence": 0.25
+      },
+      "history_relevance_weight": 0.65,
+      "history_window_size": 5,
+      "mood_feature_weights": {
+        "acousticness": 0.23580174066971527,
+        "danceability": 0.015083345626198553,
+        "energy": 0.2691768697448001,
+        "instrumentalness": 0.09142203864876824,
+        "loudness": 0.055981708216551115,
+        "speechiness": 0.05837881693465113,
+        "tempo": 0.026589467473078623,
+        "valence": 0.24756601268623687
+      },
+      "mood_relevance_weight": 0.35,
+      "name": "feature-similarity-current-cosine-v1",
+      "relevance_similarity_metric": "weighted_cosine",
+      "schema_version": "nexttrack-algorithm-config-v1"
+    },
+    "current_euclidean": {
+      "context_history_strategy": "linear_recency",
+      "default_diversity_strength": 0.2,
+      "diversity_similarity_metric": "weighted_cosine",
+      "feature_weights": {
+        "acousticness": 0.1,
+        "danceability": 0.15,
+        "energy": 0.25,
+        "instrumentalness": 0.05,
+        "loudness": 0.05,
+        "speechiness": 0.05,
+        "tempo": 0.1,
+        "valence": 0.25
+      },
+      "history_relevance_weight": 0.65,
+      "history_window_size": 5,
+      "mood_feature_weights": {
+        "acousticness": 0.23580174066971527,
+        "danceability": 0.015083345626198553,
+        "energy": 0.2691768697448001,
+        "instrumentalness": 0.09142203864876824,
+        "loudness": 0.055981708216551115,
+        "speechiness": 0.05837881693465113,
+        "tempo": 0.026589467473078623,
+        "valence": 0.24756601268623687
+      },
+      "mood_relevance_weight": 0.35,
+      "name": "feature-similarity-current-euclidean-v1",
+      "relevance_similarity_metric": "weighted_euclidean",
+      "schema_version": "nexttrack-algorithm-config-v1"
+    },
+    "equal_cosine": {
+      "context_history_strategy": "linear_recency",
+      "default_diversity_strength": 0.2,
+      "diversity_similarity_metric": "weighted_cosine",
+      "feature_weights": {
+        "acousticness": 0.125,
+        "danceability": 0.125,
+        "energy": 0.125,
+        "instrumentalness": 0.125,
+        "loudness": 0.125,
+        "speechiness": 0.125,
+        "tempo": 0.125,
+        "valence": 0.125
+      },
+      "history_relevance_weight": 0.65,
+      "history_window_size": 5,
+      "mood_feature_weights": {
+        "acousticness": 0.23580174066971527,
+        "danceability": 0.015083345626198553,
+        "energy": 0.2691768697448001,
+        "instrumentalness": 0.09142203864876824,
+        "loudness": 0.055981708216551115,
+        "speechiness": 0.05837881693465113,
+        "tempo": 0.026589467473078623,
+        "valence": 0.24756601268623687
+      },
+      "mood_relevance_weight": 0.35,
+      "name": "feature-similarity-equal-cosine-v1",
+      "relevance_similarity_metric": "weighted_cosine",
+      "schema_version": "nexttrack-algorithm-config-v1"
+    },
+    "equal_euclidean": {
+      "context_history_strategy": "linear_recency",
+      "default_diversity_strength": 0.2,
+      "diversity_similarity_metric": "weighted_cosine",
+      "feature_weights": {
+        "acousticness": 0.125,
+        "danceability": 0.125,
+        "energy": 0.125,
+        "instrumentalness": 0.125,
+        "loudness": 0.125,
+        "speechiness": 0.125,
+        "tempo": 0.125,
+        "valence": 0.125
+      },
+      "history_relevance_weight": 0.65,
+      "history_window_size": 5,
+      "mood_feature_weights": {
+        "acousticness": 0.23580174066971527,
+        "danceability": 0.015083345626198553,
+        "energy": 0.2691768697448001,
+        "instrumentalness": 0.09142203864876824,
+        "loudness": 0.055981708216551115,
+        "speechiness": 0.05837881693465113,
+        "tempo": 0.026589467473078623,
+        "valence": 0.24756601268623687
+      },
+      "mood_relevance_weight": 0.35,
+      "name": "feature-similarity-equal-euclidean-v1",
+      "relevance_similarity_metric": "weighted_euclidean",
+      "schema_version": "nexttrack-algorithm-config-v1"
+    },
+    "literature_cosine": {
+      "context_history_strategy": "linear_recency",
+      "default_diversity_strength": 0.2,
+      "diversity_similarity_metric": "weighted_cosine",
+      "feature_weights": {
+        "acousticness": 0.06651884700665188,
+        "danceability": 0.011086474501108647,
+        "energy": 0.10199556541019955,
+        "instrumentalness": 0.03325942350332594,
+        "loudness": 0.188470066518847,
+        "speechiness": 0.38802660753880264,
+        "tempo": 0.13303769401330376,
+        "valence": 0.07760532150776053
+      },
+      "history_relevance_weight": 0.65,
+      "history_window_size": 5,
+      "mood_feature_weights": {
+        "acousticness": 0.23580174066971527,
+        "danceability": 0.015083345626198553,
+        "energy": 0.2691768697448001,
+        "instrumentalness": 0.09142203864876824,
+        "loudness": 0.055981708216551115,
+        "speechiness": 0.05837881693465113,
+        "tempo": 0.026589467473078623,
+        "valence": 0.24756601268623687
+      },
+      "mood_relevance_weight": 0.35,
+      "name": "feature-similarity-literature-cosine-v1",
+      "relevance_similarity_metric": "weighted_cosine",
+      "schema_version": "nexttrack-algorithm-config-v1"
+    },
+    "literature_euclidean": {
+      "context_history_strategy": "linear_recency",
+      "default_diversity_strength": 0.2,
+      "diversity_similarity_metric": "weighted_cosine",
+      "feature_weights": {
+        "acousticness": 0.06651884700665188,
+        "danceability": 0.011086474501108647,
+        "energy": 0.10199556541019955,
+        "instrumentalness": 0.03325942350332594,
+        "loudness": 0.188470066518847,
+        "speechiness": 0.38802660753880264,
+        "tempo": 0.13303769401330376,
+        "valence": 0.07760532150776053
+      },
+      "history_relevance_weight": 0.65,
+      "history_window_size": 5,
+      "mood_feature_weights": {
+        "acousticness": 0.23580174066971527,
+        "danceability": 0.015083345626198553,
+        "energy": 0.2691768697448001,
+        "instrumentalness": 0.09142203864876824,
+        "loudness": 0.055981708216551115,
+        "speechiness": 0.05837881693465113,
+        "tempo": 0.026589467473078623,
+        "valence": 0.24756601268623687
+      },
+      "mood_relevance_weight": 0.35,
+      "name": "feature-similarity-literature-euclidean-v1",
+      "relevance_similarity_metric": "weighted_euclidean",
+      "schema_version": "nexttrack-algorithm-config-v1"
+    },
+    "without_energy_cosine": {
+      "context_history_strategy": "linear_recency",
+      "default_diversity_strength": 0.2,
+      "diversity_similarity_metric": "weighted_cosine",
+      "feature_weights": {
+        "acousticness": 0.13333333333333333,
+        "danceability": 0.19999999999999998,
+        "energy": 0.0,
+        "instrumentalness": 0.06666666666666667,
+        "loudness": 0.06666666666666667,
+        "speechiness": 0.06666666666666667,
+        "tempo": 0.13333333333333333,
+        "valence": 0.3333333333333333
+      },
+      "history_relevance_weight": 0.65,
+      "history_window_size": 5,
+      "mood_feature_weights": {
+        "acousticness": 0.23580174066971527,
+        "danceability": 0.015083345626198553,
+        "energy": 0.2691768697448001,
+        "instrumentalness": 0.09142203864876824,
+        "loudness": 0.055981708216551115,
+        "speechiness": 0.05837881693465113,
+        "tempo": 0.026589467473078623,
+        "valence": 0.24756601268623687
+      },
+      "mood_relevance_weight": 0.35,
+      "name": "feature-similarity-without_energy-cosine-v1",
+      "relevance_similarity_metric": "weighted_cosine",
+      "schema_version": "nexttrack-algorithm-config-v1"
+    },
+    "without_energy_valence_cosine": {
+      "context_history_strategy": "linear_recency",
+      "default_diversity_strength": 0.2,
+      "diversity_similarity_metric": "weighted_cosine",
+      "feature_weights": {
+        "acousticness": 0.2,
+        "danceability": 0.3,
+        "energy": 0.0,
+        "instrumentalness": 0.1,
+        "loudness": 0.1,
+        "speechiness": 0.1,
+        "tempo": 0.2,
+        "valence": 0.0
+      },
+      "history_relevance_weight": 0.65,
+      "history_window_size": 5,
+      "mood_feature_weights": {
+        "acousticness": 0.23580174066971527,
+        "danceability": 0.015083345626198553,
+        "energy": 0.2691768697448001,
+        "instrumentalness": 0.09142203864876824,
+        "loudness": 0.055981708216551115,
+        "speechiness": 0.05837881693465113,
+        "tempo": 0.026589467473078623,
+        "valence": 0.24756601268623687
+      },
+      "mood_relevance_weight": 0.35,
+      "name": "feature-similarity-without_energy_valence-cosine-v1",
+      "relevance_similarity_metric": "weighted_cosine",
+      "schema_version": "nexttrack-algorithm-config-v1"
+    },
+    "without_valence_cosine": {
+      "context_history_strategy": "linear_recency",
+      "default_diversity_strength": 0.2,
+      "diversity_similarity_metric": "weighted_cosine",
+      "feature_weights": {
+        "acousticness": 0.13333333333333333,
+        "danceability": 0.19999999999999998,
+        "energy": 0.3333333333333333,
+        "instrumentalness": 0.06666666666666667,
+        "loudness": 0.06666666666666667,
+        "speechiness": 0.06666666666666667,
+        "tempo": 0.13333333333333333,
+        "valence": 0.0
+      },
+      "history_relevance_weight": 0.65,
+      "history_window_size": 5,
+      "mood_feature_weights": {
+        "acousticness": 0.23580174066971527,
+        "danceability": 0.015083345626198553,
+        "energy": 0.2691768697448001,
+        "instrumentalness": 0.09142203864876824,
+        "loudness": 0.055981708216551115,
+        "speechiness": 0.05837881693465113,
+        "tempo": 0.026589467473078623,
+        "valence": 0.24756601268623687
+      },
+      "mood_relevance_weight": 0.35,
+      "name": "feature-similarity-without_valence-cosine-v1",
+      "relevance_similarity_metric": "weighted_cosine",
+      "schema_version": "nexttrack-algorithm-config-v1"
+    }
+  },
+  "environment": {
+    "django": "6.1",
+    "operating_system": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.4"
+  },
+  "genre_concentration": "fractional multi-label genre shares; HHI=sum(share^2)",
+  "latency": {
+    "repetitions": 5,
+    "scope": "rank_cbf only; excludes DB, vector/profile construction and JSON I/O",
+    "warmup_calls": 1
+  },
+  "literature_weight_preset_is_experimental_not_proven_optimal": true,
+  "primary_matrix": [
+    "current_cosine",
+    "current_euclidean",
+    "equal_cosine",
+    "equal_euclidean",
+    "literature_cosine",
+    "literature_euclidean"
+  ],
+  "production_default_unchanged": true,
+  "reference_history_match": "Equal-weight Euclidean fit to the same Basic CBF session profile; diagnostic, not a relevance label.",
+  "scenario_policy": "all frozen history scenarios; requested mood ignored by Basic CBF",
+  "scenarios_sha256": "28df17f94b6b5ab0ab877515e40f6631829cbef432afd515b383963a8643d2ea",
+  "schema_version": "nexttrack-feature-similarity-study-v1",
+  "scores_across_metrics_are_not_calibrated_or_directly_comparable": true,
+  "sensitivity_checks": [
+    "without_energy_cosine",
+    "without_valence_cosine",
+    "without_energy_valence_cosine"
+  ],
+  "source_checksums": {
+    "backend/offline_evaluation/feature_similarity.py": "f44bcc372ca6f8ab782b2d80b747caad304356042b6522233dd0a818d946ed00",
+    "backend/recommendations/domain/algorithm_config.py": "614e5d5053e9d0324727fc9ecdd992668a953a82253c60e58e343c86fb254006",
+    "backend/recommendations/domain/cbf_ranker.py": "8afce4672163dee53f4336471b7465f70e5f4766d957e561fb8955b40fc78a4f",
+    "backend/recommendations/domain/explanations.py": "b04a10301b435decde16bcf50c62734bc9a5a329444d3227f4533fb7451cf87f",
+    "backend/recommendations/domain/feature_vectors.py": "04f6177c66d0b273b2a03988a881c0d7af814e6d65aaeb48314a0f62ff0b2b5c"
+  },
+  "source_experiment_id": "nexttrack-offline-baseline-v1",
+  "study_id": "feature-similarity-v2",
+  "top_n": 10
+}
