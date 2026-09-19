@@ -1,3 +1,6 @@
 data/processed/*/*.json text eol=lf
 evaluation/*.json text eol=lf
 evaluation/scenario-review.md text eol=lf
+evaluation/scenario-approval.md text eol=lf
+evaluation/results/**/*.json text eol=lf
+evaluation/results/**/*.csv text eol=lf

@@ -1,0 +1,841 @@
+{
+  "caution": "These are diagnostic proxy differences, not evidence of user preference or a globally optimal parameter.",
+  "method": "One-factor-at-a-time against the frozen baseline; same scenarios and candidate pool.",
+  "rows": [
+    {
+      "algorithm": "cbf",
+      "baseline": 0.903682,
+      "category": "coherent_multi_track_history",
+      "delta_variant_minus_baseline": 0.006763,
+      "metric": "history_match",
+      "variant": "equal_feature_weights",
+      "variant_value": 0.910445
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.117602,
+      "category": "coherent_multi_track_history",
+      "delta_variant_minus_baseline": -0.008914,
+      "metric": "intra_list_diversity",
+      "variant": "equal_feature_weights",
+      "variant_value": 0.108688
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.988889,
+      "category": "coherent_multi_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "equal_feature_weights",
+      "variant_value": 0.988889
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.876193,
+      "category": "single_track_history",
+      "delta_variant_minus_baseline": 0.003277,
+      "metric": "history_match",
+      "variant": "equal_feature_weights",
+      "variant_value": 0.87947
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.125857,
+      "category": "single_track_history",
+      "delta_variant_minus_baseline": 0.001568,
+      "metric": "intra_list_diversity",
+      "variant": "equal_feature_weights",
+      "variant_value": 0.127425
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 1.0,
+      "category": "single_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "equal_feature_weights",
+      "variant_value": 1.0
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.861646,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": 0.005151,
+      "metric": "history_match",
+      "variant": "equal_feature_weights",
+      "variant_value": 0.866797
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.716463,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": -0.006708,
+      "metric": "mood_match",
+      "variant": "equal_feature_weights",
+      "variant_value": 0.709755
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.125536,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": -0.007036,
+      "metric": "intra_list_diversity",
+      "variant": "equal_feature_weights",
+      "variant_value": 0.1185
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 1.0,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "equal_feature_weights",
+      "variant_value": 1.0
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.905474,
+      "category": "coherent_multi_track_history",
+      "delta_variant_minus_baseline": 0.004482,
+      "metric": "history_match",
+      "variant": "equal_feature_weights",
+      "variant_value": 0.909956
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.11619,
+      "category": "coherent_multi_track_history",
+      "delta_variant_minus_baseline": -0.006578,
+      "metric": "intra_list_diversity",
+      "variant": "equal_feature_weights",
+      "variant_value": 0.109612
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.988889,
+      "category": "coherent_multi_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "equal_feature_weights",
+      "variant_value": 0.988889
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.953568,
+      "category": "mood_only",
+      "delta_variant_minus_baseline": -0.000475,
+      "metric": "mood_match",
+      "variant": "equal_feature_weights",
+      "variant_value": 0.953093
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.229248,
+      "category": "mood_only",
+      "delta_variant_minus_baseline": 0.011423,
+      "metric": "intra_list_diversity",
+      "variant": "equal_feature_weights",
+      "variant_value": 0.240671
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 1.0,
+      "category": "mood_only",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "equal_feature_weights",
+      "variant_value": 1.0
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.876336,
+      "category": "single_track_history",
+      "delta_variant_minus_baseline": 0.002713,
+      "metric": "history_match",
+      "variant": "equal_feature_weights",
+      "variant_value": 0.879049
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.131985,
+      "category": "single_track_history",
+      "delta_variant_minus_baseline": 0.001934,
+      "metric": "intra_list_diversity",
+      "variant": "equal_feature_weights",
+      "variant_value": 0.133919
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 1.0,
+      "category": "single_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "equal_feature_weights",
+      "variant_value": 1.0
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.830368,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": -0.00242,
+      "metric": "history_match",
+      "variant": "equal_feature_weights",
+      "variant_value": 0.827948
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.925914,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": 0.005752,
+      "metric": "mood_match",
+      "variant": "equal_feature_weights",
+      "variant_value": 0.931666
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.154974,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": 0.014754,
+      "metric": "intra_list_diversity",
+      "variant": "equal_feature_weights",
+      "variant_value": 0.169728
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 1.0,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "equal_feature_weights",
+      "variant_value": 1.0
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.903682,
+      "category": "coherent_multi_track_history",
+      "delta_variant_minus_baseline": 0.018478,
+      "metric": "history_match",
+      "variant": "euclidean_relevance",
+      "variant_value": 0.92216
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.117602,
+      "category": "coherent_multi_track_history",
+      "delta_variant_minus_baseline": -0.016787,
+      "metric": "intra_list_diversity",
+      "variant": "euclidean_relevance",
+      "variant_value": 0.100815
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.988889,
+      "category": "coherent_multi_track_history",
+      "delta_variant_minus_baseline": 0.011111,
+      "metric": "distinct_artist_fraction",
+      "variant": "euclidean_relevance",
+      "variant_value": 1.0
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.876193,
+      "category": "single_track_history",
+      "delta_variant_minus_baseline": 0.011637,
+      "metric": "history_match",
+      "variant": "euclidean_relevance",
+      "variant_value": 0.88783
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.125857,
+      "category": "single_track_history",
+      "delta_variant_minus_baseline": -0.010366,
+      "metric": "intra_list_diversity",
+      "variant": "euclidean_relevance",
+      "variant_value": 0.115491
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 1.0,
+      "category": "single_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "euclidean_relevance",
+      "variant_value": 1.0
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.861646,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": 0.016253,
+      "metric": "history_match",
+      "variant": "euclidean_relevance",
+      "variant_value": 0.877899
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.716463,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": -0.054274,
+      "metric": "mood_match",
+      "variant": "euclidean_relevance",
+      "variant_value": 0.662189
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.125536,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": -0.014319,
+      "metric": "intra_list_diversity",
+      "variant": "euclidean_relevance",
+      "variant_value": 0.111217
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 1.0,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "euclidean_relevance",
+      "variant_value": 1.0
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.905474,
+      "category": "coherent_multi_track_history",
+      "delta_variant_minus_baseline": 0.016763,
+      "metric": "history_match",
+      "variant": "euclidean_relevance",
+      "variant_value": 0.922237
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.11619,
+      "category": "coherent_multi_track_history",
+      "delta_variant_minus_baseline": -0.014861,
+      "metric": "intra_list_diversity",
+      "variant": "euclidean_relevance",
+      "variant_value": 0.101329
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.988889,
+      "category": "coherent_multi_track_history",
+      "delta_variant_minus_baseline": 0.011111,
+      "metric": "distinct_artist_fraction",
+      "variant": "euclidean_relevance",
+      "variant_value": 1.0
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.953568,
+      "category": "mood_only",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "mood_match",
+      "variant": "euclidean_relevance",
+      "variant_value": 0.953568
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.229248,
+      "category": "mood_only",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "intra_list_diversity",
+      "variant": "euclidean_relevance",
+      "variant_value": 0.229248
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 1.0,
+      "category": "mood_only",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "euclidean_relevance",
+      "variant_value": 1.0
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.876336,
+      "category": "single_track_history",
+      "delta_variant_minus_baseline": 0.01149,
+      "metric": "history_match",
+      "variant": "euclidean_relevance",
+      "variant_value": 0.887826
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.131985,
+      "category": "single_track_history",
+      "delta_variant_minus_baseline": -0.008164,
+      "metric": "intra_list_diversity",
+      "variant": "euclidean_relevance",
+      "variant_value": 0.123821
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 1.0,
+      "category": "single_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "euclidean_relevance",
+      "variant_value": 1.0
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.830368,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": 0.047205,
+      "metric": "history_match",
+      "variant": "euclidean_relevance",
+      "variant_value": 0.877573
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.925914,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": -0.059246,
+      "metric": "mood_match",
+      "variant": "euclidean_relevance",
+      "variant_value": 0.866668
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.154974,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": -0.041539,
+      "metric": "intra_list_diversity",
+      "variant": "euclidean_relevance",
+      "variant_value": 0.113435
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 1.0,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "euclidean_relevance",
+      "variant_value": 1.0
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.903682,
+      "category": "coherent_multi_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "history_match",
+      "variant": "equal_history_mood_ratio",
+      "variant_value": 0.903682
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.117602,
+      "category": "coherent_multi_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "intra_list_diversity",
+      "variant": "equal_history_mood_ratio",
+      "variant_value": 0.117602
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.988889,
+      "category": "coherent_multi_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "equal_history_mood_ratio",
+      "variant_value": 0.988889
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.876193,
+      "category": "single_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "history_match",
+      "variant": "equal_history_mood_ratio",
+      "variant_value": 0.876193
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.125857,
+      "category": "single_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "intra_list_diversity",
+      "variant": "equal_history_mood_ratio",
+      "variant_value": 0.125857
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 1.0,
+      "category": "single_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "equal_history_mood_ratio",
+      "variant_value": 1.0
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.861646,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "history_match",
+      "variant": "equal_history_mood_ratio",
+      "variant_value": 0.861646
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.716463,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "mood_match",
+      "variant": "equal_history_mood_ratio",
+      "variant_value": 0.716463
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.125536,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "intra_list_diversity",
+      "variant": "equal_history_mood_ratio",
+      "variant_value": 0.125536
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 1.0,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "equal_history_mood_ratio",
+      "variant_value": 1.0
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.905474,
+      "category": "coherent_multi_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "history_match",
+      "variant": "equal_history_mood_ratio",
+      "variant_value": 0.905474
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.11619,
+      "category": "coherent_multi_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "intra_list_diversity",
+      "variant": "equal_history_mood_ratio",
+      "variant_value": 0.11619
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.988889,
+      "category": "coherent_multi_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "equal_history_mood_ratio",
+      "variant_value": 0.988889
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.953568,
+      "category": "mood_only",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "mood_match",
+      "variant": "equal_history_mood_ratio",
+      "variant_value": 0.953568
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.229248,
+      "category": "mood_only",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "intra_list_diversity",
+      "variant": "equal_history_mood_ratio",
+      "variant_value": 0.229248
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 1.0,
+      "category": "mood_only",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "equal_history_mood_ratio",
+      "variant_value": 1.0
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.876336,
+      "category": "single_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "history_match",
+      "variant": "equal_history_mood_ratio",
+      "variant_value": 0.876336
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.131985,
+      "category": "single_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "intra_list_diversity",
+      "variant": "equal_history_mood_ratio",
+      "variant_value": 0.131985
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 1.0,
+      "category": "single_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "equal_history_mood_ratio",
+      "variant_value": 1.0
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.830368,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": -0.011996,
+      "metric": "history_match",
+      "variant": "equal_history_mood_ratio",
+      "variant_value": 0.818372
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.925914,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": 0.014643,
+      "metric": "mood_match",
+      "variant": "equal_history_mood_ratio",
+      "variant_value": 0.940557
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.154974,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": 0.017652,
+      "metric": "intra_list_diversity",
+      "variant": "equal_history_mood_ratio",
+      "variant_value": 0.172626
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 1.0,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "equal_history_mood_ratio",
+      "variant_value": 1.0
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.903682,
+      "category": "coherent_multi_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "history_match",
+      "variant": "mmr_60_40",
+      "variant_value": 0.903682
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.117602,
+      "category": "coherent_multi_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "intra_list_diversity",
+      "variant": "mmr_60_40",
+      "variant_value": 0.117602
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.988889,
+      "category": "coherent_multi_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "mmr_60_40",
+      "variant_value": 0.988889
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.876193,
+      "category": "single_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "history_match",
+      "variant": "mmr_60_40",
+      "variant_value": 0.876193
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.125857,
+      "category": "single_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "intra_list_diversity",
+      "variant": "mmr_60_40",
+      "variant_value": 0.125857
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 1.0,
+      "category": "single_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "mmr_60_40",
+      "variant_value": 1.0
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.861646,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "history_match",
+      "variant": "mmr_60_40",
+      "variant_value": 0.861646
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.716463,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "mood_match",
+      "variant": "mmr_60_40",
+      "variant_value": 0.716463
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 0.125536,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "intra_list_diversity",
+      "variant": "mmr_60_40",
+      "variant_value": 0.125536
+    },
+    {
+      "algorithm": "cbf",
+      "baseline": 1.0,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "mmr_60_40",
+      "variant_value": 1.0
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.905474,
+      "category": "coherent_multi_track_history",
+      "delta_variant_minus_baseline": 0.000181,
+      "metric": "history_match",
+      "variant": "mmr_60_40",
+      "variant_value": 0.905655
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.11619,
+      "category": "coherent_multi_track_history",
+      "delta_variant_minus_baseline": 0.008162,
+      "metric": "intra_list_diversity",
+      "variant": "mmr_60_40",
+      "variant_value": 0.124352
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.988889,
+      "category": "coherent_multi_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "mmr_60_40",
+      "variant_value": 0.988889
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.953568,
+      "category": "mood_only",
+      "delta_variant_minus_baseline": -0.005048,
+      "metric": "mood_match",
+      "variant": "mmr_60_40",
+      "variant_value": 0.94852
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.229248,
+      "category": "mood_only",
+      "delta_variant_minus_baseline": 0.041816,
+      "metric": "intra_list_diversity",
+      "variant": "mmr_60_40",
+      "variant_value": 0.271064
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 1.0,
+      "category": "mood_only",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "mmr_60_40",
+      "variant_value": 1.0
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.876336,
+      "category": "single_track_history",
+      "delta_variant_minus_baseline": -0.0021,
+      "metric": "history_match",
+      "variant": "mmr_60_40",
+      "variant_value": 0.874236
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.131985,
+      "category": "single_track_history",
+      "delta_variant_minus_baseline": 0.010512,
+      "metric": "intra_list_diversity",
+      "variant": "mmr_60_40",
+      "variant_value": 0.142497
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 1.0,
+      "category": "single_track_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "mmr_60_40",
+      "variant_value": 1.0
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.830368,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": -0.019157,
+      "metric": "history_match",
+      "variant": "mmr_60_40",
+      "variant_value": 0.811211
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.925914,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": 0.005378,
+      "metric": "mood_match",
+      "variant": "mmr_60_40",
+      "variant_value": 0.931292
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 0.154974,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": 0.051852,
+      "metric": "intra_list_diversity",
+      "variant": "mmr_60_40",
+      "variant_value": 0.206826
+    },
+    {
+      "algorithm": "context_mmr",
+      "baseline": 1.0,
+      "category": "transition_conflicting_history",
+      "delta_variant_minus_baseline": 0.0,
+      "metric": "distinct_artist_fraction",
+      "variant": "mmr_60_40",
+      "variant_value": 1.0
+    }
+  ],
+  "schema_version": "nexttrack-parameter-comparison-v1",
+  "variant_manifests": {
+    "equal_feature_weights": "comparisons\\equal_feature_weights\\manifest.json",
+    "equal_history_mood_ratio": "comparisons\\equal_history_mood_ratio\\manifest.json",
+    "euclidean_relevance": "comparisons\\euclidean_relevance\\manifest.json",
+    "mmr_60_40": "comparisons\\mmr_60_40\\manifest.json"
+  }
+}

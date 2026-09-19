@@ -1,0 +1,55 @@
+{
+  "algorithm_config": {
+    "context_history_strategy": "linear_recency",
+    "default_diversity_strength": 0.2,
+    "diversity_similarity_metric": "weighted_cosine",
+    "feature_weights": {
+      "acousticness": 0.125,
+      "danceability": 0.125,
+      "energy": 0.125,
+      "instrumentalness": 0.125,
+      "loudness": 0.125,
+      "speechiness": 0.125,
+      "tempo": 0.125,
+      "valence": 0.125
+    },
+    "history_relevance_weight": 0.65,
+    "history_window_size": 5,
+    "mood_feature_weights": {
+      "acousticness": 0.23580174066971527,
+      "danceability": 0.015083345626198553,
+      "energy": 0.2691768697448001,
+      "instrumentalness": 0.09142203864876824,
+      "loudness": 0.055981708216551115,
+      "speechiness": 0.05837881693465113,
+      "tempo": 0.026589467473078623,
+      "valence": 0.24756601268623687
+    },
+    "mood_relevance_weight": 0.35,
+    "name": "equal-feature-weights-v1",
+    "relevance_similarity_metric": "weighted_cosine",
+    "schema_version": "nexttrack-algorithm-config-v1"
+  },
+  "candidate_pool_sha256": "2ab4333447e6c46d34007fbe11bef6deec21a87431bfd7e2a2b238311177bae1",
+  "catalogue_sha256": "82bd95b1e5d4e983f172af116904740bb43eb599f5d7e37cd6e0f558f84de65b",
+  "experiment_id": "nexttrack-offline-baseline-v1",
+  "outputs": {
+    "recommendation-runs.json": {
+      "bytes": 463530,
+      "sha256": "2c5e348b4d32eed0202a473d032ab89cc01a37a1bad00f2b4cb087d30b8626b3"
+    },
+    "summary.csv": {
+      "bytes": 1068,
+      "sha256": "4c34650b5afa0208ea05dfc9ffcabd5bc3716325f4b63cf86805d345c558d94c"
+    },
+    "summary.json": {
+      "bytes": 4678,
+      "sha256": "e864c2a7da08fda42be3b4af6933f12f536b3d639a7f84a7a24a6fce891a4218"
+    }
+  },
+  "random_seeds": [],
+  "result_set_name": "equal_feature_weights",
+  "run_count": 38,
+  "scenarios_sha256": "28df17f94b6b5ab0ab877515e40f6631829cbef432afd515b383963a8643d2ea",
+  "schema_version": "nexttrack-offline-results-v1"
+}

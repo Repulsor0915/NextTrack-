@@ -1,6 +1,6 @@
 # Scenario review checklist
 
-Status: **awaiting human approval**
+Status: **accepted provisionally**; see `scenario-approval.md` for caveats
 
 Draft SHA-256: `544ec158523cce4968d797e1b5270f877b57a09e9ac5fa871f42c77efea5449b`
 
@@ -50,7 +50,7 @@ are recent target-mood evidence.
 
 ## Approval decision
 
-- [ ] Approve all scenarios as written.
+- [x] Accept all scenarios as written, provisionally.
 - [ ] Request replacements listed below.
 
 Replacement requests:
@@ -59,5 +59,4 @@ Replacement requests:
 - Track(s) to replace:
 - Reason:
 
-Do not run or freeze the evaluation while any checkbox decision is
-unresolved.
+The accepted copy is `scenarios.json`; this draft checklist is kept for provenance.

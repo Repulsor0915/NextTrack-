@@ -117,7 +117,7 @@
     "summary_json": "evaluation/results/summary.json"
   },
   "protocol_date": "2026-09-19",
-  "protocol_status": "awaiting_human_scenario_review",
+  "protocol_status": "frozen",
   "randomness": {
     "candidate_pool_seed": 221611,
     "master_seed": 221611,
@@ -162,17 +162,19 @@
     "top_n": 10
   },
   "scenarios": {
+    "approval_record": "evaluation/scenario-approval.md",
     "category_counts": {
       "coherent_multi_track_history": 9,
       "mood_only": 4,
       "single_track_history": 4,
       "transition_conflicting_history": 4
     },
-    "path": "evaluation/scenarios.draft.json",
+    "path": "evaluation/scenarios.json",
     "review_path": "evaluation/scenario-review.md",
     "scenario_count": 21,
-    "sha256": "544ec158523cce4968d797e1b5270f877b57a09e9ac5fa871f42c77efea5449b",
-    "status": "draft_requires_human_review"
+    "sha256": "28df17f94b6b5ab0ab877515e40f6631829cbef432afd515b383963a8643d2ea",
+    "source_draft_sha256": "544ec158523cce4968d797e1b5270f877b57a09e9ac5fa871f42c77efea5449b",
+    "status": "frozen_after_user_acceptance"
   },
   "schema_version": "nexttrack-experiment-config-v1"
 }

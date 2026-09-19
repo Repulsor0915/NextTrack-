@@ -1,0 +1,12 @@
+algorithm,category,run_count,scenario_count,catalogue_coverage,mean_history_match,sd_history_match,mean_mood_match,sd_mood_match,mean_intra_list_diversity,sd_intra_list_diversity,mean_distinct_artist_fraction,sd_distinct_artist_fraction,mean_processing_ms,sd_processing_ms
+cbf,coherent_multi_track_history,9,9,0.074,0.903682,0.010186,,,0.117602,0.019569,0.988889,0.031427,38.497111,6.429978
+cbf,single_track_history,4,4,0.074,0.876193,0.021181,,,0.125857,0.012477,1.0,0.0,33.932,2.590027
+cbf,transition_conflicting_history,4,4,0.042,0.861646,0.018771,0.716463,0.073493,0.125536,0.00603,1.0,0.0,41.10875,6.065761
+context_mmr,coherent_multi_track_history,9,9,0.07,0.905474,0.009918,,,0.11619,0.016884,0.988889,0.031427,155.253444,7.649415
+context_mmr,mood_only,4,4,0.07,,,0.953568,0.021331,0.229248,0.030453,1.0,0.0,141.247,1.270684
+context_mmr,single_track_history,4,4,0.076,0.876336,0.021805,,,0.131985,0.01429,1.0,0.0,149.5745,4.505069
+context_mmr,transition_conflicting_history,4,4,0.076,0.830368,0.012448,0.925914,0.038833,0.154974,0.025781,1.0,0.0,175.93375,38.472052
+random,coherent_multi_track_history,270,9,0.444,0.769762,0.042028,,,0.311989,0.047845,1.0,0.0,30.634826,12.476973
+random,mood_only,120,4,0.444,,,0.663768,0.069637,0.311989,0.047845,1.0,0.0,26.530517,8.792299
+random,single_track_history,120,4,0.444,0.700435,0.035863,,,0.311989,0.047845,1.0,0.0,26.280742,5.287368
+random,transition_conflicting_history,120,4,0.444,0.758588,0.028949,0.663768,0.069637,0.311989,0.047845,1.0,0.0,29.66355,9.670058

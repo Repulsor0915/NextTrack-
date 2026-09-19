@@ -469,6 +469,10 @@ def prepare_protocol(
         raise ProtocolValidationError("At least one coherent genre is required.")
 
     project_root = project_root.resolve()
+    if (output_directory / "scenarios.json").exists():
+        raise ProtocolValidationError(
+            "Frozen scenarios.json exists; a new draft must use another output directory."
+        )
     paths = {
         "experiment_config": output_directory / "experiment-config.json",
         "candidate_pool": output_directory / "candidate-pool.json",
