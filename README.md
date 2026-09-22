@@ -10,16 +10,59 @@ Run these commands from the `NextTrack` directory in PowerShell:
 
 ```powershell
 .\.venv\Scripts\python.exe backend\manage.py migrate
-.\.venv\Scripts\python.exe backend\manage.py import_catalogue ..\prototype\data\tracks.json --data-source prototype-manual
-.\.venv\Scripts\python.exe backend\manage.py test recommendations
+.\.venv\Scripts\python.exe backend\manage.py import_catalogue data\processed\spotify-tracks-kaggle-full\catalogue.json
+.\.venv\Scripts\python.exe backend\manage.py catalogue_status
+.\.venv\Scripts\python.exe backend\manage.py test
 .\.venv\Scripts\python.exe backend\manage.py runserver
 ```
 
-The recommendation endpoint is:
+Open `http://127.0.0.1:8000/` for the recommendation page. It supports
+track search, ordered listening history, mood and BPM controls, an MMR variety
+slider, Auto plus advanced CBF choices, a separate Random discovery button,
+and evidence-backed results. The page uses a responsive Soft Indigo layout;
+the decorative record motion is disabled for reduced-motion preferences.
+The page uses the existing same-origin API without a separate frontend build
+step. See [`frontend/README.md`](frontend/README.md) for its code map and test
+commands. The separate Analytics page at `/analytics/` is intended to display
+a compact, read-only snapshot of frozen results and verified figures. Browser
+acceptance is pending because the user's page currently remains in its loading
+state. The page does not run new experiments or publish raw runs; see
+[`frontend/README.md`](frontend/README.md) for its sources and update process.
+
+The API entry points are:
 
 ```text
+GET  /health/
+GET  /api/v1/catalogue/
+GET  /api/v1/tracks/
+GET  /api/v1/tracks/{id}/
 POST /api/v1/recommendations/
+POST /api/v1/track-suggestions/
+GET  /api/v1/schema/
+GET  /api/v1/docs/swagger/
+GET  /api/v1/docs/redoc/
 ```
+
+Track discovery supports title/artist search, exact artist and genre filters,
+BPM bounds, and page-number pagination. Public requests cannot write tracks or
+change the active catalogue. A submitted track suggestion enters a separate
+staff-review queue; review does not automatically import it. Staff status and
+suggestion-review endpoints require a staff token. See
+[`docs/api-contract-and-access.md`](docs/api-contract-and-access.md) for endpoint contracts, examples,
+limits, security settings, and deployment prerequisites. `/api/v1/` itself is
+not an index page. The live schema, Swagger, and ReDoc routes require a Django
+superuser session; log in at `/admin/` first.
+
+The import command above is for a **new, empty database**. A database from
+before Stage 4 should use the verified adoption workflow; changing snapshots
+requires an explicit `--replace` or `--prune` preview and confirmation. See
+[`docs/stage-4-catalogue-database.md`](docs/stage-4-catalogue-database.md).
+
+Django Admin is available at `/admin/` for staff and superusers. It provides
+read-only catalogue inspection and track-suggestion review; it cannot change
+the active snapshot. Public recommendations still need no login. See
+[`docs/admin-and-catalogue-operations.md`](docs/admin-and-catalogue-operations.md)
+for permissions, setup, and the decision to defer bulk upload.
 
 ## Default Auto mode
 
@@ -49,6 +92,10 @@ Example mood-only Auto request:
   }
 }
 ```
+
+For a simpler client payload, `mood`, `bpm`, and `diversity_strength` may also
+be supplied at the top level. Do not supply the same field both there and in
+`context`.
 
 When Auto resolves to a content-based method, MMR reranking is enabled by
 default with `diversity_strength = 0.2`. This is equivalent to standard MMR
@@ -133,6 +180,10 @@ Example explicit Context+MMR request:
   component. The separate track `tempo` feature may still contribute to CBF.
 - Explanations are deterministic and evidence-based; they do not use an AI
   agent or LLM.
+- Each result also exposes `explanation_evidence`, with the unrounded scoring
+  evidence, applicable feature targets, relevance and final ranks, and MMR
+  selection evidence. `meta.explanation_model_version` identifies its contract.
+  See `docs/stage-3-explanation-contract.md` for field and `null` semantics.
 
 ## Mood model boundary
 
@@ -203,15 +254,16 @@ retaining actionable details:
     "code": "VALIDATION_ERROR",
     "message": "Request validation failed. See details for specific fields.",
     "details": {
-      "limit": ["Ensure this value is less than or equal to 10."]
+      "limit": ["Ensure this value is less than or equal to 20."]
     }
   }
 }
 ```
 
 Invalid input and unknown IDs return HTTP 400. A valid request with no eligible
-candidates returns HTTP 422. Internal stack traces, database paths, and server
-configuration are not exposed.
+candidates returns HTTP 422. With production `DEBUG=False`, internal stack
+traces, database paths, and server configuration are not exposed. Local
+`DEBUG=True` is not safe to publish.
 
 ## Data status
 
@@ -235,4 +287,11 @@ A verified manual run produced full catalogue checksum
 `82bd95b1e5d4e983f172af116904740bb43eb599f5d7e37cd6e0f558f84de65b`.
 The full, 20-track, and 500-track processed catalogues are now present and their
 manifest checksums have been verified. Algorithm evaluation remains a separate
-next stage.
+offline workflow. Stage 2 studies and the reviewed v1 decision are documented
+in [`backend/offline_evaluation/README.md`](backend/offline_evaluation/README.md)
+and [`docs/stage-2-decision.md`](docs/stage-2-decision.md). The scoring defaults
+remain unchanged; API metadata now exposes the reviewed algorithm versions.
+
+The four-path offline comparison and separate full-catalogue latency study are
+documented in [`docs/recommender-comparison.md`](docs/recommender-comparison.md).
+These results are report evidence, not API responses or user relevance labels.

@@ -2,6 +2,6 @@
 __pycache__/
 *.py[cod]
 *.sqlite3
+backend/staticfiles/
 .env
 data/raw/
-evaluation/studies/feature-similarity-v1/
