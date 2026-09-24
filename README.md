@@ -33,7 +33,7 @@ workflow rather than operate as a streaming platform. It includes:
 | Backend | Python, Django 6.1, Django REST Framework |
 | Recommendation code | NumPy and project-owned ranking modules |
 | Local database | SQLite |
-| Production options | GCE/SQLite profile and PostgreSQL production profile |
+| Hosted user testing | Waitress, ngrok, WhiteNoise, and SQLite |
 | Frontend | Django templates, HTML, CSS, dependency-free JavaScript modules |
 | API schema | drf-spectacular |
 | Offline evaluation | Django management commands with JSON, JSONL, CSV, and SVG artifacts |
@@ -48,13 +48,13 @@ experiment snapshot was produced with Python 3.14.4 on Windows 11 and SQLite.
 NextTrack/
 ├── backend/
 │   ├── catalogue_preprocess/   CSV validation, merging, and output manifests
-│   ├── config/                 Django development and production settings
+│   ├── config/                 Django development and ngrok host settings
 │   ├── offline_evaluation/     V2 experiment and visualization code
 │   └── recommendations/        Models, API, services, rankers, and import code
 ├── data/
 │   ├── raw/                    Local source CSV files; Git-ignored
 │   └── processed/              Manifests, reports, and local catalogue output
-├── deploy/gce/                 Single-VM GCE configuration and instructions
+├── deploy/ngrok/               Waitress and ngrok startup instructions
 ├── evaluation/v2/              Verified experiment results and figures
 ├── frontend/                   Templates, styles, JavaScript, and frontend tests
 ├── requirements.txt            Local application dependencies
@@ -68,15 +68,15 @@ More detailed component notes are kept in:
 - [offline evaluation](backend/offline_evaluation/README.md)
 - [evaluation artifacts](evaluation/README.md)
 - [frontend](frontend/README.md)
-- [GCE deployment](deploy/gce/README.md)
+- [ngrok hosting](deploy/ngrok/README.md)
 
 ## 4. Python environment and dependency installation
 
-Run the following commands from the repository root in PowerShell:
+Run the following commands from the repository root in CMD:
 
-```powershell
+```cmd
 py -3.14 -m venv .venv
-.\.venv\Scripts\Activate.ps1
+.venv\Scripts\activate
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
@@ -84,6 +84,12 @@ python -m pip install -r requirements.txt
 Python 3.12 or 3.13 may be used when compatible wheels are available. Node.js
 is optional and is only needed to run the small frontend test suite. There is
 no frontend build step and no runtime npm dependency.
+
+For public user testing through ngrok, also install the host dependencies:
+
+```cmd
+python -m pip install -r requirements-production.txt
+```
 
 ## 5. Default database
 
@@ -100,7 +106,7 @@ into `Track`, `TrackFeatures`, `Artist`, `Album`, and `TrackArtist`, with
 
 Create or update the schema and inspect the active catalogue with:
 
-```powershell
+```cmd
 python backend\manage.py migrate
 python backend\manage.py catalogue_status
 ```
@@ -123,7 +129,7 @@ Their expected SHA-256 values are recorded in the committed
 `data/processed/spotify-merged-v2/manifest.json`. Generate a fresh copy into an
 empty output directory:
 
-```powershell
+```cmd
 python backend\manage.py prepare_catalogue data\raw\spotify-tracks-kaggle\dataset.csv data\processed\spotify-merged-v2-rebuild --catalogue-version spotify-merged-v2 --retrieved-date 2026-09-23 --tracks-csv data\raw\tracks.csv
 ```
 
@@ -142,7 +148,7 @@ remain `null`; display fallbacks belong to the UI rather than the database.
 
 For a new empty database, import the verified output with:
 
-```powershell
+```cmd
 python backend\manage.py migrate
 python backend\manage.py import_catalogue data\processed\spotify-merged-v2-rebuild\catalogue.json
 python backend\manage.py catalogue_status
@@ -150,7 +156,7 @@ python backend\manage.py catalogue_status
 
 For a populated database, preview the synchronization first:
 
-```powershell
+```cmd
 python backend\manage.py import_catalogue data\processed\spotify-merged-v2-rebuild\catalogue.json --prune --dry-run
 ```
 
@@ -162,7 +168,7 @@ checksum, and preview token with the command's confirmation options. Do not add
 
 After the schema and catalogue are ready:
 
-```powershell
+```cmd
 python backend\manage.py catalogue_status
 python backend\manage.py runserver
 ```
@@ -175,9 +181,12 @@ Open <http://127.0.0.1:8000/>. Useful local pages are:
 
 Create a local administrator when needed:
 
-```powershell
+```cmd
 python backend\manage.py createsuperuser
 ```
+
+`runserver` is only for local development. Stop it before starting the public
+Waitress host because both commands use port 8000.
 
 ## 8. Web and API routes
 
@@ -237,7 +246,7 @@ accuracy.
 
 Run a new evaluation into an empty directory:
 
-```powershell
+```cmd
 python backend\manage.py run_evaluation --config evaluation\v2-config.json --output-dir evaluation\v2-local
 python backend\manage.py build_evaluation_graphs --input-dir evaluation\v2-local
 ```
@@ -245,7 +254,7 @@ python backend\manage.py build_evaluation_graphs --input-dir evaluation\v2-local
 After verifying a completed run and its manifest, publish it to the Analytics
 page with:
 
-```powershell
+```cmd
 python backend\manage.py publish_analytics_snapshot --input-dir evaluation\v2-local
 ```
 
@@ -255,15 +264,15 @@ The committed verified results remain under `evaluation/v2/`.
 
 Run the backend checks and complete Django test suite:
 
-```powershell
+```cmd
 python backend\manage.py check
 python backend\manage.py test --noinput
 ```
 
 Run the dependency-free frontend tests:
 
-```powershell
-node --test frontend\tests\*.test.js
+```cmd
+node --test frontend\tests\analytics.test.js frontend\tests\model.test.js
 ```
 
 The tests cover API validation, ranking behaviour, explanations, catalogue
@@ -271,20 +280,37 @@ imports, staff access, evaluation artifacts, page templates, and frontend
 request/display helpers. Browser layout and real multi-user performance still
 require manual checks.
 
-## 12. GCP deployment entry point
+## 12. Public user testing with ngrok
 
-The intended FYP deployment profile uses one Google Compute Engine VM with
-Gunicorn, Nginx, WhiteNoise, and a copied SQLite database. Start with the
-[GCE deployment guide](deploy/gce/README.md) and the files under `deploy/gce/`.
+The hosted FYP profile runs Django through Waitress on the Windows development
+machine and publishes it through ngrok. It uses `config.settings_ngrok`,
+WhiteNoise, and the existing `backend/db.schema-final.sqlite3` database.
 
-Production deployment requires `requirements-production.txt`, a generated
-secret key, explicit allowed hosts, `DEBUG=False`, collected static files, and
-an absolute `NEXTTRACK_DB_PATH`. The deployed catalogue status should report
-`spotify-merged-v2`, 964,224 records, and a consistent track/feature count.
+Install `requirements-production.txt` and authenticate the ngrok agent once:
 
-The GCE guide still contains older example database names and catalogue status
-values. Update and verify those examples against this section before the final
-deployment.
+```cmd
+ngrok config add-authtoken YOUR_TOKEN
+```
+
+Then open two CMD windows from the repository root:
+
+```cmd
+deploy\ngrok\start-waitress.cmd
+```
+
+```cmd
+ngrok http 8000
+```
+
+The first command checks Django, collects static assets, and starts Waitress.
+The second command maintains the public HTTPS tunnel. Do not run Django's
+development server at the same time. The current public address is
+<https://breeding-gusty-grower.ngrok-free.dev>.
+
+The hosted settings use `backend/db.schema-final.sqlite3` and create a private,
+Git-ignored key at `backend/.nexttrack-secret-key`. Both CMD windows and the
+computer must remain running during a user test. See the
+[ngrok hosting guide](deploy/ngrok/README.md) for domain changes.
 
 ## 13. Data sources and boundaries
 
@@ -310,11 +336,13 @@ excluded from Git.
 
 - The synthetic offline scenarios do not provide human relevance labels or
   prove recommendation accuracy.
-- Artist and album metadata are missing for 777,524 catalogue rows. This limits
-  artist search, collaboration analysis, and artist-diversity interpretation.
+- Normalized Artist and Album relationships are unavailable for 777,524
+  catalogue rows, although the source album display text is preserved for all
+  but two tracks. Missing artist relationships still limit artist search,
+  collaboration analysis, and artist-diversity interpretation.
 - Full-catalogue content scoring on SQLite can take several seconds, especially
   for Context + MMR and larger result sets.
-- SQLite and the single-VM GCE profile are suitable for demonstration and
+- SQLite with one local Waitress process is suitable for demonstrations and
   small user tests, not horizontal scaling or high write concurrency.
 - Spotify playback embeds depend on third-party availability and may be hidden
   by browser content-filtering extensions.

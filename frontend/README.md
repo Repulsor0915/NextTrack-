@@ -133,5 +133,5 @@ Production deployment must run:
 python backend/manage.py collectstatic --noinput
 ```
 
-Django collects these assets into `backend/staticfiles/`. The GCE deployment
-serves that directory at `/static/`.
+Django collects these assets into `backend/staticfiles/`. WhiteNoise serves
+that directory when the Waitress and ngrok host profile is active.

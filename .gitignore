@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *.sqlite3
 backend/staticfiles/
+backend/.nexttrack-secret-key
 .env
 data/raw/
 data/processed/*/catalogue.json 
