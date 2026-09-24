@@ -1,1 +1,1 @@
-"""Offline experiment protocol and evaluation tooling."""
+"""Reproducible offline experiments and result visualisation for NextTrack."""

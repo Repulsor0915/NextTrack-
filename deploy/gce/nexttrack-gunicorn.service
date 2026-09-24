@@ -1,0 +1,15 @@
+[Unit]
+Description=NextTrack Django application
+After=network.target
+
+[Service]
+User=nexttrack
+Group=www-data
+WorkingDirectory=/opt/nexttrack
+EnvironmentFile=/etc/nexttrack.env
+ExecStart=/opt/nexttrack/.venv312/bin/gunicorn config.wsgi:application --chdir /opt/nexttrack/backend --bind 127.0.0.1:8000 --workers 1 --threads 2 --timeout 120
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

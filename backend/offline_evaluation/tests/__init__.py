@@ -1,1 +1,1 @@
-"""Tests for offline evaluation tooling."""
+"""Tests for the current offline evaluation design."""

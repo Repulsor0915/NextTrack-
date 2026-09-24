@@ -1,5 +1,6 @@
 import random
 from dataclasses import replace
+from unittest.mock import patch
 
 from django.test import SimpleTestCase
 
@@ -17,6 +18,7 @@ from recommendations.domain.feature_vectors import (
     FEATURE_WEIGHTS,
     build_recency_weighted_profile,
     build_session_profile,
+    calculate_similarity,
     weighted_cosine_similarity,
     weighted_euclidean_similarity,
 )
@@ -513,6 +515,109 @@ class MmrTests(SimpleTestCase):
         rerank_mmr(self.rankings, 2, diversity_strength=0.5)
 
         self.assertEqual(self.rankings, original)
+
+    def test_redundancy_support_uses_earliest_selected_track_on_a_tie(self):
+        shared_vector = self._vector(1.0, 0.0)
+        rankings = [
+            self._ranking("track-a", 0.9, shared_vector),
+            self._ranking("track-b", 0.8, shared_vector),
+            self._ranking("track-c", 0.7, shared_vector),
+        ]
+
+        results = rerank_mmr(rankings, 3, diversity_strength=0.2)
+
+        self.assertIsNone(results[0].supporting_track_id)
+        self.assertEqual(results[1].supporting_track_id, "track-a")
+        self.assertEqual(results[2].supporting_track_id, "track-a")
+        self.assertEqual(results[2].diversity_penalty, 1.0)
+
+    def test_incremental_redundancy_matches_full_recalculation(self):
+        generator = random.Random(221611)
+        rankings = [
+            self._ranking(
+                f"track-{index}",
+                generator.random(),
+                {name: generator.random() for name in FEATURE_WEIGHTS},
+            )
+            for index in range(25)
+        ]
+        for strength in (0.0, 0.2, 0.4, 1.0):
+            remaining = rankings.copy()
+            reference = []
+            while remaining and len(reference) < 10:
+                scored = []
+                for context in remaining:
+                    similarities = [
+                        calculate_similarity(
+                            context.vector, previous.vector,
+                            metric=DEFAULT_ALGORITHM_CONFIG.diversity_similarity_metric,
+                            weights=DEFAULT_ALGORITHM_CONFIG.feature_weights,
+                        )
+                        for previous, *_ in reference
+                    ]
+                    if similarities:
+                        support_index = max(
+                            range(len(similarities)),
+                            key=lambda index: (similarities[index], -index),
+                        )
+                        penalty = similarities[support_index]
+                        support_id = reference[support_index][0].candidate
+                        score = ((1 - strength) * context.relevance
+                                 + strength * (1 - penalty))
+                    else:
+                        penalty, support_id, score = 0.0, None, context.relevance
+                    scored.append((context, score, penalty, support_id))
+                best = min(
+                    scored,
+                    key=lambda item: (-item[1], -item[0].relevance, item[0].candidate),
+                )
+                reference.append(best)
+                remaining.remove(best[0])
+
+            actual = rerank_mmr(rankings, 10, diversity_strength=strength)
+            self.assertEqual(
+                [
+                    (
+                        item.context.candidate, item.mmr_score,
+                        item.diversity_penalty, item.supporting_track_id,
+                    )
+                    for item in actual
+                ],
+                [
+                    (item.candidate, score, penalty, support_id)
+                    for item, score, penalty, support_id in reference
+                ],
+            )
+
+    def test_vectorized_large_pool_matches_scalar_greedy_ranking(self):
+        generator = random.Random(221611)
+        rankings = [
+            self._ranking(
+                f"track-{index:04d}",
+                generator.random(),
+                {name: generator.random() for name in FEATURE_WEIGHTS},
+            )
+            for index in range(1200)
+        ]
+        for strength in (0.0, 0.2, 0.4, 1.0):
+            vectorized = rerank_mmr(rankings, 10, diversity_strength=strength)
+            with patch(
+                "recommendations.domain.mmr._VECTORIZED_MIN_CANDIDATES", 1201,
+            ):
+                scalar = rerank_mmr(rankings, 10, diversity_strength=strength)
+            self.assertEqual(
+                [item.context.candidate for item in vectorized],
+                [item.context.candidate for item in scalar],
+            )
+            self.assertEqual(
+                [item.supporting_track_id for item in vectorized],
+                [item.supporting_track_id for item in scalar],
+            )
+            for optimized, reference in zip(vectorized, scalar):
+                self.assertAlmostEqual(optimized.mmr_score, reference.mmr_score)
+                self.assertAlmostEqual(
+                    optimized.diversity_penalty, reference.diversity_penalty,
+                )
 
     def test_rejects_diversity_strength_outside_zero_to_one(self):
         with self.assertRaises(ValueError):

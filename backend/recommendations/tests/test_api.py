@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -7,6 +8,7 @@ from recommendations.models import Track, TrackFeatures
 
 class RecommendationApiTests(APITestCase):
     def setUp(self):
+        cache.clear()
         self.url = reverse("recommendations:recommendations")
 
     @staticmethod
@@ -118,6 +120,12 @@ class RecommendationApiTests(APITestCase):
         self.assertEqual(response.data["meta"]["resolved_algorithm"], "random")
         self.assertEqual(response.data["meta"]["relevance_model"], "random")
         self.assertIsNone(response.data["meta"]["reranker"])
+        self.assertEqual(
+            response.data["meta"]["algorithm_contract_version"],
+            "nexttrack-recommender-v1",
+        )
+        self.assertIsNone(response.data["meta"]["cbf_model_version"])
+        self.assertIsNone(response.data["meta"]["reranker_version"])
         self.assertIsNone(response.data["recommendations"][0]["score"])
 
     def test_auto_with_mood_resolves_to_mood_cbf_and_default_mmr(self):
@@ -221,13 +229,30 @@ class RecommendationApiTests(APITestCase):
     def test_limit_above_maximum_returns_400(self):
         response = self.client.post(
             self.url,
-            {"history": ["track-001"], "limit": 11},
+            {"history": ["track-001"], "limit": 21},
             format="json",
         )
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data["error"]["code"], "VALIDATION_ERROR")
         self.assertIn("limit", response.data["error"]["details"])
+
+    def test_limit_twenty_returns_twenty_ranked_tracks(self):
+        for index in range(21):
+            self._create_track(f"track-{index:02d}")
+
+        response = self.client.post(
+            self.url,
+            {"algorithm": "random", "limit": 20},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data["recommendations"]), 20)
+        self.assertEqual(
+            [item["rank"] for item in response.data["recommendations"]],
+            list(range(1, 21)),
+        )
 
     def test_cbf_requires_non_empty_history(self):
         response = self.client.post(
@@ -387,6 +412,11 @@ class RecommendationApiTests(APITestCase):
             "happy-track",
         )
         self.assertEqual(response.data["meta"]["history_count_used"], 0)
+        evidence = response.data["recommendations"][0]["explanation_evidence"]
+        self.assertEqual(evidence["path"], "mood_mmr")
+        self.assertIsNone(evidence["history"])
+        self.assertIsNotNone(evidence["mood"])
+        self.assertIsNone(evidence["mmr"]["supporting_track"])
 
     def test_context_mmr_without_history_or_mood_returns_400(self):
         response = self.client.post(

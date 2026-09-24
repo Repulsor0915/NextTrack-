@@ -1,0 +1,89 @@
+{
+  "catalogue_version": "spotify-merged-v2",
+  "outputs": {
+    "catalogue.json": {
+      "bytes": 488158477,
+      "sha256": "45652c01108cdce20454d71cc51351b0e3d6e1bef4e47d5219642e55f001e2e2"
+    },
+    "preprocessing-report.json": {
+      "bytes": 69019,
+      "sha256": "c8640c849216cd0a1ce7f703f717f0c2cb24196f220936b03fb4281d95622d3e"
+    }
+  },
+  "preprocessing": {
+    "cross_source_overlap_policy": "keep Kaggle record unchanged for shared track IDs",
+    "deduplication_key": "track_id",
+    "genre_policy": "merge unique non-empty labels and sort",
+    "hard_validation_policy": {
+      "allow_blank_genre": true,
+      "content_policy_filters": [],
+      "duplicate_policy": "keep_first_hard_valid",
+      "require_boolean_explicit": true,
+      "require_positive_tempo": true
+    },
+    "required_features": [
+      "tempo",
+      "energy",
+      "valence",
+      "danceability",
+      "acousticness",
+      "instrumentalness",
+      "loudness",
+      "speechiness"
+    ],
+    "selection": {
+      "method": "keep Kaggle records on shared track IDs; add new tracks.csv IDs",
+      "mode": "two_source_id_merge"
+    },
+    "stored_feature_values": "raw source values",
+    "validation_policy": "hard validity only"
+  },
+  "retrieved_date": "2026-09-23",
+  "runtime_normalization": {
+    "acousticness": {
+      "maximum": 1.0,
+      "minimum": 0.0
+    },
+    "danceability": {
+      "maximum": 1.0,
+      "minimum": 0.0
+    },
+    "energy": {
+      "maximum": 1.0,
+      "minimum": 0.0
+    },
+    "instrumentalness": {
+      "maximum": 1.0,
+      "minimum": 0.0
+    },
+    "loudness": {
+      "maximum": 0.0,
+      "minimum": -30.0
+    },
+    "speechiness": {
+      "maximum": 1.0,
+      "minimum": 0.0
+    },
+    "tempo": {
+      "maximum": 220.0,
+      "minimum": 40.0
+    },
+    "valence": {
+      "maximum": 1.0,
+      "minimum": 0.0
+    }
+  },
+  "schema_version": "nexttrack-catalogue-merged-v1",
+  "sources": {
+    "kaggle": {
+      "bytes": 20118244,
+      "file_name": "dataset.csv",
+      "sha256": "b202fa49909b2d5cef71a04b1d21243cfeb36414535f2ca9272aa646721177bd"
+    },
+    "tracks": {
+      "bytes": 931386809,
+      "file_name": "tracks.csv",
+      "sha256": "eeebc3b0a5ca488a823f82453b120088ab8bed970e54989c0b1328fac248acb9"
+    }
+  }
+}

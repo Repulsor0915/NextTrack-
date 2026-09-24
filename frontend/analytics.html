@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block meta_description %}Verified NextTrack V2 recommendation experiment results.{% endblock %}
+{% block title %}Analytics &mdash; NextTrack{% endblock %}
+{% block page_styles %}<link rel="stylesheet" href="{% static 'frontend/css/analytics.css' %}">{% endblock %}
+{% block page_scripts %}<script type="module" src="{% static 'frontend/js/analytics/analytics.js' %}?v=4"></script>{% endblock %}
+{% block header_navigation %}
+        <nav class="header-right" aria-label="Primary navigation">
+          <a class="header-link" href="{% url 'home' %}">Discover</a>
+        </nav>
+{% endblock %}
+{% block content %}
+      <main class="analytics-main">
+        <section class="analytics-hero" aria-labelledby="analytics-title">
+          <p class="eyebrow"><span class="eyebrow-line"></span> VERIFIED V2 OFFLINE EXPERIMENTS</p>
+          <h1 id="analytics-title">The evidence behind <em>the mix.</em></h1>
+          <p>Explore what the latest fixed experiments measured across Random, Basic CBF, Context, and Context + MMR. These are diagnostic audio-feature proxies, not listener ratings or proof of recommendation accuracy.</p>
+          <div class="analytics-hero-links"><a class="analytics-back" href="{% url 'home' %}">← Build a playlist</a><span>Read-only results · no live experiment is run here</span></div>
+        </section>
+
+        <div id="analytics-state" class="analytics-state" role="status" aria-live="polite">Loading the verified experiment snapshot…</div>
+        <div id="analytics-content" data-snapshot-url="{% static 'frontend/analytics/snapshot.json' %}?v=2" hidden>
+          <section aria-labelledby="scope-title">
+            <div class="analytics-section-head"><p class="section-kicker">01 / STUDY SCOPE</p><h2 id="scope-title">One fixed ruler for every method</h2><p>The 500-track candidate set and synthetic scenarios were held constant where each method was eligible.</p></div>
+            <div id="study-stats" class="study-stats"></div>
+            <p id="snapshot-provenance" class="provenance-note"></p>
+          </section>
+
+          <section aria-labelledby="findings-title">
+            <div class="analytics-section-head"><p class="section-kicker">02 / INTERPRETATION</p><h2 id="findings-title">What the results actually say</h2><p>These statements use the verified V2 summaries and do not represent a listener-accuracy test.</p></div>
+            <div id="finding-cards" class="finding-cards"></div>
+            <p class="analytics-note">Transition comparisons use four synthetic conflicting-history scenarios. Random has 30 seeds per scenario; those draws are not independent listeners. The Context/MMR comparison uses all 12 scenarios.</p>
+          </section>
+
+          <section aria-labelledby="methods-title">
+            <div class="analytics-section-head"><p class="section-kicker">03 / FOUR RECOMMENDATION PATHS</p><h2 id="methods-title">What each method produced</h2><p>Means below describe the resulting playlists. A score measured against history or mood does not mean that a method actually used that signal.</p></div>
+            <div class="analytics-table-wrap" tabindex="0" aria-label="Scroll the method comparison table horizontally if needed">
+              <table><thead><tr><th scope="col">Method</th><th scope="col">Runs / scenarios</th><th scope="col">History match</th><th scope="col">Mood fit</th><th scope="col">Intra-list diversity</th><th scope="col">Artist metadata</th><th scope="col">Pool coverage</th></tr></thead><tbody id="method-rows"></tbody></table>
+            </div>
+            <p class="analytics-note">Basic CBF is eligible only when history exists (8 scenarios); the other paths cover 12. Artist diversity uses only known artists, so artist metadata coverage is shown separately. Pool coverage is relative to the fixed 500-track pool; Random combines 30 seeds and is not directly comparable to one-run deterministic paths.</p>
+          </section>
+
+          <section aria-labelledby="comparison-title">
+            <div class="analytics-section-head"><p class="section-kicker">04 / PAIRED COMPARISON</p><h2 id="comparison-title">How much did the lists change?</h2><p>Top-10 Jaccard compares the songs in two lists on eligible, paired scenarios. It is overlap, not recommendation accuracy.</p></div>
+            <div id="pairwise-rows" class="pairwise-rows"></div>
+            <div id="comparison-figures" class="figure-grid"></div>
+          </section>
+
+          <section aria-labelledby="latency-title">
+            <div class="analytics-section-head"><p class="section-kicker">05 / LOCAL PERFORMANCE</p><h2 id="latency-title">Measured service latency</h2><p>Same-process warm calls on one Windows/SQLite machine; HTTP, browser rendering, and concurrent users were not measured.</p></div>
+            <div class="analytics-table-wrap" tabindex="0" aria-label="Scroll the latency table horizontally if needed">
+              <table><thead><tr><th scope="col">Method</th><th scope="col">500-track p50</th><th scope="col">500-track p95</th><th scope="col">Full p50</th><th scope="col">Full p95</th></tr></thead><tbody id="latency-rows"></tbody></table>
+            </div>
+            <p class="analytics-note">All latency values are milliseconds. Each warm group has ten samples; its p95 is therefore an unstable estimate, not a public-service promise.</p>
+            <div id="latency-figures" class="figure-grid"></div>
+          </section>
+
+          <section aria-labelledby="sensitivity-title">
+            <div class="analytics-section-head"><p class="section-kicker">06 / V2 CONFIGURATION SENSITIVITY</p><h2 id="sensitivity-title">What changed when assumptions changed?</h2><p>The V2 catalogue audit and controlled comparisons examine feature scaling, similarity, history, mood, and MMR. They do not identify universally optimal settings.</p></div>
+            <div id="configuration-figures" class="figure-grid"></div>
+          </section>
+
+          <section aria-labelledby="decision-title">
+            <div class="analytics-section-head"><p class="section-kicker">07 / CURRENT SETTINGS</p><h2 id="decision-title">Which settings were retained?</h2><p>The V2 configuration study keeps a conservative baseline. These are engineering choices under synthetic evidence, not proven user-optimal values.</p></div>
+            <div class="analytics-table-wrap" tabindex="0" aria-label="Scroll the reviewed settings table horizontally if needed">
+              <table class="decision-table"><thead><tr><th scope="col">Parameter</th><th scope="col">Current setting</th><th scope="col">Reason and limitation</th></tr></thead><tbody>
+                <tr><th scope="row">Eight-feature weights</th><td>Current heuristic weights</td><td>Rankings changed under alternative weights; no listener labels justified a replacement.</td></tr>
+                <tr><th scope="row">Similarity</th><td>Weighted cosine</td><td>Euclidean separated scores more, but that did not establish better relevance.</td></tr>
+                <tr><th scope="row">History</th><td>Window 5, linear recency</td><td>Retains earlier session evidence while following recent tracks; an outlier latest track remains a weakness.</td></tr>
+                <tr><th scope="row">History : mood</th><td>0.65 : 0.35</td><td>A stronger mood weight improved mood fit in conflicts but reduced history fit.</td></tr>
+                <tr><th scope="row">Mood-internal weights</th><td>Current literature-informed heuristic</td><td>The reference informed weights, not a proven optimum for this catalogue or these mood targets.</td></tr>
+                <tr><th scope="row">MMR diversity strength</th><td>0.2</td><td>Raised diversity with little measured relevance loss; 0.4 showed a larger relevance risk.</td></tr>
+              </tbody></table>
+            </div>
+            <p class="analytics-note">The verified protocol, summaries, raw runs, checksums, and figures are stored under <code>evaluation/v2/</code>.</p>
+          </section>
+
+          <section class="limits-panel" aria-labelledby="limits-title">
+            <p class="section-kicker">HOW TO READ THIS PAGE</p><h2 id="limits-title">Evidence, with boundaries</h2>
+            <ul><li>The 12 scenarios are synthetic; there are no listener relevance labels or real session logs.</li><li>Random uses 30 fixed seeds per scenario. Its repeated runs are not 30 independent users.</li><li>Artist metadata is missing for part of the merged catalogue, so artist metrics report coverage separately.</li><li>The merged catalogue does not retain the original input source for each track.</li><li>Fixed-pool quality proxies and full-catalogue timing answer different questions.</li><li>The source results and checksums remain in <code>evaluation/v2/</code>; this page publishes a compact verified snapshot.</li></ul>
+          </section>
+        </div>
+      </main>
+{% endblock %}

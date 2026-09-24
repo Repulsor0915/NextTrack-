@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block meta_description %}Discover explainable music recommendations with NextTrack.{% endblock %}
+{% block title %}NextTrack &mdash; Find your next track{% endblock %}
+{% block page_styles %}<link rel="stylesheet" href="{% static 'frontend/css/discover.css' %}">{% endblock %}
+{% block page_scripts %}<script type="module" src="{% static 'frontend/js/discover/main.js' %}"></script>{% endblock %}
+{% block header_navigation %}
+        <div class="header-right">
+          <span class="catalogue-pill" id="catalogue-status">Connecting to catalogue</span>
+          <a class="header-link" href="{% url 'analytics' %}">Analytics</a>
+        </div>
+{% endblock %}
+{% block content %}
+      <main>
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="hero-copy">
+            <p class="eyebrow"><span class="eyebrow-line"></span> PERSONALIZED MUSIC DISCOVERY</p>
+            <h1 id="hero-title">Your next favorite<br>track is <em>out there.</em></h1>
+            <p class="hero-description">Build a listening trail, choose your mood, and discover music with a recommendation you can actually understand.</p>
+          </div>
+          <div class="hero-visual" aria-hidden="true">
+            <div class="visual-orbit orbit-one"></div>
+            <div class="visual-orbit orbit-two"></div>
+            <div class="record"><div class="record-ring"></div><div class="record-label"><span class="record-label-mark">N<span>·</span></span></div></div>
+            <span class="visual-note note-one">♪</span><span class="visual-note note-two">♫</span>
+          </div>
+        </section>
+
+        <div class="workspace">
+          <section class="setup-column" aria-label="Recommendation settings">
+            <div class="section-heading"><span class="step-number">01</span><div><p class="section-kicker">MAKE IT YOURS</p><h2>Set the direction</h2></div></div>
+
+            <div class="panel search-panel">
+              <div class="panel-top"><div><h3>Your listening trail</h3><p>Add up to five tracks, oldest first. Your most recent track goes last.</p></div><span class="count-badge" id="history-count">0 / 5</span></div>
+              <label class="field-label" for="track-search">Search by song or artist</label>
+              <div class="search-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16 16 4.5 4.5"></path></svg>
+                <input id="track-search" type="search" autocomplete="off" maxlength="100" role="combobox" aria-autocomplete="list" aria-controls="search-results" aria-expanded="false" placeholder="Try a song or artist...">
+                <span class="search-spinner" id="search-spinner" aria-hidden="true"></span>
+                <div id="search-results" class="search-results" role="listbox" aria-label="Track search results" hidden></div>
+              </div>
+              <p class="field-hint" id="search-hint" role="status" aria-live="polite">Type at least two characters to search the catalogue.</p>
+              <ol id="history-list" class="history-list" aria-label="Selected listening history"></ol>
+              <div id="history-empty" class="history-empty"><span aria-hidden="true">♫</span><p>No tracks selected yet.<br><small>Choose a mood or use Surprise me below.</small></p></div>
+              <div class="suggestion-entry">
+                <button id="suggestion-toggle" class="suggestion-toggle" type="button" aria-expanded="false" aria-controls="suggestion-form">Can't find a song? Suggest it</button>
+                <form id="suggestion-form" class="suggestion-form" hidden>
+                  <p class="field-hint">Send a track for admin review. Suggestions are not added to recommendations automatically.</p>
+                  <div class="suggestion-fields">
+                    <label><span class="field-label">Track name</span><input name="title" type="text" maxlength="255" required></label>
+                    <label><span class="field-label">Artist name</span><input name="artist" type="text" maxlength="255" required></label>
+                    <label><span class="field-label">Album name (optional)</span><input name="album_name" type="text" maxlength="255"></label>
+                    <label><span class="field-label">Supporting link (optional)</span><input name="reference_url" type="url" maxlength="200" placeholder="https://..."></label>
+                  </div>
+                  <button id="suggestion-submit" class="suggestion-submit" type="submit">Send suggestion</button>
+                  <p id="suggestion-status" class="suggestion-status" role="status" aria-live="polite"></p>
+                </form>
+              </div>
+            </div>
+
+            <div class="panel mood-panel">
+              <div class="panel-top"><div><h3>How do you want to feel?</h3><p>Optional, but it helps shape the recommendations.</p></div></div>
+              <fieldset id="mood-fieldset" class="mood-fieldset"><legend class="sr-only">Choose a mood</legend>
+                <label class="mood-choice"><input type="radio" name="mood" value="" checked><span class="mood-icon" aria-hidden="true">✧</span><span>Any mood</span></label>
+                <label class="mood-choice"><input type="radio" name="mood" value="happy"><span class="mood-icon" aria-hidden="true">☀</span><span>Happy</span></label>
+                <label class="mood-choice"><input type="radio" name="mood" value="energetic"><span class="mood-icon" aria-hidden="true">✦</span><span>Energetic</span></label>
+                <label class="mood-choice"><input type="radio" name="mood" value="calm"><span class="mood-icon" aria-hidden="true">☾</span><span>Calm</span></label>
+                <label class="mood-choice"><input type="radio" name="mood" value="sad"><span class="mood-icon" aria-hidden="true">☁</span><span>Sad</span></label>
+              </fieldset>
+              <p class="field-hint" id="mood-hint">Mood is matched against the catalogue's audio-feature profile, not detected from you.</p>
+            </div>
+
+            <div class="panel controls-panel">
+              <div class="panel-top"><div><h3>Fine-tune your mix</h3><p>Optional controls for pace and variety.</p></div></div>
+              <div class="control-block">
+                <div class="label-row"><label class="field-label" for="bpm-min">Tempo range</label><span class="tiny-label">BPM · optional</span></div>
+                <div class="bpm-fields"><input id="bpm-min" type="number" min="0" step="1" inputmode="numeric" placeholder="Min" aria-label="Minimum BPM"><span aria-hidden="true">to</span><input id="bpm-max" type="number" min="0" step="1" inputmode="numeric" placeholder="Max" aria-label="Maximum BPM"></div>
+              </div>
+              <div class="control-block diversity-block">
+                <div class="label-row"><label class="field-label" for="diversity">Variety strength</label><strong id="diversity-value">0.20</strong></div>
+                <input id="diversity" type="range" min="0" max="0.4" step="0.05" value="0.2">
+                <div class="range-labels"><span>Closer match</span><span>More variety</span></div>
+                <p class="field-hint" id="diversity-hint">MMR balance weight, not a percentage of diverse tracks.</p>
+              </div>
+              <div class="control-block"><label class="field-label" for="result-limit">Number of tracks</label><select id="result-limit"><option value="5" selected>5 tracks</option><option value="10">10 tracks</option><option value="20">20 tracks</option></select></div>
+              <div class="advanced-wrap"><button id="advanced-toggle" class="advanced-toggle" type="button" aria-expanded="false" aria-controls="advanced-panel">Advanced algorithm options <span aria-hidden="true">⌄</span></button>
+                <div id="advanced-panel" class="advanced-panel" hidden><label class="field-label" for="algorithm">Recommendation method</label><select id="algorithm"><option value="auto" selected>Auto · recommended</option><option value="cbf">Basic CBF · history only</option><option value="context_mmr">Context + MMR</option></select><p class="field-hint" id="algorithm-hint">Auto chooses a method from the history and mood you provide.</p></div>
+              </div>
+            </div>
+
+            <div class="action-area"><p id="form-error" class="form-error" role="alert" hidden></p><button id="recommend-button" class="primary-button" type="button"><span>Find my next tracks</span><span aria-hidden="true">↗</span></button><button id="random-button" class="secondary-button" type="button">Surprise me · random mix</button><p class="action-note">Surprise me uses the selected track count and BPM, but not mood or variety. Your listening trail stays in this browser tab.</p></div>
+          </section>
+
+          <section class="results-column" aria-labelledby="results-title">
+            <div class="section-heading"><span class="step-number">02</span><div><p class="section-kicker">THE DISCOVERY</p><h2 id="results-title">Made for this moment</h2></div></div>
+            <div id="results-state" class="results-state" role="status" aria-live="polite"><div class="empty-visual" aria-hidden="true"><div class="empty-disc"><span>♪</span></div></div><h3>A great discovery starts here.</h3><p>Add tracks or choose a mood for a tailored list. For a random mix, use Surprise me.</p></div>
+            <div id="results-content" hidden><div class="results-toolbar"><div><p class="section-kicker">YOUR RECOMMENDATIONS</p><p id="results-meta" class="results-meta"></p></div><span id="results-stale" class="stale-badge" hidden>Settings changed · generate again</span></div><div class="recommendation-results"><ol id="recommendation-list" class="recommendation-list"></ol><nav id="recommendation-pagination" class="recommendation-pagination" aria-label="Recommendation pages" hidden><button id="recommendation-previous" type="button">Previous</button><span id="recommendation-page-label" aria-live="polite"></span><button id="recommendation-next" type="button">Next</button></nav></div><aside id="reason-panel" class="reason-panel" aria-labelledby="reason-title" hidden></aside></div>
+          </section>
+        </div>
+      </main>
+{% endblock %}

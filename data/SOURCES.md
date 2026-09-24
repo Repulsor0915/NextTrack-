@@ -1,7 +1,5 @@
 # NextTrack data source
 
-Last reviewed: 2026-09-18
-
 ## Selected raw source
 
 NextTrack currently selects MaharshiPandya's **Spotify Tracks Dataset**, version
@@ -54,7 +52,7 @@ recommendation time.
 
 ## Preprocessing boundary
 
-The offline implementation lives in `backend/catalogue_pipeline/` and performs:
+The offline implementation lives in `backend/catalogue_preprocess/` and performs:
 
 1. Source-column validation.
 2. Row-level hard validation.

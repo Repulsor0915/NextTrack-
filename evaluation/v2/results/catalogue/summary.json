@@ -1,0 +1,22 @@
+{
+  "candidate_pool_count": 500,
+  "catalogue_sha256": "45652c01108cdce20454d71cc51351b0e3d6e1bef4e47d5219642e55f001e2e2",
+  "catalogue_version": "spotify-merged-v2",
+  "database_track_count": 964224,
+  "missing_album_count": 777524,
+  "missing_artist_display_count": 777524,
+  "missing_feature_count": 0,
+  "missing_primary_artist_count": 777524,
+  "multi_artist_track_count": 22523,
+  "scenario_count": 12,
+  "source_counts": {
+    "spotify-merged-v2": 964224
+  },
+  "state_record_count": 964224,
+  "track_feature_row_count": 964224,
+  "usable_feature_count": 964224,
+  "warnings": [
+    "Artist-based metrics cover only tracks with known artist metadata.",
+    "Track.data_source stores the merged catalogue version, so per-input-source analysis is unavailable."
+  ]
+}

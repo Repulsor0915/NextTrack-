@@ -1,13 +1,20 @@
+## This file score each candidate using the user's listening history
+## requested mood, or a weighted combination of both
+## The scoring evidence is kept for the explanation and MMR stages.
+
+
 from dataclasses import dataclass, field
 
 from .algorithm_config import DEFAULT_ALGORITHM_CONFIG
 from .feature_vectors import calculate_similarity, feature_closeness
 from .mood_model import score_mood
 
+
+# Deafult contribution of listening history and mood to the relevance score.
 HISTORY_RELEVANCE_WEIGHT = DEFAULT_ALGORITHM_CONFIG.history_relevance_weight
 MOOD_RELEVANCE_WEIGHT = DEFAULT_ALGORITHM_CONFIG.mood_relevance_weight
 
-
+# Store the score and supporting evidence for one candidate track.
 @dataclass(frozen=True)
 class ContextRanking:
     candidate: object
@@ -19,7 +26,7 @@ class ContextRanking:
     feature_closeness: dict
     mood_feature_closeness: dict = field(default_factory=dict)
 
-
+# At least one source of user context matches the recent listening profile.
 def score_context_candidates(
     candidate_vectors,
     *,
@@ -28,7 +35,6 @@ def score_context_candidates(
     bpm_constraint_applied=False,
     algorithm_config=DEFAULT_ALGORITHM_CONFIG,
 ):
-    """Score candidates using available session and explicit mood evidence."""
 
     if session_profile is None and mood is None:
         raise ValueError("session_profile or mood is required")
@@ -92,6 +98,6 @@ def score_context_candidates(
     )
     return rankings
 
-
+# Return a stable string ID for sorting different candidate object types. 
 def _candidate_id(candidate):
     return str(getattr(candidate, "id", candidate))

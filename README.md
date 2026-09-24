@@ -281,7 +281,7 @@ the eight recommendation features, validates their numeric values, and
 deduplicates by track ID. It does not remove explicit tracks or particular
 genres. The complete manual workflow, commands, path behaviour, seed rules,
 outputs, and optional database import are documented in
-[`backend/catalogue_pipeline/README.md`](backend/catalogue_pipeline/README.md).
+[`backend/catalogue_preprocess/README.md`](backend/catalogue_preprocess/README.md).
 
 A verified manual run produced full catalogue checksum
 `82bd95b1e5d4e983f172af116904740bb43eb599f5d7e37cd6e0f558f84de65b`.

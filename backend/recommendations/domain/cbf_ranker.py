@@ -1,3 +1,6 @@
+## This file create all the CBF Ranking for all the enlisted song, and compare it between every song.
+## A large catalogue would cause large burden to the system.
+
 from dataclasses import dataclass
 
 from .algorithm_config import DEFAULT_ALGORITHM_CONFIG

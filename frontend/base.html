@@ -1,0 +1,29 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#151629">
+    <meta name="description" content="{% block meta_description %}NextTrack music recommendations.{% endblock %}">
+    <title>{% block title %}NextTrack{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'frontend/css/base.css' %}">
+    {% block page_styles %}{% endblock %}
+    {% block page_scripts %}{% endblock %}
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="brand" href="{% url 'home' %}" aria-label="NextTrack home">
+          <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span>NextTrack<span class="brand-period">.</span></span>
+        </a>
+        {% block header_navigation %}{% endblock %}
+      </header>
+
+      {% block content %}{% endblock %}
+
+      <footer class="site-footer"><span>NextTrack<span class="brand-period">.</span></span><span>Explainable recommendations, not a streaming service.</span></footer>
+    </div>
+  </body>
+</html>

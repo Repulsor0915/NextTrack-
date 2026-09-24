@@ -1,0 +1,92 @@
+{
+  "rows": [
+    {
+      "above_normalization_range": 97,
+      "below_normalization_range": 290,
+      "feature": "tempo",
+      "maximum": 249.899,
+      "mean": 119.49261136416435,
+      "median": 119.995,
+      "minimum": 30.038,
+      "p05": 74.597,
+      "p95": 174.053
+    },
+    {
+      "above_normalization_range": 0,
+      "below_normalization_range": 0,
+      "feature": "energy",
+      "maximum": 1.0,
+      "mean": 0.5425367082093995,
+      "median": 0.575,
+      "minimum": 0.0,
+      "p05": 0.046,
+      "p95": 0.952
+    },
+    {
+      "above_normalization_range": 0,
+      "below_normalization_range": 0,
+      "feature": "valence",
+      "maximum": 1.0,
+      "mean": 0.44036998204203587,
+      "median": 0.415,
+      "minimum": 0.0,
+      "p05": 0.0429,
+      "p95": 0.909
+    },
+    {
+      "above_normalization_range": 0,
+      "below_normalization_range": 0,
+      "feature": "danceability",
+      "maximum": 0.995,
+      "mean": 0.5513152183517523,
+      "median": 0.571,
+      "minimum": 0.0,
+      "p05": 0.194,
+      "p95": 0.83
+    },
+    {
+      "above_normalization_range": 0,
+      "below_normalization_range": 0,
+      "feature": "acousticness",
+      "maximum": 0.996,
+      "mean": 0.4091705123462598,
+      "median": 0.299,
+      "minimum": 0.0,
+      "p05": 0.000433,
+      "p95": 0.987
+    },
+    {
+      "above_normalization_range": 0,
+      "below_normalization_range": 0,
+      "feature": "instrumentalness",
+      "maximum": 1.0,
+      "mean": 0.2916300551684671,
+      "median": 0.00375,
+      "minimum": 0.0,
+      "p05": 0.0,
+      "p95": 0.938
+    },
+    {
+      "above_normalization_range": 1191,
+      "below_normalization_range": 19259,
+      "feature": "loudness",
+      "maximum": 5.096,
+      "mean": -10.670719790214722,
+      "median": -8.611,
+      "minimum": -58.713,
+      "p05": -25.33,
+      "p95": -3.427
+    },
+    {
+      "above_normalization_range": 0,
+      "below_normalization_range": 0,
+      "feature": "speechiness",
+      "maximum": 0.967,
+      "mean": 0.08155386476586353,
+      "median": 0.0467,
+      "minimum": 0.0,
+      "p05": 0.0287,
+      "p95": 0.279
+    }
+  ]
+}

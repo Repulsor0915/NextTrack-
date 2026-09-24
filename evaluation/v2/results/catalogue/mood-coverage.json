@@ -1,0 +1,28 @@
+{
+  "rows": [
+    {
+      "fit_at_least_0_8": 277413,
+      "fit_at_least_0_9": 93314,
+      "mean_fit": 0.6660784938483667,
+      "mood": "happy"
+    },
+    {
+      "fit_at_least_0_8": 336576,
+      "fit_at_least_0_9": 184962,
+      "mean_fit": 0.6437179881512293,
+      "mood": "energetic"
+    },
+    {
+      "fit_at_least_0_8": 296355,
+      "fit_at_least_0_9": 53294,
+      "mean_fit": 0.6461005616453446,
+      "mood": "calm"
+    },
+    {
+      "fit_at_least_0_8": 208644,
+      "fit_at_least_0_9": 27181,
+      "mean_fit": 0.6588581987134491,
+      "mood": "sad"
+    }
+  ]
+}

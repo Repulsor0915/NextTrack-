@@ -2,8 +2,10 @@ import random
 from dataclasses import replace
 
 from django.test import TestCase
+from django.db import connection
+from django.test.utils import CaptureQueriesContext
 
-from recommendations.models import Track, TrackFeatures
+from recommendations.models import CatalogueState, Track, TrackFeatures
 from recommendations.domain.algorithm_config import DEFAULT_ALGORITHM_CONFIG
 from recommendations.services.recommendation_service import (
     MissingTrackFeaturesError,
@@ -79,6 +81,64 @@ class RecommendationServiceTests(TestCase):
         self.assertNotIn("track-a", result_ids)
         self.assertEqual(result["meta"]["candidate_count"], 3)
         self.assertEqual(result["meta"]["returned_count"], 2)
+
+    def test_response_uses_registered_active_catalogue_identity(self):
+        CatalogueState.objects.create(
+            pk=1, version="verified-v1", catalogue_sha256="a" * 64,
+            record_count=4, import_mode="initial",
+        )
+
+        result = self.service.recommend(self._request())
+
+        self.assertEqual(result["meta"]["catalogue_version"], "verified-v1")
+        self.assertEqual(result["meta"]["catalogue_sha256"], "a" * 64)
+
+    def test_candidate_query_defers_display_metadata(self):
+        with CaptureQueriesContext(connection) as queries:
+            candidates = self.service._get_candidates(
+                history=[], candidate_ids=None, context={},
+            )
+
+        self.assertEqual(len(queries), 1)
+        selected_columns = queries[0]["sql"].lower().split(" from ", 1)[0]
+        self.assertNotIn('"title"', selected_columns)
+        self.assertNotIn('"artist"', selected_columns)
+        self.assertNotIn('"data_source"', selected_columns)
+        self.assertEqual(len(candidates), 4)
+        self.assertIsNone(candidates[0].title)
+        self.assertIsNone(candidates[0].artist)
+
+        self.service._attach_selected_metadata(candidates[:2])
+
+        self.assertEqual(candidates[0].title, f"Song {candidates[0].id}")
+        self.assertEqual(candidates[0].artist, "Test Artist")
+        self.assertIsNone(candidates[2].title)
+
+    def test_catalogue_fallback_uses_eligible_candidates_only(self):
+        Track.objects.filter(pk="track-d").update(data_source="other-source")
+
+        result = self.service.recommend(
+            self._request(candidate_ids=["track-a", "track-d"], limit=1)
+        )
+
+        self.assertEqual(
+            result["meta"]["catalogue_version"],
+            "mixed:other-source,test-catalogue-v1",
+        )
+
+    def test_selected_track_metadata_is_returned_in_every_mode(self):
+        requests = [
+            self._request(limit=2),
+            self._request(algorithm="cbf", history=["track-a"], limit=2),
+            self._request(context={"mood": "happy"}, limit=2),
+        ]
+        for request in requests:
+            with self.subTest(algorithm=request["algorithm"], context=request["context"]):
+                result = self.service.recommend(request)
+                for item in result["recommendations"]:
+                    track = item["track"]
+                    self.assertEqual(track["title"], f"Song {track['id']}")
+                    self.assertEqual(track["artist"], "Test Artist")
 
     def test_candidate_ids_restrict_the_pool(self):
         result = self.service.recommend(
@@ -210,6 +270,12 @@ class RecommendationServiceTests(TestCase):
 
         self.assertEqual(result["meta"]["history_count_used"], 5)
         self.assertEqual(result["meta"]["history_window_size"], 5)
+        self.assertEqual(
+            result["meta"]["algorithm_contract_version"],
+            "nexttrack-recommender-v1",
+        )
+        self.assertEqual(result["meta"]["cbf_model_version"], "eight-feature-cbf-v1")
+        self.assertIsNone(result["meta"]["reranker_version"])
 
     def test_service_uses_injected_algorithm_config(self):
         config = replace(
@@ -345,6 +411,11 @@ class RecommendationServiceTests(TestCase):
             result["meta"]["mood_model"],
             "va-targets-panda-2021-relieff-weights-v2",
         )
+        self.assertEqual(
+            result["meta"]["mood_model_version"],
+            "va-targets-panda-2021-relieff-weights-v2",
+        )
+        self.assertEqual(result["meta"]["reranker_version"], "mmr-v1")
         self.assertEqual(result["meta"]["diversity_strength"], 0.4)
         self.assertEqual(result["meta"]["mmr_lambda"], 0.6)
         self.assertIsNotNone(components["history_similarity"])
@@ -378,6 +449,8 @@ class RecommendationServiceTests(TestCase):
         self.assertEqual(result["meta"]["reranker"], "mmr")
         self.assertEqual(result["meta"]["diversity_strength"], 0.2)
         self.assertEqual(result["meta"]["mmr_lambda"], 0.8)
+        self.assertEqual(result["meta"]["cbf_model_version"], "eight-feature-cbf-v1")
+        self.assertEqual(result["meta"]["reranker_version"], "mmr-v1")
         for recommendation in result["recommendations"]:
             self.assertEqual(
                 recommendation["score"],

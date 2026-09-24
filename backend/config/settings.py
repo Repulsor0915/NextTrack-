@@ -32,29 +32,90 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "django.contrib.admin",
+    "django.contrib.contenttypes",
+    "django.contrib.auth",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
     "rest_framework",
+    "rest_framework.authtoken",
+    "drf_spectacular",
+    "corsheaders",
     "offline_evaluation.apps.OfflineEvaluationConfig",
     "recommendations.apps.RecommendationsConfig",
 ]
 
+TEST_RUNNER = "config.test_runner.NextTrackTestRunner"
+
 REST_FRAMEWORK = {
+    "DEFAULT_PARSER_CLASSES": ["rest_framework.parsers.JSONParser"],
+    "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
     "DEFAULT_AUTHENTICATION_CLASSES": [],
     "DEFAULT_PERMISSION_CLASSES": [],
     "UNAUTHENTICATED_USER": None,
     "EXCEPTION_HANDLER": "recommendations.api.exceptions.api_exception_handler",
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_THROTTLE_RATES": {
+        "recommendations": os.environ.get("NEXTTRACK_RECOMMENDATION_RATE", "12/min"),
+        "track_reads": os.environ.get("NEXTTRACK_TRACK_READ_RATE", "120/min"),
+        "suggestions": os.environ.get("NEXTTRACK_SUGGESTION_RATE", "3/hour"),
+        "staff": os.environ.get("NEXTTRACK_STAFF_RATE", "60/min"),
+    },
 }
 
+SPECTACULAR_SETTINGS = {
+    "TITLE": "NextTrack API",
+    "DESCRIPTION": "Track discovery and explainable music recommendations.",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SERVE_AUTHENTICATION": ["rest_framework.authentication.SessionAuthentication"],
+    "SERVE_PERMISSIONS": ["recommendations.api.permissions.IsSuperuser"],
+}
+
+CORS_ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get("NEXTTRACK_CORS_ORIGINS", "").split(",")
+    if origin.strip()
+]
+CORS_ALLOW_CREDENTIALS = False
+CORS_URLS_REGEX = r"^/api/v1/"
+DATA_UPLOAD_MAX_MEMORY_SIZE = 64 * 1024
+
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
+    "recommendations.api.middleware.ApiRequestSizeMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
 
-TEMPLATES = []
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR.parent / "frontend"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+            ]
+        },
+    }
+]
 
 WSGI_APPLICATION = "config.wsgi.application"
+
+STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [BASE_DIR.parent / "frontend" / "static"]
 
 
 # Database
@@ -63,7 +124,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.environ.get("NEXTTRACK_DB_PATH", BASE_DIR / "db.sqlite3"),
+        "NAME": BASE_DIR / "db.schema-final.sqlite3",
     }
 }
 

@@ -1,10 +1,6 @@
-"""Versioned, validated configuration for recommendation algorithms.
-
-The public REST API intentionally does not accept this complete object. It is
-injected by trusted backend code (for example, the future offline evaluator)
-so experiments are reproducible without editing algorithm source files. The
-documented request-level diversity control remains a separate API input.
-"""
+# Focys on the eight audio features available in NextTrack, with weights
+# informed by the literature. The weights are used for both relevance and
+# diversity calculations, and are also used to normalise the mood profile
 
 from __future__ import annotations
 
@@ -15,16 +11,21 @@ from typing import Mapping
 
 from recommendations.audio_features import FEATURE_NAMES
 
-
+# Constants for algorithm configuration and validation.
 ALGORITHM_CONFIG_SCHEMA_VERSION = "nexttrack-algorithm-config-v1"
+
+# supported similarity metrics and context history strategies for validation.
+# calculation support cosine and euclidean distance
 SUPPORTED_SIMILARITY_METRICS = frozenset(
     {"weighted_cosine", "weighted_euclidean"}
 )
+
+# History could be weighted equally or with linear recency
 SUPPORTED_CONTEXT_HISTORY_STRATEGIES = frozenset(
     {"equal", "linear_recency"}
 )
 
-
+## The weightage of audio features, total value of all weights should be 1.0.
 CURRENT_FEATURE_WEIGHTS = {
     "tempo": 0.10,
     "energy": 0.25,
@@ -36,19 +37,17 @@ CURRENT_FEATURE_WEIGHTS = {
     "speechiness": 0.05,
 }
 
+## This is the other version of weightage for audio features
+## Total weightage would be 1.0, and all features have equal weightage
 EQUAL_FEATURE_WEIGHTS = {
     feature_name: 1.0 / len(FEATURE_NAMES)
     for feature_name in FEATURE_NAMES
 }
 
-# ReliefF feature importance reported by Panda et al. (2021) for separating
-# 704 labelled songs across Russell's four arousal-valence quadrants. The
-# source study used 12 Spotify features; only the eight features available in
-# NextTrack are retained and normalised here. These weights are used solely by
-# the mood-fit calculation, not by the Basic CBF similarity baseline.
+# This is a literature-informed preset retained for controlled comparison.
+# The source study used 12 Spotify features; only the eight features available in NextTrack are retained and normalised here.
+# the mood-fit
 # Source: https://renatopanda.github.io/assets/pdf/papers/
-# Panda%20et%20al.%20-%202021%20-%20How%20Does%20the%20Spotify%20API%20Compare%
-# 20to%20the%20Music%20Emotion%20Recognition%20State-of-the-Art.pdf
 _PANDA_2021_MER_RAW_FEATURE_WEIGHTS = {
     "tempo": 0.00721,
     "energy": 0.07299,
@@ -121,15 +120,11 @@ def _validated_frozen_weights(
         raise ValueError(f"{field_name} must sum to 1.0; received {total!r}.")
     return MappingProxyType(validated)
 
-
+# This class encapsulates the configuration for the recommendation algorithm,
+# including feature weights, similarity metrics, and history strategies.
 @dataclass(frozen=True)
 class AlgorithmConfig:
-    """Immutable settings shared by Random, CBF, Context and MMR code.
 
-    ``mood_feature_weights=None`` means that the features present in each mood
-    profile contribute equally. A supplied mood weight vector is renormalised
-    over the features used by the requested mood.
-    """
 
     name: str = "baseline-panda-mood-v1"
     feature_weights: Mapping[str, float] = field(

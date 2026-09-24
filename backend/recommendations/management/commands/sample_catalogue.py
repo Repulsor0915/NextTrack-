@@ -1,8 +1,10 @@
+
+
 from pathlib import Path
 
 from django.core.management.base import BaseCommand, CommandError
 
-from catalogue_pipeline import CataloguePreparationError, sample_catalogue
+from catalogue_preprocess import CataloguePreparationError, sample_catalogue
 
 
 class Command(BaseCommand):

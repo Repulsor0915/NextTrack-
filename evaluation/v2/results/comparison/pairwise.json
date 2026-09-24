@@ -1,0 +1,544 @@
+{
+  "rows": [
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.015984405458089667,
+      "mean_overlap": 0.3,
+      "right_method": "cbf",
+      "scenario_id": "coherent_calm",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.01442495126705653,
+      "mean_overlap": 0.26666666666666666,
+      "right_method": "context_no_mmr",
+      "scenario_id": "coherent_calm",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.01442495126705653,
+      "mean_overlap": 0.26666666666666666,
+      "right_method": "context_mmr",
+      "scenario_id": "coherent_calm",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "cbf",
+      "mean_jaccard": 0.42857142857142855,
+      "mean_overlap": 6,
+      "right_method": "context_no_mmr",
+      "scenario_id": "coherent_calm",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "cbf",
+      "mean_jaccard": 0.42857142857142855,
+      "mean_overlap": 6,
+      "right_method": "context_mmr",
+      "scenario_id": "coherent_calm",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "context_no_mmr",
+      "mean_jaccard": 1.0,
+      "mean_overlap": 10,
+      "right_method": "context_mmr",
+      "scenario_id": "coherent_calm",
+      "top1_same_fraction": 1
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.012475633528265107,
+      "mean_overlap": 0.23333333333333334,
+      "right_method": "cbf",
+      "scenario_id": "coherent_energetic",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.014230019493177388,
+      "mean_overlap": 0.26666666666666666,
+      "right_method": "context_no_mmr",
+      "scenario_id": "coherent_energetic",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.014230019493177388,
+      "mean_overlap": 0.26666666666666666,
+      "right_method": "context_mmr",
+      "scenario_id": "coherent_energetic",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "cbf",
+      "mean_jaccard": 0.0,
+      "mean_overlap": 0,
+      "right_method": "context_no_mmr",
+      "scenario_id": "coherent_energetic",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "cbf",
+      "mean_jaccard": 0.0,
+      "mean_overlap": 0,
+      "right_method": "context_mmr",
+      "scenario_id": "coherent_energetic",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "context_no_mmr",
+      "mean_jaccard": 0.6666666666666666,
+      "mean_overlap": 8,
+      "right_method": "context_mmr",
+      "scenario_id": "coherent_energetic",
+      "top1_same_fraction": 1
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.014230019493177388,
+      "mean_overlap": 0.26666666666666666,
+      "right_method": "cbf",
+      "scenario_id": "coherent_happy",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.014230019493177388,
+      "mean_overlap": 0.26666666666666666,
+      "right_method": "context_no_mmr",
+      "scenario_id": "coherent_happy",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.01442495126705653,
+      "mean_overlap": 0.26666666666666666,
+      "right_method": "context_mmr",
+      "scenario_id": "coherent_happy",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "cbf",
+      "mean_jaccard": 0.3333333333333333,
+      "mean_overlap": 5,
+      "right_method": "context_no_mmr",
+      "scenario_id": "coherent_happy",
+      "top1_same_fraction": 1
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "cbf",
+      "mean_jaccard": 0.3333333333333333,
+      "mean_overlap": 5,
+      "right_method": "context_mmr",
+      "scenario_id": "coherent_happy",
+      "top1_same_fraction": 1
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "context_no_mmr",
+      "mean_jaccard": 0.8181818181818182,
+      "mean_overlap": 9,
+      "right_method": "context_mmr",
+      "scenario_id": "coherent_happy",
+      "top1_same_fraction": 1
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.01793372319688109,
+      "mean_overlap": 0.3333333333333333,
+      "right_method": "cbf",
+      "scenario_id": "coherent_sad",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.015984405458089667,
+      "mean_overlap": 0.3,
+      "right_method": "context_no_mmr",
+      "scenario_id": "coherent_sad",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.012280701754385965,
+      "mean_overlap": 0.23333333333333334,
+      "right_method": "context_mmr",
+      "scenario_id": "coherent_sad",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "cbf",
+      "mean_jaccard": 0.5384615384615384,
+      "mean_overlap": 7,
+      "right_method": "context_no_mmr",
+      "scenario_id": "coherent_sad",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "cbf",
+      "mean_jaccard": 0.3333333333333333,
+      "mean_overlap": 5,
+      "right_method": "context_mmr",
+      "scenario_id": "coherent_sad",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "context_no_mmr",
+      "mean_jaccard": 0.6666666666666666,
+      "mean_overlap": 8,
+      "right_method": "context_mmr",
+      "scenario_id": "coherent_sad",
+      "top1_same_fraction": 1
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.007212475633528265,
+      "mean_overlap": 0.13333333333333333,
+      "right_method": "context_no_mmr",
+      "scenario_id": "mood_only_calm",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.007212475633528265,
+      "mean_overlap": 0.13333333333333333,
+      "right_method": "context_mmr",
+      "scenario_id": "mood_only_calm",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "context_no_mmr",
+      "mean_jaccard": 0.8181818181818182,
+      "mean_overlap": 9,
+      "right_method": "context_mmr",
+      "scenario_id": "mood_only_calm",
+      "top1_same_fraction": 1
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.008771929824561403,
+      "mean_overlap": 0.16666666666666666,
+      "right_method": "context_no_mmr",
+      "scenario_id": "mood_only_energetic",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.007017543859649122,
+      "mean_overlap": 0.13333333333333333,
+      "right_method": "context_mmr",
+      "scenario_id": "mood_only_energetic",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "context_no_mmr",
+      "mean_jaccard": 0.6666666666666666,
+      "mean_overlap": 8,
+      "right_method": "context_mmr",
+      "scenario_id": "mood_only_energetic",
+      "top1_same_fraction": 1
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.008771929824561403,
+      "mean_overlap": 0.16666666666666666,
+      "right_method": "context_no_mmr",
+      "scenario_id": "mood_only_happy",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.008771929824561403,
+      "mean_overlap": 0.16666666666666666,
+      "right_method": "context_mmr",
+      "scenario_id": "mood_only_happy",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "context_no_mmr",
+      "mean_jaccard": 0.8181818181818182,
+      "mean_overlap": 9,
+      "right_method": "context_mmr",
+      "scenario_id": "mood_only_happy",
+      "top1_same_fraction": 1
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.019688109161793373,
+      "mean_overlap": 0.36666666666666664,
+      "right_method": "context_no_mmr",
+      "scenario_id": "mood_only_sad",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.019688109161793373,
+      "mean_overlap": 0.36666666666666664,
+      "right_method": "context_mmr",
+      "scenario_id": "mood_only_sad",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "context_no_mmr",
+      "mean_jaccard": 1.0,
+      "mean_overlap": 10,
+      "right_method": "context_mmr",
+      "scenario_id": "mood_only_sad",
+      "top1_same_fraction": 1
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.015984405458089667,
+      "mean_overlap": 0.3,
+      "right_method": "cbf",
+      "scenario_id": "transition_calm_to_energetic",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.0017543859649122805,
+      "mean_overlap": 0.03333333333333333,
+      "right_method": "context_no_mmr",
+      "scenario_id": "transition_calm_to_energetic",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.005263157894736842,
+      "mean_overlap": 0.1,
+      "right_method": "context_mmr",
+      "scenario_id": "transition_calm_to_energetic",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "cbf",
+      "mean_jaccard": 0.0,
+      "mean_overlap": 0,
+      "right_method": "context_no_mmr",
+      "scenario_id": "transition_calm_to_energetic",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "cbf",
+      "mean_jaccard": 0.0,
+      "mean_overlap": 0,
+      "right_method": "context_mmr",
+      "scenario_id": "transition_calm_to_energetic",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "context_no_mmr",
+      "mean_jaccard": 0.6666666666666666,
+      "mean_overlap": 8,
+      "right_method": "context_mmr",
+      "scenario_id": "transition_calm_to_energetic",
+      "top1_same_fraction": 1
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.012475633528265107,
+      "mean_overlap": 0.23333333333333334,
+      "right_method": "cbf",
+      "scenario_id": "transition_energetic_to_calm",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.010526315789473684,
+      "mean_overlap": 0.2,
+      "right_method": "context_no_mmr",
+      "scenario_id": "transition_energetic_to_calm",
+      "top1_same_fraction": 0.03333333333333333
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.007017543859649122,
+      "mean_overlap": 0.13333333333333333,
+      "right_method": "context_mmr",
+      "scenario_id": "transition_energetic_to_calm",
+      "top1_same_fraction": 0.03333333333333333
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "cbf",
+      "mean_jaccard": 0.0,
+      "mean_overlap": 0,
+      "right_method": "context_no_mmr",
+      "scenario_id": "transition_energetic_to_calm",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "cbf",
+      "mean_jaccard": 0.0,
+      "mean_overlap": 0,
+      "right_method": "context_mmr",
+      "scenario_id": "transition_energetic_to_calm",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "context_no_mmr",
+      "mean_jaccard": 0.8181818181818182,
+      "mean_overlap": 9,
+      "right_method": "context_mmr",
+      "scenario_id": "transition_energetic_to_calm",
+      "top1_same_fraction": 1
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.014230019493177388,
+      "mean_overlap": 0.26666666666666666,
+      "right_method": "cbf",
+      "scenario_id": "transition_happy_to_sad",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.012280701754385965,
+      "mean_overlap": 0.23333333333333334,
+      "right_method": "context_no_mmr",
+      "scenario_id": "transition_happy_to_sad",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.005263157894736842,
+      "mean_overlap": 0.1,
+      "right_method": "context_mmr",
+      "scenario_id": "transition_happy_to_sad",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "cbf",
+      "mean_jaccard": 0.0,
+      "mean_overlap": 0,
+      "right_method": "context_no_mmr",
+      "scenario_id": "transition_happy_to_sad",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "cbf",
+      "mean_jaccard": 0.0,
+      "mean_overlap": 0,
+      "right_method": "context_mmr",
+      "scenario_id": "transition_happy_to_sad",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "context_no_mmr",
+      "mean_jaccard": 0.5384615384615384,
+      "mean_overlap": 7,
+      "right_method": "context_mmr",
+      "scenario_id": "transition_happy_to_sad",
+      "top1_same_fraction": 1
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.01793372319688109,
+      "mean_overlap": 0.3333333333333333,
+      "right_method": "cbf",
+      "scenario_id": "transition_sad_to_happy",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.014230019493177388,
+      "mean_overlap": 0.26666666666666666,
+      "right_method": "context_no_mmr",
+      "scenario_id": "transition_sad_to_happy",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 30,
+      "left_method": "random",
+      "mean_jaccard": 0.010526315789473684,
+      "mean_overlap": 0.2,
+      "right_method": "context_mmr",
+      "scenario_id": "transition_sad_to_happy",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "cbf",
+      "mean_jaccard": 0.05263157894736842,
+      "mean_overlap": 1,
+      "right_method": "context_no_mmr",
+      "scenario_id": "transition_sad_to_happy",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "cbf",
+      "mean_jaccard": 0.05263157894736842,
+      "mean_overlap": 1,
+      "right_method": "context_mmr",
+      "scenario_id": "transition_sad_to_happy",
+      "top1_same_fraction": 0
+    },
+    {
+      "comparison_count": 1,
+      "left_method": "context_no_mmr",
+      "mean_jaccard": 0.8181818181818182,
+      "mean_overlap": 9,
+      "right_method": "context_mmr",
+      "scenario_id": "transition_sad_to_happy",
+      "top1_same_fraction": 1
+    }
+  ]
+}

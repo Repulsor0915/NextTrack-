@@ -1,8 +1,11 @@
+## This file represents each supported mood as target audio-feature values.
+## It scores how closely a candidate matches the selected mood profile.
+
 from dataclasses import dataclass
 
 from .algorithm_config import PANDA_2021_MER_MOOD_FEATURE_WEIGHTS
 
-
+# Public identifier for the current mood targets and feature-weight setup.
 MOOD_MODEL_VERSION = "va-targets-panda-2021-relieff-weights-v2"
 
 # These profiles operate in the same normalized eight-feature space as the
@@ -40,19 +43,13 @@ class MoodScore:
     fit: float
     feature_closeness: dict
 
-
+# Score proximity to a project-defined mood profile.
 def score_mood(
     vector,
     mood,
     *,
     feature_weights=PANDA_2021_MER_MOOD_FEATURE_WEIGHTS,
 ):
-    """Score proximity to a project-defined mood profile.
-
-    No standalone arousal or dominance value is inferred. Activation-related
-    differences are represented only by the audio features explicitly listed
-    in the selected profile.
-    """
 
     if mood not in MOOD_PROFILES:
         raise ValueError(f'Unsupported mood "{mood}"')
@@ -82,7 +79,7 @@ def score_mood(
         feature_closeness=closeness,
     )
 
-
+# Convenience wrapper for callers that need only the final mood-fit value.
 def calculate_mood_fit(
     vector,
     mood,

@@ -1,0 +1,124 @@
+{
+  "catalogue": {
+    "database_track_count": 964224,
+    "record_count": 964224,
+    "sha256": "45652c01108cdce20454d71cc51351b0e3d6e1bef4e47d5219642e55f001e2e2",
+    "usable_feature_count": 964224,
+    "version": "spotify-merged-v2"
+  },
+  "environment": {
+    "database_engine": "django.db.backends.sqlite3",
+    "django": "6.1",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.4"
+  },
+  "outputs": {
+    "protocol.json": {
+      "bytes": 21438,
+      "sha256": "01c96c0ce38d42edb2e58c7e06ed99ff4b47663726e1df2e6d3bbf6494134f09"
+    },
+    "results/catalogue/feature-distributions.csv": {
+      "bytes": 618,
+      "sha256": "1044c082652b67bf08ea5ff6667f977fa3dc6d75adc011e74255a1017d938a3e"
+    },
+    "results/catalogue/feature-distributions.json": {
+      "bytes": 2141,
+      "sha256": "57b26711d8f502e1f8c4bd705d50429c1c59683603b516562c4e7884d3b049b3"
+    },
+    "results/catalogue/mood-coverage.csv": {
+      "bytes": 202,
+      "sha256": "079d5ac07c1e62477ed8cd1fb1a64f3a1a6597384187138a123a9986ee3baa80"
+    },
+    "results/catalogue/mood-coverage.json": {
+      "bytes": 581,
+      "sha256": "ea7f4a769c862f15c43c7da412fa837b2960f82eadb730da6d55163e37e8f73f"
+    },
+    "results/catalogue/source-counts.csv": {
+      "bytes": 49,
+      "sha256": "f5c31f758f78d1377e405a90d09c4aed0bc0a7b0a8fdf370d678dd6fbdff6f50"
+    },
+    "results/catalogue/source-counts.json": {
+      "bytes": 102,
+      "sha256": "13d4a5bbf06f7ea58df90b89b11634b921306a18a2a9f17b5dd9d58da49d9d62"
+    },
+    "results/catalogue/summary.json": {
+      "bytes": 772,
+      "sha256": "f3820aff08fb3079bbfaad024add32f6a6b3a16c8098a5220b2f096d53870efb"
+    },
+    "results/comparison/pairwise.csv": {
+      "bytes": 4426,
+      "sha256": "7ae0c02d57be2344e93effd178b338e63bd31bbccef370d4d9112011fb07563a"
+    },
+    "results/comparison/pairwise.json": {
+      "bytes": 15566,
+      "sha256": "14f84dba0329e693280cae5ea9662e5b0520676a2aa656b6c46b1d4dc528ef1d"
+    },
+    "results/comparison/runs.jsonl": {
+      "bytes": 767060,
+      "sha256": "dd60d2061aed2f9c6c7a93d497528b27db82ec6dae5c1f946cc26c10a22251b5"
+    },
+    "results/comparison/summary.csv": {
+      "bytes": 3941,
+      "sha256": "ebf36d17d027f48454729f7e61925f8356338d04314f7ddfd6056cd3a68bd211"
+    },
+    "results/comparison/summary.json": {
+      "bytes": 11956,
+      "sha256": "bb1c6961640f0306704e9ca1332a47a4335c0f6ba9ae79046e27e9e92354265a"
+    },
+    "results/configuration/configurations.json": {
+      "bytes": 14383,
+      "sha256": "922e13e6bf80d7507182a41e2920d40a34fd236fb6179e053f87847d6f857e04"
+    },
+    "results/configuration/runs.jsonl": {
+      "bytes": 250370,
+      "sha256": "864176889dd8be60fc5c69c64bf1edb8ecef202ae58f1b103a688ebf7a5acf9f"
+    },
+    "results/configuration/summary.csv": {
+      "bytes": 11619,
+      "sha256": "da8cdc1b60a274c9194e5447577be11f4ed9b50584a1d03de25ad8bb2d4485d8"
+    },
+    "results/configuration/summary.json": {
+      "bytes": 37140,
+      "sha256": "c58c0587484757a7b562f184a81090b6c8efa5fb8ce3526ecd46bd3546a72d68"
+    },
+    "results/performance/runs.jsonl": {
+      "bytes": 23680,
+      "sha256": "d4e0d0f85171bc177958015df1c4f2e3bb6a3bf8bc7b8cad423f00d166452252"
+    },
+    "results/performance/summary.csv": {
+      "bytes": 2010,
+      "sha256": "b5e6a8f6fd1698f9b9e6cc619f19e0dbbb3124429a16c6be14600d7b6a802216"
+    },
+    "results/performance/summary.json": {
+      "bytes": 5187,
+      "sha256": "44f9d8a15a28ed905ac19a36582c9bb8973b287f3a5240b459e9c7491d77dc98"
+    }
+  },
+  "run_counts": {
+    "catalogue": 0,
+    "comparison": 392,
+    "configuration": 124,
+    "performance": 120
+  },
+  "schema_version": "nexttrack-offline-evaluation-v2",
+  "selected_studies": [
+    "catalogue",
+    "configuration",
+    "comparison",
+    "performance"
+  ],
+  "source_sha256": {
+    "backend/offline_evaluation/experiments/__init__.py": "7ab790ba1afbe899b0e8b3843fbe6a14cc730892dbdade19a7d92c92368cdb14",
+    "backend/offline_evaluation/experiments/artifacts.py": "ae8f0ec916c0fa082752aee691db5561d87c31db65f12188b855209c7e8b5b50",
+    "backend/offline_evaluation/experiments/config.py": "379254bde5028def1e7dbc392d55d8b8a6781316886e5cda89f1f2bbd944318a",
+    "backend/offline_evaluation/experiments/metrics.py": "072f4ddcb151bb87ade656c0ecda2c73d7e654ae57a29139e05843040040dcd9",
+    "backend/offline_evaluation/experiments/protocol.py": "65d6b63fd199972e54d6511205e7d328a42e36ec5bcd7acea9ac87ab888b3e91",
+    "backend/offline_evaluation/experiments/runner.py": "cf2c5021cdde974fb249a02212edcc21ac689ad2ae03d95c1523cb7ae960eb55",
+    "backend/offline_evaluation/experiments/studies/__init__.py": "3f2a0f417ea5f6a5a76fcfcd2881a3c53132d17b3738d62abfb9dbf4ba74364a",
+    "backend/offline_evaluation/experiments/studies/catalogue.py": "4c3ffb1661fc8ce1db1481519c201181ab03a8b2181f047b05f2a89f529e67f9",
+    "backend/offline_evaluation/experiments/studies/common.py": "798a9289e1826dc3058b3c9f2a72f7b86d5b6676cdd8e370d2fb0b29305b0fe2",
+    "backend/offline_evaluation/experiments/studies/comparison.py": "d65d3db4c103e80663781a84265a34ae37877244d6155469bb8ca1b01d8e27b9",
+    "backend/offline_evaluation/experiments/studies/configuration.py": "50adf0fa47a5140489b7b3ee64f8216f8e386db299835c27642ab85dc84f76ac",
+    "backend/offline_evaluation/experiments/studies/performance.py": "d1cc42ac89d874fc52a94f8ff08936f9ebcef80c0b1ba436f61fb2fe64c94e15"
+  }
+}

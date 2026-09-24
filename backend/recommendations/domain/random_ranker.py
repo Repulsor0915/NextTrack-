@@ -1,14 +1,11 @@
+## This file provides the random recommendation baseline.
+## It is used to compare the main algorithm against a non-personalized method.
 import random
 
 
 def rank_random(candidates, limit, *, random_source=None):
-    """Return up to ``limit`` unique candidates in random order.
 
-    The ranker deliberately knows nothing about Django, HTTP, mood, or audio
-    features. A seeded ``random_source`` can be injected for repeatable tests and
-    offline evaluation.
-    """
-
+    # A recommendation request must ask for at least one result.
     if limit < 1:
         raise ValueError("limit must be at least 1")
 

@@ -1,167 +1,113 @@
-from django.test import SimpleTestCase
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
-from offline_evaluation.protocol import (
-    DEFAULT_COHERENT_GENRES,
-    build_scenario_review,
-    generate_scenario_draft,
-)
-from recommendations.domain.mood_model import MOOD_PROFILES
+from django.test import TestCase
+
+from offline_evaluation.experiments.config import EvaluationConfig, STUDY_NAMES
+from offline_evaluation.experiments.protocol import build_context
+from offline_evaluation.experiments.runner import run_evaluation
+from offline_evaluation.experiments.studies import comparison, configuration
+from offline_evaluation.visualization.publisher import build_report_figures
+from recommendations.models import CatalogueState, Track, TrackFeatures
 
 
-class ScenarioGeneratorTests(SimpleTestCase):
-    def test_generates_deterministic_reviewable_scenario_families(self):
-        records = self._catalogue()
-        candidate_ids = {f"candidate-{index:03d}" for index in range(10)}
-
-        first = generate_scenario_draft(
-            records,
-            candidate_ids=candidate_ids,
-            catalogue_version="test-full",
-            catalogue_sha256="full-sha",
-            candidate_pool_sha256="pool-sha",
-            top_n=10,
-        )
-        second = generate_scenario_draft(
-            records,
-            candidate_ids=candidate_ids,
-            catalogue_version="test-full",
-            catalogue_sha256="full-sha",
-            candidate_pool_sha256="pool-sha",
-            top_n=10,
-        )
-
-        self.assertEqual(first, second)
-        self.assertEqual(first["status"], "draft_requires_human_review")
-        self.assertEqual(first["scenario_count"], 21)
-        self.assertEqual(
-            first["category_counts"],
-            {
-                "coherent_multi_track_history": 9,
-                "mood_only": 4,
-                "single_track_history": 4,
-                "transition_conflicting_history": 4,
-            },
-        )
-
-        for scenario in first["scenarios"]:
-            history = set(scenario["request_template"]["history"])
-            self.assertTrue(history.isdisjoint(candidate_ids))
-            self.assertEqual(scenario["request_template"]["limit"], 10)
-
-    def test_coherent_histories_are_nested_and_use_distinct_artists(self):
-        draft = generate_scenario_draft(
-            self._catalogue(),
-            candidate_ids={f"candidate-{index:03d}" for index in range(10)},
-            catalogue_version="test-full",
-            catalogue_sha256="full-sha",
-            candidate_pool_sha256="pool-sha",
-            top_n=10,
-        )
-        scenarios = {
-            scenario["scenario_id"]: scenario for scenario in draft["scenarios"]
-        }
-
-        for genre in DEFAULT_COHERENT_GENRES:
-            slug = genre.replace("-", "_")
-            h1 = scenarios[f"coherent_{slug}_h1"]
-            h3 = scenarios[f"coherent_{slug}_h3"]
-            h5 = scenarios[f"coherent_{slug}_h5"]
-            ids1 = set(h1["request_template"]["history"])
-            ids3 = set(h3["request_template"]["history"])
-            ids5 = set(h5["request_template"]["history"])
-            self.assertTrue(ids1.issubset(ids3))
-            self.assertTrue(ids3.issubset(ids5))
-            artists = [track["artist"] for track in h5["history_tracks"]]
-            self.assertEqual(len(artists), len(set(artists)))
-
-    def test_review_document_contains_each_scenario_and_approval_gate(self):
-        draft = generate_scenario_draft(
-            self._catalogue(),
-            candidate_ids={f"candidate-{index:03d}" for index in range(10)},
-            catalogue_version="test-full",
-            catalogue_sha256="full-sha",
-            candidate_pool_sha256="pool-sha",
-            top_n=10,
-        )
-
-        review = build_scenario_review(draft, draft_sha256="draft-sha")
-
-        self.assertIn("awaiting human approval", review)
-        self.assertIn("draft-sha", review)
-        self.assertIn("single_happy_anchor", review)
-        self.assertIn("coherent_pop", review)
-        self.assertIn("transition_calm_to_energetic", review)
-        self.assertIn("mood_only_sad", review)
-        self.assertIn("Approve all scenarios as written", review)
-
+class ProtocolTests(TestCase):
     @classmethod
-    def _catalogue(cls):
-        records = [
-            cls._record(
-                f"candidate-{index:03d}",
-                artist=f"Candidate Artist {index}",
-                genre="candidate",
-                energy=0.5,
-                valence=0.5,
-                acousticness=0.5,
+    def setUpTestData(cls):
+        tracks = []
+        for index in range(30):
+            tracks.append(
+                Track(
+                    id=f"track-{index:02d}",
+                    title=f"Track {index}",
+                    artist=f"Artist {index}",
+                    artist_display=f"Artist {index}",
+                    genres=["test"],
+                    data_source="test-source",
+                )
             )
-            for index in range(10)
-        ]
-
-        for genre_index, genre in enumerate(DEFAULT_COHERENT_GENRES):
-            for index in range(12):
-                records.append(
-                    cls._record(
-                        f"{genre.replace('-', '_')}-{index:03d}",
-                        artist=f"{genre} Artist {index}",
-                        genre=genre,
-                        energy=0.35 + genre_index * 0.2 + index * 0.002,
-                        valence=0.4 + genre_index * 0.1 + index * 0.002,
-                        acousticness=0.55 - genre_index * 0.15,
-                    )
+        Track.objects.bulk_create(tracks)
+        TrackFeatures.objects.bulk_create(
+            [
+                TrackFeatures(
+                    track=track,
+                    tempo=60.0 + index * 4,
+                    energy=(index % 10) / 10,
+                    valence=((index * 3) % 10) / 10,
+                    danceability=((index * 7) % 10) / 10,
+                    acousticness=((index * 9) % 10) / 10,
+                    instrumentalness=((index * 2) % 10) / 10,
+                    loudness=-25.0 + index * 0.8,
+                    speechiness=((index * 4) % 10) / 10,
+                    feature_source="test",
                 )
+                for index, track in enumerate(tracks)
+            ]
+        )
+        CatalogueState.objects.create(
+            id=1,
+            version="test-catalogue",
+            catalogue_sha256="a" * 64,
+            record_count=30,
+            import_mode="test",
+        )
 
-        for mood, profile in MOOD_PROFILES.items():
-            for index in range(10):
-                overrides = dict(profile)
-                records.append(
-                    cls._record(
-                        f"mood-{mood}-{index:03d}",
-                        artist=f"Mood {mood} Artist {index}",
-                        genre=f"mood-{mood}",
-                        **overrides,
-                    )
-                )
-        return records
+    def test_builds_twelve_scenarios_and_a_disjoint_pool(self):
+        config = EvaluationConfig(
+            candidate_count=5,
+            top_n=3,
+            random_repetitions=1,
+            performance_fresh_repetitions=1,
+            performance_warm_repetitions=1,
+        )
 
-    @staticmethod
-    def _record(
-        track_id,
-        *,
-        artist,
-        genre,
-        tempo=120.0,
-        energy=0.5,
-        valence=0.5,
-        danceability=0.5,
-        acousticness=0.5,
-        instrumentalness=0.1,
-        loudness=-10.0,
-        speechiness=0.05,
-    ):
-        return {
-            "id": track_id,
-            "title": f"Track {track_id}",
-            "artist": artist,
-            "genres": [genre],
-            "features": {
-                "tempo": tempo,
-                "energy": energy,
-                "valence": valence,
-                "danceability": danceability,
-                "acousticness": acousticness,
-                "instrumentalness": instrumentalness,
-                "loudness": loudness,
-                "speechiness": speechiness,
-            },
+        first = build_context(config)
+        second = build_context(config)
+
+        history_ids = {
+            track_id for scenario in first.scenarios for track_id in scenario["history"]
         }
+        self.assertEqual(len(first.scenarios), 12)
+        self.assertEqual(len(first.candidate_ids), 5)
+        self.assertTrue(history_ids.isdisjoint(first.candidate_ids))
+        self.assertEqual(first.candidate_ids, second.candidate_ids)
+
+    def test_compact_configuration_and_comparison_studies_execute(self):
+        config = EvaluationConfig(
+            candidate_count=5,
+            top_n=3,
+            random_repetitions=1,
+            performance_fresh_repetitions=1,
+            performance_warm_repetitions=1,
+        )
+        context = build_context(config)
+
+        configuration_result = configuration.run(context)
+        comparison_result = comparison.run(context)
+
+        self.assertEqual(len(configuration_result.runs), 124)
+        self.assertEqual(len(comparison_result.runs), 44)
+        self.assertTrue(configuration_result.tables["summary"])
+        self.assertTrue(comparison_result.tables["pairwise"])
+
+    def test_end_to_end_run_and_figure_build(self):
+        config = EvaluationConfig(
+            candidate_count=5,
+            top_n=3,
+            random_repetitions=1,
+            performance_fresh_repetitions=1,
+            performance_warm_repetitions=1,
+        )
+        with TemporaryDirectory() as temporary:
+            output_dir = Path(temporary) / "evaluation"
+
+            manifest = run_evaluation(
+                config=config,
+                output_dir=output_dir,
+                selected_studies=STUDY_NAMES,
+            )
+            figure_manifest = build_report_figures(output_dir)
+
+            self.assertTrue(manifest.is_file())
+            self.assertTrue(figure_manifest.is_file())
+            self.assertEqual(len(list((output_dir / "figures").glob("*.svg"))), 5)

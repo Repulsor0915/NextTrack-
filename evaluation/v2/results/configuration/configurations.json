@@ -1,0 +1,436 @@
+{
+  "cbf/current_cosine": {
+    "context_history_strategy": "linear_recency",
+    "default_diversity_strength": 0.2,
+    "diversity_similarity_metric": "weighted_cosine",
+    "feature_weights": {
+      "acousticness": 0.1,
+      "danceability": 0.15,
+      "energy": 0.25,
+      "instrumentalness": 0.05,
+      "loudness": 0.05,
+      "speechiness": 0.05,
+      "tempo": 0.1,
+      "valence": 0.25
+    },
+    "history_relevance_weight": 0.65,
+    "history_window_size": 5,
+    "mood_feature_weights": {
+      "acousticness": 0.23580174066971527,
+      "danceability": 0.015083345626198553,
+      "energy": 0.2691768697448001,
+      "instrumentalness": 0.09142203864876824,
+      "loudness": 0.055981708216551115,
+      "speechiness": 0.05837881693465113,
+      "tempo": 0.026589467473078623,
+      "valence": 0.24756601268623687
+    },
+    "mood_relevance_weight": 0.35,
+    "name": "baseline-panda-mood-v1",
+    "relevance_similarity_metric": "weighted_cosine",
+    "schema_version": "nexttrack-algorithm-config-v1"
+  },
+  "cbf/current_euclidean": {
+    "context_history_strategy": "linear_recency",
+    "default_diversity_strength": 0.2,
+    "diversity_similarity_metric": "weighted_cosine",
+    "feature_weights": {
+      "acousticness": 0.1,
+      "danceability": 0.15,
+      "energy": 0.25,
+      "instrumentalness": 0.05,
+      "loudness": 0.05,
+      "speechiness": 0.05,
+      "tempo": 0.1,
+      "valence": 0.25
+    },
+    "history_relevance_weight": 0.65,
+    "history_window_size": 5,
+    "mood_feature_weights": {
+      "acousticness": 0.23580174066971527,
+      "danceability": 0.015083345626198553,
+      "energy": 0.2691768697448001,
+      "instrumentalness": 0.09142203864876824,
+      "loudness": 0.055981708216551115,
+      "speechiness": 0.05837881693465113,
+      "tempo": 0.026589467473078623,
+      "valence": 0.24756601268623687
+    },
+    "mood_relevance_weight": 0.35,
+    "name": "evaluation-current-euclidean",
+    "relevance_similarity_metric": "weighted_euclidean",
+    "schema_version": "nexttrack-algorithm-config-v1"
+  },
+  "cbf/equal_cosine": {
+    "context_history_strategy": "linear_recency",
+    "default_diversity_strength": 0.2,
+    "diversity_similarity_metric": "weighted_cosine",
+    "feature_weights": {
+      "acousticness": 0.125,
+      "danceability": 0.125,
+      "energy": 0.125,
+      "instrumentalness": 0.125,
+      "loudness": 0.125,
+      "speechiness": 0.125,
+      "tempo": 0.125,
+      "valence": 0.125
+    },
+    "history_relevance_weight": 0.65,
+    "history_window_size": 5,
+    "mood_feature_weights": {
+      "acousticness": 0.23580174066971527,
+      "danceability": 0.015083345626198553,
+      "energy": 0.2691768697448001,
+      "instrumentalness": 0.09142203864876824,
+      "loudness": 0.055981708216551115,
+      "speechiness": 0.05837881693465113,
+      "tempo": 0.026589467473078623,
+      "valence": 0.24756601268623687
+    },
+    "mood_relevance_weight": 0.35,
+    "name": "evaluation-equal-cosine",
+    "relevance_similarity_metric": "weighted_cosine",
+    "schema_version": "nexttrack-algorithm-config-v1"
+  },
+  "cbf/equal_euclidean": {
+    "context_history_strategy": "linear_recency",
+    "default_diversity_strength": 0.2,
+    "diversity_similarity_metric": "weighted_cosine",
+    "feature_weights": {
+      "acousticness": 0.125,
+      "danceability": 0.125,
+      "energy": 0.125,
+      "instrumentalness": 0.125,
+      "loudness": 0.125,
+      "speechiness": 0.125,
+      "tempo": 0.125,
+      "valence": 0.125
+    },
+    "history_relevance_weight": 0.65,
+    "history_window_size": 5,
+    "mood_feature_weights": {
+      "acousticness": 0.23580174066971527,
+      "danceability": 0.015083345626198553,
+      "energy": 0.2691768697448001,
+      "instrumentalness": 0.09142203864876824,
+      "loudness": 0.055981708216551115,
+      "speechiness": 0.05837881693465113,
+      "tempo": 0.026589467473078623,
+      "valence": 0.24756601268623687
+    },
+    "mood_relevance_weight": 0.35,
+    "name": "evaluation-equal-euclidean",
+    "relevance_similarity_metric": "weighted_euclidean",
+    "schema_version": "nexttrack-algorithm-config-v1"
+  },
+  "history/window_1_recency": {
+    "context_history_strategy": "linear_recency",
+    "default_diversity_strength": 0.2,
+    "diversity_similarity_metric": "weighted_cosine",
+    "feature_weights": {
+      "acousticness": 0.1,
+      "danceability": 0.15,
+      "energy": 0.25,
+      "instrumentalness": 0.05,
+      "loudness": 0.05,
+      "speechiness": 0.05,
+      "tempo": 0.1,
+      "valence": 0.25
+    },
+    "history_relevance_weight": 0.65,
+    "history_window_size": 1,
+    "mood_feature_weights": {
+      "acousticness": 0.23580174066971527,
+      "danceability": 0.015083345626198553,
+      "energy": 0.2691768697448001,
+      "instrumentalness": 0.09142203864876824,
+      "loudness": 0.055981708216551115,
+      "speechiness": 0.05837881693465113,
+      "tempo": 0.026589467473078623,
+      "valence": 0.24756601268623687
+    },
+    "mood_relevance_weight": 0.35,
+    "name": "evaluation-window-1-recency",
+    "relevance_similarity_metric": "weighted_cosine",
+    "schema_version": "nexttrack-algorithm-config-v1"
+  },
+  "history/window_5_equal": {
+    "context_history_strategy": "equal",
+    "default_diversity_strength": 0.2,
+    "diversity_similarity_metric": "weighted_cosine",
+    "feature_weights": {
+      "acousticness": 0.1,
+      "danceability": 0.15,
+      "energy": 0.25,
+      "instrumentalness": 0.05,
+      "loudness": 0.05,
+      "speechiness": 0.05,
+      "tempo": 0.1,
+      "valence": 0.25
+    },
+    "history_relevance_weight": 0.65,
+    "history_window_size": 5,
+    "mood_feature_weights": {
+      "acousticness": 0.23580174066971527,
+      "danceability": 0.015083345626198553,
+      "energy": 0.2691768697448001,
+      "instrumentalness": 0.09142203864876824,
+      "loudness": 0.055981708216551115,
+      "speechiness": 0.05837881693465113,
+      "tempo": 0.026589467473078623,
+      "valence": 0.24756601268623687
+    },
+    "mood_relevance_weight": 0.35,
+    "name": "evaluation-window-5-equal",
+    "relevance_similarity_metric": "weighted_cosine",
+    "schema_version": "nexttrack-algorithm-config-v1"
+  },
+  "history/window_5_recency": {
+    "context_history_strategy": "linear_recency",
+    "default_diversity_strength": 0.2,
+    "diversity_similarity_metric": "weighted_cosine",
+    "feature_weights": {
+      "acousticness": 0.1,
+      "danceability": 0.15,
+      "energy": 0.25,
+      "instrumentalness": 0.05,
+      "loudness": 0.05,
+      "speechiness": 0.05,
+      "tempo": 0.1,
+      "valence": 0.25
+    },
+    "history_relevance_weight": 0.65,
+    "history_window_size": 5,
+    "mood_feature_weights": {
+      "acousticness": 0.23580174066971527,
+      "danceability": 0.015083345626198553,
+      "energy": 0.2691768697448001,
+      "instrumentalness": 0.09142203864876824,
+      "loudness": 0.055981708216551115,
+      "speechiness": 0.05837881693465113,
+      "tempo": 0.026589467473078623,
+      "valence": 0.24756601268623687
+    },
+    "mood_relevance_weight": 0.35,
+    "name": "evaluation-window-5-recency",
+    "relevance_similarity_metric": "weighted_cosine",
+    "schema_version": "nexttrack-algorithm-config-v1"
+  },
+  "history_mood/history_0.5_mood_0.5": {
+    "context_history_strategy": "linear_recency",
+    "default_diversity_strength": 0.2,
+    "diversity_similarity_metric": "weighted_cosine",
+    "feature_weights": {
+      "acousticness": 0.1,
+      "danceability": 0.15,
+      "energy": 0.25,
+      "instrumentalness": 0.05,
+      "loudness": 0.05,
+      "speechiness": 0.05,
+      "tempo": 0.1,
+      "valence": 0.25
+    },
+    "history_relevance_weight": 0.5,
+    "history_window_size": 5,
+    "mood_feature_weights": {
+      "acousticness": 0.23580174066971527,
+      "danceability": 0.015083345626198553,
+      "energy": 0.2691768697448001,
+      "instrumentalness": 0.09142203864876824,
+      "loudness": 0.055981708216551115,
+      "speechiness": 0.05837881693465113,
+      "tempo": 0.026589467473078623,
+      "valence": 0.24756601268623687
+    },
+    "mood_relevance_weight": 0.5,
+    "name": "evaluation-history_0.5_mood_0.5",
+    "relevance_similarity_metric": "weighted_cosine",
+    "schema_version": "nexttrack-algorithm-config-v1"
+  },
+  "history_mood/history_0.65_mood_0.35": {
+    "context_history_strategy": "linear_recency",
+    "default_diversity_strength": 0.2,
+    "diversity_similarity_metric": "weighted_cosine",
+    "feature_weights": {
+      "acousticness": 0.1,
+      "danceability": 0.15,
+      "energy": 0.25,
+      "instrumentalness": 0.05,
+      "loudness": 0.05,
+      "speechiness": 0.05,
+      "tempo": 0.1,
+      "valence": 0.25
+    },
+    "history_relevance_weight": 0.65,
+    "history_window_size": 5,
+    "mood_feature_weights": {
+      "acousticness": 0.23580174066971527,
+      "danceability": 0.015083345626198553,
+      "energy": 0.2691768697448001,
+      "instrumentalness": 0.09142203864876824,
+      "loudness": 0.055981708216551115,
+      "speechiness": 0.05837881693465113,
+      "tempo": 0.026589467473078623,
+      "valence": 0.24756601268623687
+    },
+    "mood_relevance_weight": 0.35,
+    "name": "evaluation-history_0.65_mood_0.35",
+    "relevance_similarity_metric": "weighted_cosine",
+    "schema_version": "nexttrack-algorithm-config-v1"
+  },
+  "history_mood/history_0_mood_1": {
+    "context_history_strategy": "linear_recency",
+    "default_diversity_strength": 0.2,
+    "diversity_similarity_metric": "weighted_cosine",
+    "feature_weights": {
+      "acousticness": 0.1,
+      "danceability": 0.15,
+      "energy": 0.25,
+      "instrumentalness": 0.05,
+      "loudness": 0.05,
+      "speechiness": 0.05,
+      "tempo": 0.1,
+      "valence": 0.25
+    },
+    "history_relevance_weight": 0.0,
+    "history_window_size": 5,
+    "mood_feature_weights": {
+      "acousticness": 0.23580174066971527,
+      "danceability": 0.015083345626198553,
+      "energy": 0.2691768697448001,
+      "instrumentalness": 0.09142203864876824,
+      "loudness": 0.055981708216551115,
+      "speechiness": 0.05837881693465113,
+      "tempo": 0.026589467473078623,
+      "valence": 0.24756601268623687
+    },
+    "mood_relevance_weight": 1.0,
+    "name": "evaluation-history_0_mood_1",
+    "relevance_similarity_metric": "weighted_cosine",
+    "schema_version": "nexttrack-algorithm-config-v1"
+  },
+  "history_mood/history_1_mood_0": {
+    "context_history_strategy": "linear_recency",
+    "default_diversity_strength": 0.2,
+    "diversity_similarity_metric": "weighted_cosine",
+    "feature_weights": {
+      "acousticness": 0.1,
+      "danceability": 0.15,
+      "energy": 0.25,
+      "instrumentalness": 0.05,
+      "loudness": 0.05,
+      "speechiness": 0.05,
+      "tempo": 0.1,
+      "valence": 0.25
+    },
+    "history_relevance_weight": 1.0,
+    "history_window_size": 5,
+    "mood_feature_weights": {
+      "acousticness": 0.23580174066971527,
+      "danceability": 0.015083345626198553,
+      "energy": 0.2691768697448001,
+      "instrumentalness": 0.09142203864876824,
+      "loudness": 0.055981708216551115,
+      "speechiness": 0.05837881693465113,
+      "tempo": 0.026589467473078623,
+      "valence": 0.24756601268623687
+    },
+    "mood_relevance_weight": 0.0,
+    "name": "evaluation-history_1_mood_0",
+    "relevance_similarity_metric": "weighted_cosine",
+    "schema_version": "nexttrack-algorithm-config-v1"
+  },
+  "mmr/mmr_0": {
+    "context_history_strategy": "linear_recency",
+    "default_diversity_strength": 0.0,
+    "diversity_similarity_metric": "weighted_cosine",
+    "feature_weights": {
+      "acousticness": 0.1,
+      "danceability": 0.15,
+      "energy": 0.25,
+      "instrumentalness": 0.05,
+      "loudness": 0.05,
+      "speechiness": 0.05,
+      "tempo": 0.1,
+      "valence": 0.25
+    },
+    "history_relevance_weight": 0.65,
+    "history_window_size": 5,
+    "mood_feature_weights": {
+      "acousticness": 0.23580174066971527,
+      "danceability": 0.015083345626198553,
+      "energy": 0.2691768697448001,
+      "instrumentalness": 0.09142203864876824,
+      "loudness": 0.055981708216551115,
+      "speechiness": 0.05837881693465113,
+      "tempo": 0.026589467473078623,
+      "valence": 0.24756601268623687
+    },
+    "mood_relevance_weight": 0.35,
+    "name": "evaluation-mmr_0",
+    "relevance_similarity_metric": "weighted_cosine",
+    "schema_version": "nexttrack-algorithm-config-v1"
+  },
+  "mmr/mmr_0.2": {
+    "context_history_strategy": "linear_recency",
+    "default_diversity_strength": 0.2,
+    "diversity_similarity_metric": "weighted_cosine",
+    "feature_weights": {
+      "acousticness": 0.1,
+      "danceability": 0.15,
+      "energy": 0.25,
+      "instrumentalness": 0.05,
+      "loudness": 0.05,
+      "speechiness": 0.05,
+      "tempo": 0.1,
+      "valence": 0.25
+    },
+    "history_relevance_weight": 0.65,
+    "history_window_size": 5,
+    "mood_feature_weights": {
+      "acousticness": 0.23580174066971527,
+      "danceability": 0.015083345626198553,
+      "energy": 0.2691768697448001,
+      "instrumentalness": 0.09142203864876824,
+      "loudness": 0.055981708216551115,
+      "speechiness": 0.05837881693465113,
+      "tempo": 0.026589467473078623,
+      "valence": 0.24756601268623687
+    },
+    "mood_relevance_weight": 0.35,
+    "name": "evaluation-mmr_0.2",
+    "relevance_similarity_metric": "weighted_cosine",
+    "schema_version": "nexttrack-algorithm-config-v1"
+  },
+  "mmr/mmr_0.4": {
+    "context_history_strategy": "linear_recency",
+    "default_diversity_strength": 0.4,
+    "diversity_similarity_metric": "weighted_cosine",
+    "feature_weights": {
+      "acousticness": 0.1,
+      "danceability": 0.15,
+      "energy": 0.25,
+      "instrumentalness": 0.05,
+      "loudness": 0.05,
+      "speechiness": 0.05,
+      "tempo": 0.1,
+      "valence": 0.25
+    },
+    "history_relevance_weight": 0.65,
+    "history_window_size": 5,
+    "mood_feature_weights": {
+      "acousticness": 0.23580174066971527,
+      "danceability": 0.015083345626198553,
+      "energy": 0.2691768697448001,
+      "instrumentalness": 0.09142203864876824,
+      "loudness": 0.055981708216551115,
+      "speechiness": 0.05837881693465113,
+      "tempo": 0.026589467473078623,
+      "valence": 0.24756601268623687
+    },
+    "mood_relevance_weight": 0.35,
+    "name": "evaluation-mmr_0.4",
+    "relevance_similarity_metric": "weighted_cosine",
+    "schema_version": "nexttrack-algorithm-config-v1"
+  }
+}

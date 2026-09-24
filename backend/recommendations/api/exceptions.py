@@ -18,8 +18,10 @@ def api_exception_handler(exc, context):
         message = "Request validation failed. See details for specific fields."
         details = _plain(response.data)
     else:
-        code = str(getattr(exc, "default_code", "API_ERROR")).upper()
         detail = response.data.get("detail") if isinstance(response.data, dict) else None
+        code = str(
+            getattr(detail, "code", getattr(exc, "default_code", "API_ERROR"))
+        ).upper()
         message = str(detail or "The API request could not be completed.")
         details = {}
 

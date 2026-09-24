@@ -1,8 +1,0 @@
-algorithm,category,run_count,scenario_count,catalogue_coverage,mean_history_match,sd_history_match,mean_mood_match,sd_mood_match,mean_intra_list_diversity,sd_intra_list_diversity,mean_distinct_artist_fraction,sd_distinct_artist_fraction,mean_processing_ms,sd_processing_ms
-cbf,coherent_multi_track_history,9,9,0.068,0.92216,0.003509,,,0.100815,0.002502,1.0,0.0,31.488111,3.07274
-cbf,single_track_history,4,4,0.074,0.88783,0.021967,,,0.115491,0.012044,1.0,0.0,28.2735,0.937228
-cbf,transition_conflicting_history,4,4,0.052,0.877899,0.012938,0.662189,0.023289,0.111217,0.007594,1.0,0.0,36.418,4.904062
-context_mmr,coherent_multi_track_history,9,9,0.066,0.922237,0.003073,,,0.101329,0.003156,1.0,0.0,152.088889,13.689263
-context_mmr,mood_only,4,4,0.07,,,0.953568,0.021331,0.229248,0.030453,1.0,0.0,138.47875,1.031033
-context_mmr,single_track_history,4,4,0.074,0.887826,0.021922,,,0.123821,0.015342,1.0,0.0,137.058,1.938866
-context_mmr,transition_conflicting_history,4,4,0.078,0.877573,0.013469,0.866668,0.013557,0.113435,0.017719,1.0,0.0,149.96225,5.765423

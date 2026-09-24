@@ -1,0 +1,18 @@
+{
+  "candidate_artist_policy": "allow_missing",
+  "candidate_count": 500,
+  "history_mood_ratios": [
+    [1.0, 0.0],
+    [0.65, 0.35],
+    [0.5, 0.5],
+    [0.0, 1.0]
+  ],
+  "history_windows": [1, 5],
+  "mmr_strengths": [0.0, 0.2, 0.4],
+  "performance_fresh_repetitions": 5,
+  "performance_warm_repetitions": 10,
+  "random_repetitions": 30,
+  "schema_version": "nexttrack-offline-evaluation-v2",
+  "seed": 221611,
+  "top_n": 10
+}

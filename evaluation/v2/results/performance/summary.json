@@ -1,0 +1,183 @@
+{
+  "fresh_service_is_not_cold_process": true,
+  "rows": [
+    {
+      "candidate_count": 500,
+      "maximum_ms": 21.988600001350278,
+      "method": "random",
+      "minimum_ms": 20.682899998064386,
+      "p50_ms": 21.2645000028715,
+      "p95_ms": 21.963660001347307,
+      "phase": "fresh_service",
+      "sample_count": 5,
+      "scope": "fixed_pool"
+    },
+    {
+      "candidate_count": 500,
+      "maximum_ms": 21.95220000066911,
+      "method": "random",
+      "minimum_ms": 20.380399997520726,
+      "p50_ms": 21.14254999833065,
+      "p95_ms": 21.707895000145072,
+      "phase": "same_process_warm",
+      "sample_count": 10,
+      "scope": "fixed_pool"
+    },
+    {
+      "candidate_count": 500,
+      "maximum_ms": 130.69290000203182,
+      "method": "cbf",
+      "minimum_ms": 28.372499997203704,
+      "p50_ms": 29.634700000315206,
+      "p95_ms": 110.66318000157479,
+      "phase": "fresh_service",
+      "sample_count": 5,
+      "scope": "fixed_pool"
+    },
+    {
+      "candidate_count": 500,
+      "maximum_ms": 29.821100000845036,
+      "method": "cbf",
+      "minimum_ms": 27.580199999647448,
+      "p50_ms": 28.69594999901892,
+      "p95_ms": 29.648390001966618,
+      "phase": "same_process_warm",
+      "sample_count": 10,
+      "scope": "fixed_pool"
+    },
+    {
+      "candidate_count": 500,
+      "maximum_ms": 38.32740000143531,
+      "method": "context_no_mmr",
+      "minimum_ms": 37.17089999918244,
+      "p50_ms": 38.24700000041048,
+      "p95_ms": 38.31434000094305,
+      "phase": "fresh_service",
+      "sample_count": 5,
+      "scope": "fixed_pool"
+    },
+    {
+      "candidate_count": 500,
+      "maximum_ms": 42.25170000063372,
+      "method": "context_no_mmr",
+      "minimum_ms": 37.35690000030445,
+      "p50_ms": 38.04619999937131,
+      "p95_ms": 40.713105000031646,
+      "phase": "same_process_warm",
+      "sample_count": 10,
+      "scope": "fixed_pool"
+    },
+    {
+      "candidate_count": 500,
+      "maximum_ms": 39.74060000109603,
+      "method": "context_mmr",
+      "minimum_ms": 38.08469999785302,
+      "p50_ms": 39.07299999991665,
+      "p95_ms": 39.677680000750115,
+      "phase": "fresh_service",
+      "sample_count": 5,
+      "scope": "fixed_pool"
+    },
+    {
+      "candidate_count": 500,
+      "maximum_ms": 41.04100000040489,
+      "method": "context_mmr",
+      "minimum_ms": 38.38990000076592,
+      "p50_ms": 39.99670000121114,
+      "p95_ms": 41.02839999941352,
+      "phase": "same_process_warm",
+      "sample_count": 10,
+      "scope": "fixed_pool"
+    },
+    {
+      "candidate_count": 964219,
+      "maximum_ms": 7434.635600002366,
+      "method": "random",
+      "minimum_ms": 6537.384600000223,
+      "p50_ms": 6624.101900000824,
+      "p95_ms": 7292.958980002004,
+      "phase": "fresh_service",
+      "sample_count": 5,
+      "scope": "full_catalogue"
+    },
+    {
+      "candidate_count": 964219,
+      "maximum_ms": 6883.703999999852,
+      "method": "random",
+      "minimum_ms": 6501.717099999951,
+      "p50_ms": 6677.8629000000365,
+      "p95_ms": 6870.713985000475,
+      "phase": "same_process_warm",
+      "sample_count": 10,
+      "scope": "full_catalogue"
+    },
+    {
+      "candidate_count": 964219,
+      "maximum_ms": 20638.82150000063,
+      "method": "cbf",
+      "minimum_ms": 19419.352400000207,
+      "p50_ms": 19762.490699999034,
+      "p95_ms": 20601.426999999967,
+      "phase": "fresh_service",
+      "sample_count": 5,
+      "scope": "full_catalogue"
+    },
+    {
+      "candidate_count": 964219,
+      "maximum_ms": 20580.490699998336,
+      "method": "cbf",
+      "minimum_ms": 19634.598099997675,
+      "p50_ms": 19903.48669999912,
+      "p95_ms": 20432.454694999433,
+      "phase": "same_process_warm",
+      "sample_count": 10,
+      "scope": "full_catalogue"
+    },
+    {
+      "candidate_count": 964219,
+      "maximum_ms": 27173.468799999682,
+      "method": "context_no_mmr",
+      "minimum_ms": 26318.773999999394,
+      "p50_ms": 26467.879800002265,
+      "p95_ms": 27119.37168000004,
+      "phase": "fresh_service",
+      "sample_count": 5,
+      "scope": "full_catalogue"
+    },
+    {
+      "candidate_count": 964219,
+      "maximum_ms": 27699.237299999368,
+      "method": "context_no_mmr",
+      "minimum_ms": 26653.60619999774,
+      "p50_ms": 27011.134850001326,
+      "p95_ms": 27556.091669999296,
+      "phase": "same_process_warm",
+      "sample_count": 10,
+      "scope": "full_catalogue"
+    },
+    {
+      "candidate_count": 964219,
+      "maximum_ms": 28323.435999998765,
+      "method": "context_mmr",
+      "minimum_ms": 26806.83549999958,
+      "p50_ms": 27032.662000001437,
+      "p95_ms": 28174.002099999052,
+      "phase": "fresh_service",
+      "sample_count": 5,
+      "scope": "full_catalogue"
+    },
+    {
+      "candidate_count": 964219,
+      "maximum_ms": 27415.025199999945,
+      "method": "context_mmr",
+      "minimum_ms": 26506.6599999991,
+      "p50_ms": 26998.774599998796,
+      "p95_ms": 27293.12834499997,
+      "phase": "same_process_warm",
+      "sample_count": 10,
+      "scope": "full_catalogue"
+    }
+  ],
+  "scenario_id": "transition_calm_to_energetic",
+  "timed_region": "RecommendationService.recommend in the current process"
+}

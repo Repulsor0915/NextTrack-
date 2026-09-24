@@ -1,0 +1,389 @@
+{
+  "catalogue": {
+    "missing_album_count": 777524,
+    "missing_artist_count": 777524,
+    "multi_artist_track_count": 22523,
+    "sha256": "45652c01108cdce20454d71cc51351b0e3d6e1bef4e47d5219642e55f001e2e2",
+    "track_count": 964224,
+    "usable_feature_count": 964224,
+    "version": "spotify-merged-v2"
+  },
+  "figures": [
+    {
+      "caption": "Shows the percentage of usable tracks clamped when runtime feature vectors are built.",
+      "group": "configuration",
+      "path": "figures/01-catalogue-clamping.svg",
+      "sha256": "ec9d8f89ab722fec12a354dffaf916d727de14b4ccd4d26b1b2481fac22fa1c5",
+      "title": "Catalogue values outside runtime ranges"
+    },
+    {
+      "caption": "Compares feature weights and similarity metrics on the fixed candidate pool.",
+      "group": "configuration",
+      "path": "figures/02-cbf-configuration.svg",
+      "sha256": "ad8afc91647da82f7bdb405e94e7bd8cbdfb9c1f04e5ded20671ba48dbdbfe59",
+      "title": "CBF configuration comparison"
+    },
+    {
+      "caption": "Compares history profiles, history and mood ratios, and MMR strengths.",
+      "group": "configuration",
+      "path": "figures/03-context-configuration.svg",
+      "sha256": "4408934832b9917f0f954d56880b09faaa2a23c633bfa2621e0d33b26b165005",
+      "title": "Context parameter trade-offs"
+    },
+    {
+      "caption": "Compares Random, Basic CBF, Context, and Context with MMR using diagnostic proxies.",
+      "group": "comparison",
+      "path": "figures/04-method-comparison.svg",
+      "sha256": "57abc3ca129a7c6004711a7f0d6b04ffc499bc8830bdfedf556065d1fdb24ee1",
+      "title": "Recommendation method comparison"
+    },
+    {
+      "caption": "Local P50 and P95 service time for fixed-pool and full-catalogue requests.",
+      "group": "latency",
+      "path": "figures/05-latency.svg",
+      "sha256": "d55842efbeb588b9344b922595cd33e13844e62c20fa837a3cf059ca715b71d0",
+      "title": "Recommendation service latency"
+    }
+  ],
+  "methods": [
+    {
+      "category": "all",
+      "mean_artist_diversity": 1.0,
+      "mean_artist_metadata_coverage": 0.22333333333333333,
+      "mean_history_match": 0.6826330288339392,
+      "mean_intra_list_diversity": 0.34450264639005973,
+      "mean_mean_relevance": null,
+      "mean_mood_match": 0.654593178060199,
+      "mean_processing_ms": 20.775766666666666,
+      "method": "random",
+      "pool_coverage": 0.444,
+      "run_count": 360,
+      "scenario_count": 12,
+      "sd_artist_diversity": 0.0,
+      "sd_artist_metadata_coverage": 0.14761059883656352,
+      "sd_history_match": 0.03825766695879935,
+      "sd_intra_list_diversity": 0.042392579748519864,
+      "sd_mean_relevance": null,
+      "sd_mood_match": 0.05688439226712826,
+      "sd_processing_ms": 1.1540662969594848
+    },
+    {
+      "category": "all",
+      "mean_artist_diversity": 1.0,
+      "mean_artist_metadata_coverage": 0.125,
+      "mean_history_match": 0.8603566490316523,
+      "mean_intra_list_diversity": 0.12965181863583883,
+      "mean_mean_relevance": 0.9854425,
+      "mean_mood_match": 0.6635240954662357,
+      "mean_processing_ms": 28.344875000000002,
+      "method": "cbf",
+      "pool_coverage": 0.078,
+      "run_count": 8,
+      "scenario_count": 8,
+      "sd_artist_diversity": 0.0,
+      "sd_artist_metadata_coverage": 0.12990381056766578,
+      "sd_history_match": 0.031024856714402055,
+      "sd_intra_list_diversity": 0.01741511440125736,
+      "sd_mean_relevance": 0.007766016916669674,
+      "sd_mood_match": 0.20632032976793066,
+      "sd_processing_ms": 0.5559166838430014
+    },
+    {
+      "category": "all",
+      "mean_artist_diversity": 1.0,
+      "mean_artist_metadata_coverage": 0.125,
+      "mean_history_match": 0.7910184159279807,
+      "mean_intra_list_diversity": 0.1936009116602843,
+      "mean_mean_relevance": 0.9265116666666666,
+      "mean_mood_match": 0.9019649520165859,
+      "mean_processing_ms": 36.452416666666664,
+      "method": "context_no_mmr",
+      "pool_coverage": 0.17,
+      "run_count": 12,
+      "scenario_count": 12,
+      "sd_artist_diversity": 0.0,
+      "sd_artist_metadata_coverage": 0.05951190357119042,
+      "sd_history_match": 0.08342939363803445,
+      "sd_intra_list_diversity": 0.0603371335274809,
+      "sd_mean_relevance": 0.04481762540811618,
+      "sd_mood_match": 0.06076846031268705,
+      "sd_processing_ms": 2.560913621422808
+    },
+    {
+      "category": "all",
+      "mean_artist_diversity": 1.0,
+      "mean_artist_metadata_coverage": 0.11666666666666667,
+      "mean_history_match": 0.786435424311716,
+      "mean_intra_list_diversity": 0.2147017484752548,
+      "mean_mean_relevance": 0.9260166666666667,
+      "mean_mood_match": 0.8995608446757326,
+      "mean_processing_ms": 38.724333333333334,
+      "method": "context_mmr",
+      "pool_coverage": 0.17,
+      "run_count": 12,
+      "scenario_count": 12,
+      "sd_artist_diversity": 0.0,
+      "sd_artist_metadata_coverage": 0.055277079839256664,
+      "sd_history_match": 0.0809627466458365,
+      "sd_intra_list_diversity": 0.05920912218498707,
+      "sd_mean_relevance": 0.04500997136437906,
+      "sd_mood_match": 0.0656033856104817,
+      "sd_processing_ms": 4.743542757147752
+    }
+  ],
+  "pairwise": [
+    {
+      "comparison_count": 240,
+      "left_method": "random",
+      "mean_overlap_count": 0.2833333333333333,
+      "mean_top10_jaccard": 0.015155945419103313,
+      "right_method": "cbf",
+      "scenario_count": 8,
+      "top1_same_fraction": 0.0
+    },
+    {
+      "comparison_count": 360,
+      "left_method": "random",
+      "mean_overlap_count": 0.2222222222222222,
+      "mean_top10_jaccard": 0.011842105263157893,
+      "right_method": "context_no_mmr",
+      "scenario_count": 12,
+      "top1_same_fraction": 0.002777777777777778
+    },
+    {
+      "comparison_count": 360,
+      "left_method": "random",
+      "mean_overlap_count": 0.19722222222222222,
+      "mean_top10_jaccard": 0.010510071474983756,
+      "right_method": "context_mmr",
+      "scenario_count": 12,
+      "top1_same_fraction": 0.002777777777777778
+    },
+    {
+      "comparison_count": 8,
+      "left_method": "cbf",
+      "mean_overlap_count": 2.375,
+      "mean_top10_jaccard": 0.1691247349142086,
+      "right_method": "context_no_mmr",
+      "scenario_count": 8,
+      "top1_same_fraction": 0.125
+    },
+    {
+      "comparison_count": 8,
+      "left_method": "cbf",
+      "mean_overlap_count": 2.125,
+      "mean_top10_jaccard": 0.14348370927318294,
+      "right_method": "context_mmr",
+      "scenario_count": 8,
+      "top1_same_fraction": 0.125
+    },
+    {
+      "comparison_count": 12,
+      "left_method": "context_no_mmr",
+      "mean_overlap_count": 8.666666666666666,
+      "mean_top10_jaccard": 0.7746697746697747,
+      "right_method": "context_mmr",
+      "scenario_count": 12,
+      "top1_same_fraction": 1.0
+    }
+  ],
+  "protocol": {
+    "candidate_artist_policy": "allow_missing",
+    "candidate_count": 500,
+    "random_seed_count": 30,
+    "run_count": 636,
+    "run_counts": {
+      "catalogue": 0,
+      "comparison": 392,
+      "configuration": 124,
+      "performance": 120
+    },
+    "scenario_count": 12,
+    "top_n": 10
+  },
+  "provenance": {
+    "evaluation_manifest_sha256": "6b3b171744fad066c3a6fc6fd073700a3662d92634c0fd3a5d0f703abae0d01b",
+    "figure_manifest_sha256": "3bc0707ce16daca802c167dfc6e155b3a2614b125b81fdf551cf046d8880aaf9"
+  },
+  "schema_version": "nexttrack-analytics-snapshot-v2",
+  "transition": [
+    {
+      "category": "mood_transition",
+      "mean_artist_diversity": 1.0,
+      "mean_artist_metadata_coverage": 0.22333333333333333,
+      "mean_history_match": 0.6826330288339392,
+      "mean_intra_list_diversity": 0.34450264639005973,
+      "mean_mean_relevance": null,
+      "mean_mood_match": 0.654593178060199,
+      "mean_processing_ms": 20.68415,
+      "method": "random",
+      "pool_coverage": 0.444,
+      "run_count": 120,
+      "scenario_count": 4,
+      "sd_artist_diversity": 0.0,
+      "sd_artist_metadata_coverage": 0.14761059883656352,
+      "sd_history_match": 0.03825766695879935,
+      "sd_intra_list_diversity": 0.042392579748519864,
+      "sd_mean_relevance": null,
+      "sd_mood_match": 0.05688439226712826,
+      "sd_processing_ms": 0.7413735411383389
+    },
+    {
+      "category": "mood_transition",
+      "mean_artist_diversity": 1.0,
+      "mean_artist_metadata_coverage": 0.125,
+      "mean_history_match": 0.8603566490316523,
+      "mean_intra_list_diversity": 0.12965181863583883,
+      "mean_mean_relevance": 0.9854425,
+      "mean_mood_match": 0.46387472413586717,
+      "mean_processing_ms": 27.99675,
+      "method": "cbf",
+      "pool_coverage": 0.078,
+      "run_count": 4,
+      "scenario_count": 4,
+      "sd_artist_diversity": 0.0,
+      "sd_artist_metadata_coverage": 0.12990381056766578,
+      "sd_history_match": 0.031024856714402055,
+      "sd_intra_list_diversity": 0.01741511440125736,
+      "sd_mean_relevance": 0.007766016916669674,
+      "sd_mood_match": 0.0454194570606012,
+      "sd_processing_ms": 0.6007355387356403
+    },
+    {
+      "category": "mood_transition",
+      "mean_artist_diversity": 1.0,
+      "mean_artist_metadata_coverage": 0.07500000000000001,
+      "mean_history_match": 0.716256888152031,
+      "mean_intra_list_diversity": 0.18192204327139,
+      "mean_mean_relevance": 0.86928,
+      "mean_mood_match": 0.8251537213604785,
+      "mean_processing_ms": 38.3445,
+      "method": "context_no_mmr",
+      "pool_coverage": 0.064,
+      "run_count": 4,
+      "scenario_count": 4,
+      "sd_artist_diversity": 0.0,
+      "sd_artist_metadata_coverage": 0.04330127018922193,
+      "sd_history_match": 0.046295294698725786,
+      "sd_intra_list_diversity": 0.06520134603958448,
+      "sd_mean_relevance": 0.015364717699977447,
+      "sd_mood_match": 0.01660907900476795,
+      "sd_processing_ms": 0.8729617689223272
+    },
+    {
+      "category": "mood_transition",
+      "mean_artist_diversity": 1.0,
+      "mean_artist_metadata_coverage": 0.07500000000000001,
+      "mean_history_match": 0.7138124429677742,
+      "mean_intra_list_diversity": 0.20504382541675278,
+      "mean_mean_relevance": 0.8684675,
+      "mean_mood_match": 0.8141111178969123,
+      "mean_processing_ms": 38.432,
+      "method": "context_mmr",
+      "pool_coverage": 0.066,
+      "run_count": 4,
+      "scenario_count": 4,
+      "sd_artist_diversity": 0.0,
+      "sd_artist_metadata_coverage": 0.04330127018922193,
+      "sd_history_match": 0.046026489014399014,
+      "sd_intra_list_diversity": 0.070163552592937,
+      "sd_mean_relevance": 0.015438376493336365,
+      "sd_mood_match": 0.020428578960822875,
+      "sd_processing_ms": 1.4287674758336295
+    }
+  ],
+  "warm_performance": [
+    {
+      "candidate_count": 500,
+      "maximum_ms": 21.95220000066911,
+      "method": "random",
+      "minimum_ms": 20.380399997520726,
+      "p50_ms": 21.14254999833065,
+      "p95_ms": 21.707895000145072,
+      "phase": "same_process_warm",
+      "sample_count": 10,
+      "scope": "fixed_pool"
+    },
+    {
+      "candidate_count": 500,
+      "maximum_ms": 29.821100000845036,
+      "method": "cbf",
+      "minimum_ms": 27.580199999647448,
+      "p50_ms": 28.69594999901892,
+      "p95_ms": 29.648390001966618,
+      "phase": "same_process_warm",
+      "sample_count": 10,
+      "scope": "fixed_pool"
+    },
+    {
+      "candidate_count": 500,
+      "maximum_ms": 42.25170000063372,
+      "method": "context_no_mmr",
+      "minimum_ms": 37.35690000030445,
+      "p50_ms": 38.04619999937131,
+      "p95_ms": 40.713105000031646,
+      "phase": "same_process_warm",
+      "sample_count": 10,
+      "scope": "fixed_pool"
+    },
+    {
+      "candidate_count": 500,
+      "maximum_ms": 41.04100000040489,
+      "method": "context_mmr",
+      "minimum_ms": 38.38990000076592,
+      "p50_ms": 39.99670000121114,
+      "p95_ms": 41.02839999941352,
+      "phase": "same_process_warm",
+      "sample_count": 10,
+      "scope": "fixed_pool"
+    },
+    {
+      "candidate_count": 964219,
+      "maximum_ms": 6883.703999999852,
+      "method": "random",
+      "minimum_ms": 6501.717099999951,
+      "p50_ms": 6677.8629000000365,
+      "p95_ms": 6870.713985000475,
+      "phase": "same_process_warm",
+      "sample_count": 10,
+      "scope": "full_catalogue"
+    },
+    {
+      "candidate_count": 964219,
+      "maximum_ms": 20580.490699998336,
+      "method": "cbf",
+      "minimum_ms": 19634.598099997675,
+      "p50_ms": 19903.48669999912,
+      "p95_ms": 20432.454694999433,
+      "phase": "same_process_warm",
+      "sample_count": 10,
+      "scope": "full_catalogue"
+    },
+    {
+      "candidate_count": 964219,
+      "maximum_ms": 27699.237299999368,
+      "method": "context_no_mmr",
+      "minimum_ms": 26653.60619999774,
+      "p50_ms": 27011.134850001326,
+      "p95_ms": 27556.091669999296,
+      "phase": "same_process_warm",
+      "sample_count": 10,
+      "scope": "full_catalogue"
+    },
+    {
+      "candidate_count": 964219,
+      "maximum_ms": 27415.025199999945,
+      "method": "context_mmr",
+      "minimum_ms": 26506.6599999991,
+      "p50_ms": 26998.774599998796,
+      "p95_ms": 27293.12834499997,
+      "phase": "same_process_warm",
+      "sample_count": 10,
+      "scope": "full_catalogue"
+    }
+  ],
+  "warnings": [
+    "Artist-based metrics cover only tracks with known artist metadata.",
+    "Track.data_source stores the merged catalogue version, so per-input-source analysis is unavailable."
+  ]
+}

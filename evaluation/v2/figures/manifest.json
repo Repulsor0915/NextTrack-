@@ -1,0 +1,36 @@
+{
+  "catalogue": {
+    "database_track_count": 964224,
+    "record_count": 964224,
+    "sha256": "45652c01108cdce20454d71cc51351b0e3d6e1bef4e47d5219642e55f001e2e2",
+    "usable_feature_count": 964224,
+    "version": "spotify-merged-v2"
+  },
+  "outputs": {
+    "01-catalogue-clamping.svg": {
+      "bytes": 3041,
+      "sha256": "ec9d8f89ab722fec12a354dffaf916d727de14b4ccd4d26b1b2481fac22fa1c5"
+    },
+    "02-cbf-configuration.svg": {
+      "bytes": 2598,
+      "sha256": "ad8afc91647da82f7bdb405e94e7bd8cbdfb9c1f04e5ded20671ba48dbdbfe59"
+    },
+    "03-context-configuration.svg": {
+      "bytes": 6361,
+      "sha256": "4408934832b9917f0f954d56880b09faaa2a23c633bfa2621e0d33b26b165005"
+    },
+    "04-method-comparison.svg": {
+      "bytes": 4642,
+      "sha256": "57abc3ca129a7c6004711a7f0d6b04ffc499bc8830bdfedf556065d1fdb24ee1"
+    },
+    "05-latency.svg": {
+      "bytes": 8281,
+      "sha256": "d55842efbeb588b9344b922595cd33e13844e62c20fa837a3cf059ca715b71d0"
+    }
+  },
+  "schema_version": "nexttrack-evaluation-figures-v2",
+  "source_evaluation_manifest": {
+    "bytes": 5372,
+    "sha256": "6b3b171744fad066c3a6fc6fd073700a3662d92634c0fd3a5d0f703abae0d01b"
+  }
+}

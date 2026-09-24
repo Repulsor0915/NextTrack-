@@ -1,11 +1,8 @@
 data/processed/*/*.json text eol=lf
 evaluation/*.json text eol=lf
-evaluation/scenario-review.md text eol=lf
-evaluation/scenario-approval.md text eol=lf
-evaluation/results/**/*.json text eol=lf
-evaluation/results/**/*.csv text eol=lf
-evaluation/studies/**/*.json text eol=lf
-evaluation/studies/**/*.csv text eol=lf
-evaluation/studies/**/*.md text eol=lf
+evaluation/v2/**/*.json text eol=lf
+evaluation/v2/**/*.jsonl text eol=lf
+evaluation/v2/**/*.csv text eol=lf
+evaluation/v2/**/*.svg text eol=lf
 backend/recommendations/domain/*.py text eol=lf
 backend/offline_evaluation/*.py text eol=lf
