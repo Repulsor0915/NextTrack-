@@ -1,297 +1,325 @@
 # NextTrack
 
-Stateless Django REST Framework API for session-informed music recommendation.
-The client supplies optional track history, mood, and filters in every request;
-the server does not require a user account or store a listening session.
+NextTrack is an explainable music recommendation system built as a final-year
+project. A user can provide recent tracks, a target mood, an optional BPM
+range, and a diversity preference. The Django service returns ranked tracks
+with the evidence used to produce each result.
 
-## Local development
+The application is stateless from the listener's perspective. It does not
+require a public user account and does not store listening sessions. Selected
+history is sent with each recommendation request and is cleared when the page
+is refreshed.
 
-Run these commands from the `NextTrack` directory in PowerShell:
+## 1. Project goals and main features
 
-```powershell
-.\.venv\Scripts\python.exe backend\manage.py migrate
-.\.venv\Scripts\python.exe backend\manage.py import_catalogue data\processed\spotify-tracks-kaggle-full\catalogue.json
-.\.venv\Scripts\python.exe backend\manage.py catalogue_status
-.\.venv\Scripts\python.exe backend\manage.py test
-.\.venv\Scripts\python.exe backend\manage.py runserver
-```
+NextTrack is intended to demonstrate a complete and reproducible recommendation
+workflow rather than operate as a streaming platform. It includes:
 
-Open `http://127.0.0.1:8000/` for the recommendation page. It supports
-track search, ordered listening history, mood and BPM controls, an MMR variety
-slider, Auto plus advanced CBF choices, a separate Random discovery button,
-and evidence-backed results. The page uses a responsive Soft Indigo layout;
-the decorative record motion is disabled for reduced-motion preferences.
-The page uses the existing same-origin API without a separate frontend build
-step. See [`frontend/README.md`](frontend/README.md) for its code map and test
-commands. The separate Analytics page at `/analytics/` is intended to display
-a compact, read-only snapshot of frozen results and verified figures. Browser
-acceptance is pending because the user's page currently remains in its loading
-state. The page does not run new experiments or publish raw runs; see
-[`frontend/README.md`](frontend/README.md) for its sources and update process.
+- title and artist search over an imported catalogue;
+- ordered listening history of up to five tracks;
+- Happy, Energetic, Calm, and Sad mood targets;
+- optional BPM filtering and MMR diversity control;
+- Random, Basic CBF, and contextual recommendation paths;
+- deterministic, evidence-based explanations for ranked results;
+- a public track-suggestion form with staff review in Django Admin;
+- a read-only Analytics page generated from verified offline experiments;
+- reproducible CSV preprocessing, catalogue import, evaluation, and deployment
+  commands.
 
-The API entry points are:
+## 2. Technology stack
+
+| Area | Technology |
+|---|---|
+| Backend | Python, Django 6.1, Django REST Framework |
+| Recommendation code | NumPy and project-owned ranking modules |
+| Local database | SQLite |
+| Production options | GCE/SQLite profile and PostgreSQL production profile |
+| Frontend | Django templates, HTML, CSS, dependency-free JavaScript modules |
+| API schema | drf-spectacular |
+| Offline evaluation | Django management commands with JSON, JSONL, CSV, and SVG artifacts |
+| Tests | Django test runner and Node's built-in test runner |
+
+Python 3.12 or newer is required by the pinned Django version. The verified V2
+experiment snapshot was produced with Python 3.14.4 on Windows 11 and SQLite.
+
+## 3. Repository structure
 
 ```text
-GET  /health/
-GET  /api/v1/catalogue/
-GET  /api/v1/tracks/
-GET  /api/v1/tracks/{id}/
-POST /api/v1/recommendations/
-POST /api/v1/track-suggestions/
-GET  /api/v1/schema/
-GET  /api/v1/docs/swagger/
-GET  /api/v1/docs/redoc/
+NextTrack/
+├── backend/
+│   ├── catalogue_preprocess/   CSV validation, merging, and output manifests
+│   ├── config/                 Django development and production settings
+│   ├── offline_evaluation/     V2 experiment and visualization code
+│   └── recommendations/        Models, API, services, rankers, and import code
+├── data/
+│   ├── raw/                    Local source CSV files; Git-ignored
+│   └── processed/              Manifests, reports, and local catalogue output
+├── deploy/gce/                 Single-VM GCE configuration and instructions
+├── evaluation/v2/              Verified experiment results and figures
+├── frontend/                   Templates, styles, JavaScript, and frontend tests
+├── requirements.txt            Local application dependencies
+└── requirements-production.txt Additional deployment dependencies
 ```
 
-Track discovery supports title/artist search, exact artist and genre filters,
-BPM bounds, and page-number pagination. Public requests cannot write tracks or
-change the active catalogue. A submitted track suggestion enters a separate
-staff-review queue; review does not automatically import it. Staff status and
-suggestion-review endpoints require a staff token. See
-[`docs/api-contract-and-access.md`](docs/api-contract-and-access.md) for endpoint contracts, examples,
-limits, security settings, and deployment prerequisites. `/api/v1/` itself is
-not an index page. The live schema, Swagger, and ReDoc routes require a Django
-superuser session; log in at `/admin/` first.
+More detailed component notes are kept in:
 
-The import command above is for a **new, empty database**. A database from
-before Stage 4 should use the verified adoption workflow; changing snapshots
-requires an explicit `--replace` or `--prune` preview and confirmation. See
-[`docs/stage-4-catalogue-database.md`](docs/stage-4-catalogue-database.md).
+- [catalogue preprocessing](backend/catalogue_preprocess/README.md)
+- [recommendation domain](backend/recommendations/domain/README.md)
+- [offline evaluation](backend/offline_evaluation/README.md)
+- [evaluation artifacts](evaluation/README.md)
+- [frontend](frontend/README.md)
+- [GCE deployment](deploy/gce/README.md)
 
-Django Admin is available at `/admin/` for staff and superusers. It provides
-read-only catalogue inspection and track-suggestion review; it cannot change
-the active snapshot. Public recommendations still need no login. See
-[`docs/admin-and-catalogue-operations.md`](docs/admin-and-catalogue-operations.md)
-for permissions, setup, and the decision to defer bulk upload.
+## 4. Python environment and dependency installation
 
-## Default Auto mode
-
-`algorithm` is optional and defaults to `auto`. Auto chooses a relevance model
-from the signals supplied in the current stateless request:
-
-| Request signals | Resolved method |
-|---|---|
-| No history and no mood | Random |
-| History only | History-based CBF |
-| Mood only | Mood-based CBF |
-| History and mood | History-and-mood contextual CBF |
-
-BPM does not select an algorithm. It is an optional inclusive hard filter that
-is applied to the candidate pool before ranking. A BPM-only request therefore
-filters the catalogue and then resolves to Random.
-
-Example mood-only Auto request:
-
-```json
-{
-  "limit": 5,
-  "context": {
-    "mood": "happy",
-    "bpm": {"min": 60, "max": 140},
-    "diversity_strength": 0.2
-  }
-}
-```
-
-For a simpler client payload, `mood`, `bpm`, and `diversity_strength` may also
-be supplied at the top level. Do not supply the same field both there and in
-`context`.
-
-When Auto resolves to a content-based method, MMR reranking is enabled by
-default with `diversity_strength = 0.2`. This is equivalent to standard MMR
-`lambda = 0.8`: 80% relevance weight and 20% diversity-gain weight. Set
-`diversity_strength` to `0` to preserve the base relevance order.
-
-The response records both the requested and resolved methods:
-
-```json
-{
-  "algorithm": "auto",
-  "meta": {
-    "requested_algorithm": "auto",
-    "resolved_algorithm": "context_mmr",
-    "relevance_model": "mood_cbf",
-    "reranker": "mmr",
-    "diversity_strength": 0.2,
-    "mmr_lambda": 0.8
-  }
-}
-```
-
-## Explicit experiment modes
-
-Explicit modes remain available for controlled comparisons:
-
-- `random` forces the unscored Random baseline, even if history or mood is
-  present.
-- `cbf` requires history and runs the pure Basic CBF baseline without MMR.
-- `context_mmr` requires history or mood and runs the contextual CBF scorer
-  followed by MMR.
-
-Example Basic CBF baseline request:
-
-```json
-{
-  "history": ["mbid-003"],
-  "algorithm": "cbf",
-  "limit": 3,
-  "candidate_ids": [
-    "mbid-003",
-    "mbid-004",
-    "mbid-006",
-    "mbid-012",
-    "mbid-025"
-  ]
-}
-```
-
-Example explicit Context+MMR request:
-
-```json
-{
-  "history": ["mbid-003"],
-  "algorithm": "context_mmr",
-  "limit": 5,
-  "context": {
-    "mood": "happy",
-    "bpm": {"min": 60, "max": 140},
-    "diversity_strength": 0.3
-  }
-}
-```
-
-## Contract details
-
-- History is ordered from oldest to newest. Repeated IDs represent repeated
-  play events and are intentionally preserved.
-- History tracks are excluded from the returned candidates.
-- Duplicate `candidate_ids` do not produce duplicate recommendations.
-- Missing or `null` `candidate_ids` means the full catalogue; an empty list is
-  an empty candidate pool.
-- Basic CBF averages at most the five most recent history events. Contextual CBF
-  uses a linearly recency-weighted profile of the same maximum size.
-- When history and mood are both supplied to contextual CBF, the current
-  provisional relevance formula is 65% history similarity and 35% mood fit.
-- The public recommendation `score` is always relevance: `null` for Random,
-  history similarity for history CBF, mood fit for mood-only CBF, and contextual
-  relevance for combined history and mood. MMR utility remains in
-  `components.mmr_score`; `rank` is the final reranked order.
-- `bpm_constraint_satisfied` is a boolean eligibility fact, not a scoring
-  component. The separate track `tempo` feature may still contribute to CBF.
-- Explanations are deterministic and evidence-based; they do not use an AI
-  agent or LLM.
-- Each result also exposes `explanation_evidence`, with the unrounded scoring
-  evidence, applicable feature targets, relevance and final ranks, and MMR
-  selection evidence. `meta.explanation_model_version` identifies its contract.
-  See `docs/stage-3-explanation-contract.md` for field and `null` semantics.
-
-## Mood model boundary
-
-Mood recommendation remains content-based and uses the same normalized eight
-audio features as history CBF. The current project-defined profiles are
-versioned as `va-targets-panda-2021-relieff-weights-v2`. The target values remain
-project-defined; feature contributions within each mood use the normalized
-Panda et al. (2021) ReliefF importance values for the eight features available
-in NextTrack. Valence/arousal research, including DEAM, informs the design
-rationale, but the API does not calculate or store a standalone arousal value
-and does not treat `energy` as ground-truth arousal. PAD/VAD dominance is not
-part of the implemented model.
-
-For mood requests, `meta.mood_model` identifies the profile version and each
-result exposes `components.mood_feature_closeness`. These values let the
-deterministic explanation cite the actual feature cues used in `mood_fit`.
-
-## Internal algorithm configuration
-
-The finalized baseline parameters are collected in the immutable
-`AlgorithmConfig` defined in
-`backend/recommendations/domain/algorithm_config.py`. This lets the future
-offline evaluator inject and record alternative feature weights, similarity
-metrics, history:mood ratios, mood-feature weights, and MMR defaults without
-editing ranker source code. The public API does not accept this complete
-configuration object.
-
-The default configuration is named `baseline-panda-mood-v1`. It preserves the
-existing Basic CBF, context-relevance, and MMR defaults while making the
-Panda-derived mood feature weights the formal mood calculation. The detailed
-algorithm boundary and configurable experiment choices are recorded in
-`backend/recommendations/domain/README.md`.
-
-## Offline evaluation protocol draft
-
-Protocol steps 6-8 can be reproduced from the project root with:
+Run the following commands from the repository root in PowerShell:
 
 ```powershell
-.\.venv\Scripts\python.exe backend\manage.py prepare_evaluation_protocol `
-  --protocol-date 2026-09-19 `
-  --seed 221611 `
-  --top-n 10 `
-  --random-repetitions 30 `
-  --expected-candidate-count 500 `
-  --coherent-genres pop rock hip-hop
+py -3.14 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
-Single-line version:
+Python 3.12 or 3.13 may be used when compatible wheels are available. Node.js
+is optional and is only needed to run the small frontend test suite. There is
+no frontend build step and no runtime npm dependency.
+
+## 5. Default database
+
+Local development uses:
+
+```text
+backend/db.schema-final.sqlite3
+```
+
+SQLite files are Git-ignored. A fresh clone therefore starts without the
+populated development database. The current schema separates catalogue data
+into `Track`, `TrackFeatures`, `Artist`, `Album`, and `TrackArtist`, with
+`CatalogueState` recording the active verified snapshot.
+
+Create or update the schema and inspect the active catalogue with:
 
 ```powershell
-.\.venv\Scripts\python.exe backend\manage.py prepare_evaluation_protocol --protocol-date 2026-09-19 --seed 221611 --top-n 10 --random-repetitions 30 --expected-candidate-count 500 --coherent-genres pop rock hip-hop
+python backend\manage.py migrate
+python backend\manage.py catalogue_status
 ```
 
-The command creates `evaluation/experiment-config.json`, the fixed
-`candidate-pool.json`, `scenarios.draft.json`, a human-readable
-`scenario-review.md`, and `protocol-manifest.json`. It refuses to overwrite
-these files unless `--force` is supplied. The draft must be reviewed and frozen
-as `scenarios.json` before an evaluation runner is implemented or executed.
+The current verified database should report catalogue version
+`spotify-merged-v2`, 964,224 tracks, 964,224 feature rows, and
+`state_consistent: true`.
 
-## Error responses
+## 6. Obtaining or generating the catalogue
 
-Parser, serializer, and recommendation-service errors use one envelope while
-retaining actionable details:
+The full processed `catalogue.json` is approximately 466 MB and is not stored
+in Git. To reproduce it, place these source files locally:
 
-```json
-{
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "Request validation failed. See details for specific fields.",
-    "details": {
-      "limit": ["Ensure this value is less than or equal to 20."]
-    }
-  }
-}
+```text
+data/raw/spotify-tracks-kaggle/dataset.csv
+data/raw/tracks.csv
 ```
 
-Invalid input and unknown IDs return HTTP 400. A valid request with no eligible
-candidates returns HTTP 422. With production `DEBUG=False`, internal stack
-traces, database paths, and server configuration are not exposed. Local
-`DEBUG=True` is not safe to publish.
+Their expected SHA-256 values are recorded in the committed
+`data/processed/spotify-merged-v2/manifest.json`. Generate a fresh copy into an
+empty output directory:
 
-## Data status
+```powershell
+python backend\manage.py prepare_catalogue data\raw\spotify-tracks-kaggle\dataset.csv data\processed\spotify-merged-v2-rebuild --catalogue-version spotify-merged-v2 --retrieved-date 2026-09-23 --tracks-csv data\raw\tracks.csv
+```
 
-The rebuilt preprocessing contract now produces one frozen full catalogue with
-89,566 hard-valid unique tracks from 114,000 raw rows. Two deterministic test
-catalogues contain 20 and 500 tracks. Both samples use seed `221611` and are
-derived from the full catalogue rather than independently from the raw CSV.
+The command writes:
 
-See [`data/SOURCES.md`](data/SOURCES.md) for provenance, the declared database
-licence, raw checksum, field mapping, and the current preprocessing boundary.
-Raw downloads and SQLite databases are intentionally Git-ignored.
+```text
+catalogue.json
+preprocessing-report.json
+manifest.json
+```
 
-The pipeline separates hard data validation from content policy. It requires
-the eight recommendation features, validates their numeric values, and
-deduplicates by track ID. It does not remove explicit tracks or particular
-genres. The complete manual workflow, commands, path behaviour, seed rules,
-outputs, and optional database import are documented in
-[`backend/catalogue_preprocess/README.md`](backend/catalogue_preprocess/README.md).
+It validates the required fields and eight audio features, removes duplicate
+track IDs within each source, keeps the Kaggle record when the two sources
+share an ID, and adds new IDs from `tracks.csv`. Missing artist and album data
+remain `null`; display fallbacks belong to the UI rather than the database.
 
-A verified manual run produced full catalogue checksum
-`82bd95b1e5d4e983f172af116904740bb43eb599f5d7e37cd6e0f558f84de65b`.
-The full, 20-track, and 500-track processed catalogues are now present and their
-manifest checksums have been verified. Algorithm evaluation remains a separate
-offline workflow. Stage 2 studies and the reviewed v1 decision are documented
-in [`backend/offline_evaluation/README.md`](backend/offline_evaluation/README.md)
-and [`docs/stage-2-decision.md`](docs/stage-2-decision.md). The scoring defaults
-remain unchanged; API metadata now exposes the reviewed algorithm versions.
+For a new empty database, import the verified output with:
 
-The four-path offline comparison and separate full-catalogue latency study are
-documented in [`docs/recommender-comparison.md`](docs/recommender-comparison.md).
-These results are report evidence, not API responses or user relevance labels.
+```powershell
+python backend\manage.py migrate
+python backend\manage.py import_catalogue data\processed\spotify-merged-v2-rebuild\catalogue.json
+python backend\manage.py catalogue_status
+```
+
+For a populated database, preview the synchronization first:
+
+```powershell
+python backend\manage.py import_catalogue data\processed\spotify-merged-v2-rebuild\catalogue.json --prune --dry-run
+```
+
+Review `created`, `updated`, and `deleted`, then use the reported version,
+checksum, and preview token with the command's confirmation options. Do not add
+`--allow-large-prune` until an unexpectedly large deletion has been explained.
+
+## 7. Starting the application locally
+
+After the schema and catalogue are ready:
+
+```powershell
+python backend\manage.py catalogue_status
+python backend\manage.py runserver
+```
+
+Open <http://127.0.0.1:8000/>. Useful local pages are:
+
+- Discover: <http://127.0.0.1:8000/>
+- Analytics: <http://127.0.0.1:8000/analytics/>
+- Django Admin: <http://127.0.0.1:8000/admin/>
+
+Create a local administrator when needed:
+
+```powershell
+python backend\manage.py createsuperuser
+```
+
+## 8. Web and API routes
+
+### Public routes
+
+| Method | Route | Purpose |
+|---|---|---|
+| `GET` | `/health/` | Service health |
+| `GET` | `/api/v1/catalogue/` | Active catalogue metadata |
+| `GET` | `/api/v1/tracks/` | Search and filter tracks |
+| `GET` | `/api/v1/tracks/{id}/` | Retrieve one track |
+| `POST` | `/api/v1/recommendations/` | Generate recommendations |
+| `POST` | `/api/v1/track-suggestions/` | Submit a track for review |
+
+Track search supports partial title or artist text, exact artist and genre
+filters, BPM bounds, and page-number pagination. Public routes cannot edit the
+active catalogue.
+
+Staff catalogue status and suggestion-review endpoints live under
+`/api/v1/staff/` and require staff token authentication. The schema, Swagger,
+and ReDoc routes require a superuser session after login through `/admin/`.
+
+## 9. Recommendation methods
+
+| Method | Input | Behaviour |
+|---|---|---|
+| Random | Optional BPM and exclusions | Samples eligible tracks without a relevance score |
+| Basic CBF | At least one history track | Ranks by weighted cosine similarity to recent history |
+| Context | History and/or mood | Combines history similarity with mood-feature fit |
+| Context + MMR | Context relevance | Reranks to balance relevance and intra-list diversity |
+
+All content-based methods use tempo, energy, valence, danceability,
+acousticness, instrumentalness, loudness, and speechiness. History is ordered
+oldest to newest and uses at most the five most recent events. The current
+combined relevance baseline weights history at 0.65 and mood at 0.35. The
+default diversity strength is 0.2, equivalent to an MMR relevance weight of
+0.8.
+
+The API's `auto` mode selects a method from the supplied signals. The Discover
+page asks for history or mood before using Auto and presents Random as the
+separate **Surprise me** action. Recommendation explanations are deterministic
+and use recorded scoring evidence; they do not call an LLM.
+
+## 10. V2 offline evaluation
+
+The current evaluation is divided into four studies:
+
+1. catalogue completeness, feature ranges, and mood coverage;
+2. configuration sensitivity for CBF, history, context, and MMR settings;
+3. comparison of Random, Basic CBF, Context, and Context + MMR;
+4. fixed-pool and full-catalogue service latency.
+
+The verified snapshot uses 12 synthetic scenarios, a fixed 500-track candidate
+pool, Top-10 lists, and 30 fixed Random seeds per scenario. These metrics are
+diagnostic audio-feature proxies, not listener ratings or recommendation
+accuracy.
+
+Run a new evaluation into an empty directory:
+
+```powershell
+python backend\manage.py run_evaluation --config evaluation\v2-config.json --output-dir evaluation\v2-local
+python backend\manage.py build_evaluation_graphs --input-dir evaluation\v2-local
+```
+
+After verifying a completed run and its manifest, publish it to the Analytics
+page with:
+
+```powershell
+python backend\manage.py publish_analytics_snapshot --input-dir evaluation\v2-local
+```
+
+The committed verified results remain under `evaluation/v2/`.
+
+## 11. Tests
+
+Run the backend checks and complete Django test suite:
+
+```powershell
+python backend\manage.py check
+python backend\manage.py test --noinput
+```
+
+Run the dependency-free frontend tests:
+
+```powershell
+node --test frontend\tests\*.test.js
+```
+
+The tests cover API validation, ranking behaviour, explanations, catalogue
+imports, staff access, evaluation artifacts, page templates, and frontend
+request/display helpers. Browser layout and real multi-user performance still
+require manual checks.
+
+## 12. GCP deployment entry point
+
+The intended FYP deployment profile uses one Google Compute Engine VM with
+Gunicorn, Nginx, WhiteNoise, and a copied SQLite database. Start with the
+[GCE deployment guide](deploy/gce/README.md) and the files under `deploy/gce/`.
+
+Production deployment requires `requirements-production.txt`, a generated
+secret key, explicit allowed hosts, `DEBUG=False`, collected static files, and
+an absolute `NEXTTRACK_DB_PATH`. The deployed catalogue status should report
+`spotify-merged-v2`, 964,224 records, and a consistent track/feature count.
+
+The GCE guide still contains older example database names and catalogue status
+values. Update and verify those examples against this section before the final
+deployment.
+
+## 13. Data sources and boundaries
+
+The merged catalogue was produced from 1,013,702 source rows:
+
+| Source | Rows read | Hard-valid unique rows | Rejected rows |
+|---|---:|---:|---:|
+| Kaggle `dataset.csv` | 114,000 | 89,582 | 24,418 |
+| `tracks.csv` | 899,702 | 898,206 | 1,496 |
+
+After cross-source overlap handling, the final catalogue contains 964,224
+tracks. The pipeline applies hard data validation only. Explicit tracks and
+particular genres are retained. Raw feature values are stored, while model
+normalization happens at recommendation time.
+
+The sources are MaharshiPandya's Spotify Tracks Dataset and Oleg Fostenko's
+Almost a million Spotify tracks. Their attribution, licences, file metadata,
+and pinned checksums are recorded in [data/SOURCES.md](data/SOURCES.md). Raw CSV
+files, generated full catalogues, and SQLite databases are intentionally
+excluded from Git.
+
+## 14. Current limitations
+
+- The synthetic offline scenarios do not provide human relevance labels or
+  prove recommendation accuracy.
+- Artist and album metadata are missing for 777,524 catalogue rows. This limits
+  artist search, collaboration analysis, and artist-diversity interpretation.
+- Full-catalogue content scoring on SQLite can take several seconds, especially
+  for Context + MMR and larger result sets.
+- SQLite and the single-VM GCE profile are suitable for demonstration and
+  small user tests, not horizontal scaling or high write concurrency.
+- Spotify playback embeds depend on third-party availability and may be hidden
+  by browser content-filtering extensions.
+- Track suggestions enter a review queue and are not automatically added to the
+  active catalogue.
+- The repository does not include raw data, the 466 MB processed catalogue, or
+  a populated SQLite database. They must be generated or transferred
+  separately.
